@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>SplitBites - Homelab Meal Planning & Multi-Store Grocery Aggregator</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -19,30 +19,45 @@
     }
   </script>
   <style>
+    /* Strikethrough & dimming for checked items */
     .item-checked {
       text-decoration: line-through;
-      opacity: 0.45;
+      opacity: 0.4;
+    }
+    .hide-checked .item-row-checked {
+      display: none !important;
+    }
+    /* Touch friendly tap targets */
+    .touch-target {
+      min-height: 44px;
     }
   </style>
 </head>
-<body class="bg-dark-950 text-slate-100 min-h-screen font-sans antialiased">
-  <div class="max-w-7xl mx-auto px-4 py-8">
+<body class="bg-dark-950 text-slate-100 min-h-screen font-sans antialiased selection:bg-emerald-500 selection:text-white pb-16">
+  
+  <!-- Toast Notification Container -->
+  <div id="toast" class="fixed bottom-6 right-6 z-50 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none bg-slate-900 border border-emerald-500 text-emerald-300 px-4 py-3 rounded-xl shadow-2xl flex items-center gap-2.5 text-xs font-medium">
+    <span class="text-emerald-400 text-base">✓</span>
+    <span id="toastMsg">Copied to clipboard!</span>
+  </div>
+
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
     
     <!-- Top Header -->
     <header class="flex flex-col md:flex-row md:items-center justify-between pb-6 border-b border-slate-800 gap-4">
       <div>
         <div class="flex items-center gap-3">
           <span class="text-3xl">🥑</span>
-          <h1 class="text-3xl font-extrabold tracking-tight bg-gradient-to-r from-emerald-400 to-teal-200 bg-clip-text text-transparent">
+          <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight bg-gradient-to-r from-emerald-400 to-teal-200 bg-clip-text text-transparent">
             SplitBites
           </h1>
-          <span class="text-xs uppercase px-2.5 py-0.5 rounded-full bg-emerald-950 text-emerald-400 border border-emerald-800 font-mono">
+          <span class="text-[11px] uppercase px-2.5 py-0.5 rounded-full bg-emerald-950 text-emerald-400 border border-emerald-800 font-mono">
             Rev 1.2 Homelab
           </span>
         </div>
-        <p class="text-slate-400 text-sm mt-1">pgvector Semantic Meal Planning & Multi-Store Grocery Arbitrage (Aldi • Walmart • Meijer • Amazon)</p>
+        <p class="text-slate-400 text-xs sm:text-sm mt-1">pgvector Semantic Meal Optimization & Multi-Store Grocery Arbitrage</p>
       </div>
-      <div class="flex flex-wrap items-center gap-3 text-xs font-mono">
+      <div class="flex flex-wrap items-center gap-2.5 text-xs font-mono">
         <a href="https://splitbites.tbannon80-hp-mini.stream" target="_blank" class="flex items-center gap-1.5 bg-slate-900 border border-slate-800 hover:border-slate-700 px-3 py-1.5 rounded-lg text-emerald-400 transition">
           <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
           <span>splitbites.tbannon80-hp-mini.stream</span>
@@ -54,20 +69,20 @@
     </header>
 
     <!-- Navigation Tabs -->
-    <div class="flex items-center gap-2 mt-6 border-b border-slate-800 pb-2">
-      <button id="tabMealPlanBtn" onclick="switchTab('mealplan')" class="px-4 py-2 text-sm font-semibold rounded-lg bg-emerald-950 text-emerald-300 border border-emerald-800 transition">
-        📅 Meal Planner & Groceries
+    <div class="flex items-center gap-2 mt-6 border-b border-slate-800 pb-2 overflow-x-auto">
+      <button id="tabMealPlanBtn" onclick="switchTab('mealplan')" class="px-4 py-2 text-xs sm:text-sm font-semibold rounded-lg bg-emerald-950 text-emerald-300 border border-emerald-800 transition shrink-0">
+        📅 Meal Planner & Live Groceries
       </button>
-      <button id="tabCustomRecipeBtn" onclick="switchTab('customrecipe')" class="px-4 py-2 text-sm font-semibold rounded-lg bg-slate-900 text-slate-400 hover:text-slate-200 border border-slate-800 transition flex items-center gap-2">
+      <button id="tabCustomRecipeBtn" onclick="switchTab('customrecipe')" class="px-4 py-2 text-xs sm:text-sm font-semibold rounded-lg bg-slate-900 text-slate-400 hover:text-slate-200 border border-slate-800 transition flex items-center gap-2 shrink-0">
         <span>🍲</span> Upload Custom Recipe (pgvector)
       </button>
     </div>
 
-    <!-- TAB 1: MEAL PLANNER & GROCERY SPLIT -->
-    <div id="tabMealPlan" class="grid grid-cols-1 lg:grid-cols-3 gap-8 mt-6">
+    <!-- TAB 1: MEAL PLANNER & LIVE GROCERIES -->
+    <div id="tabMealPlan" class="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8 mt-6">
       
       <!-- Step 1: Household Onboarding -->
-      <section class="bg-slate-900/80 border border-slate-800 rounded-xl p-6 shadow-xl flex flex-col justify-between">
+      <section class="bg-slate-900/80 border border-slate-800 rounded-xl p-5 sm:p-6 shadow-xl flex flex-col justify-between">
         <div>
           <div class="flex items-center justify-between mb-3">
             <h2 class="text-base font-bold text-white flex items-center gap-2">
@@ -96,12 +111,12 @@
           <button id="btnOnboard" onclick="onboardHousehold()" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-medium py-2 px-4 rounded-lg text-sm transition shadow-lg shadow-emerald-950">
             Save Household Profile
           </button>
-          <div id="householdStatus" class="mt-3 text-xs text-slate-400 font-mono">Status: Ready to onboard</div>
+          <div id="householdStatus" class="mt-3 text-xs text-slate-400 font-mono truncate">Status: Ready to onboard</div>
         </div>
       </section>
 
       <!-- Step 2: Meal Plan Generation & Customization -->
-      <section class="lg:col-span-2 bg-slate-900/80 border border-slate-800 rounded-xl p-6 shadow-xl flex flex-col justify-between">
+      <section class="lg:col-span-2 bg-slate-900/80 border border-slate-800 rounded-xl p-5 sm:p-6 shadow-xl flex flex-col justify-between">
         <div>
           <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-slate-800 mb-4 gap-3">
             <h2 class="text-base font-bold text-white flex items-center gap-2">
@@ -121,7 +136,7 @@
             </div>
           </div>
 
-          <div id="planContainer" class="space-y-2.5 min-h-[280px] flex flex-col justify-center">
+          <div id="planContainer" class="space-y-2.5 min-h-[260px] flex flex-col justify-center">
             <div class="text-center text-slate-500 text-sm py-12">
               Click <strong class="text-slate-400">Generate Plan</strong> to build a 5-day schedule respecting household profile.
             </div>
@@ -134,47 +149,50 @@
         </div>
       </section>
 
-      <!-- Step 3: Multi-Store Grocery Aggregation & Live Checkable Shopping List -->
-      <section class="lg:col-span-3 bg-slate-900/80 border border-slate-800 rounded-xl p-6 shadow-xl">
+      <!-- Step 3: Multi-Store Grocery Aggregation & Checkable Itemized Shopping List -->
+      <section class="lg:col-span-3 bg-slate-900/80 border border-slate-800 rounded-xl p-5 sm:p-6 shadow-xl">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-slate-800 mb-6 gap-3">
           <div>
-            <h2 class="text-lg font-bold text-white flex items-center gap-2">
+            <h2 class="text-base sm:text-lg font-bold text-white flex items-center gap-2">
               <span class="bg-emerald-500/20 text-emerald-400 w-6 h-6 rounded-full flex items-center justify-center text-xs">3</span>
               Checkable Live Multi-Store Shopping List (Split-Basket Execution)
             </h2>
-            <p class="text-xs text-slate-400 mt-0.5">Optimized procurement across Aldi, Walmart, Meijer, and Amazon with interactive shopping checks.</p>
+            <p class="text-xs text-slate-400 mt-0.5">Optimized procurement across Aldi, Walmart, Meijer, and Amazon with persistent mobile checkmarks.</p>
           </div>
-          <div class="flex items-center gap-2">
-            <button id="btnFetchGroceries" onclick="fetchGroceries()" disabled class="disabled:opacity-40 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold py-2 px-4 rounded-lg transition shadow flex items-center gap-2">
+          <div class="flex flex-wrap items-center gap-2">
+            <button id="btnFetchGroceries" onclick="fetchGroceries()" disabled class="disabled:opacity-40 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold py-2 px-3.5 rounded-lg transition shadow flex items-center gap-1.5">
               <span>🛒</span> Analyze Grocery Pricing
             </button>
-            <button id="btnCopyList" onclick="copyShoppingList()" class="hidden bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-medium py-2 px-3 rounded-lg transition border border-slate-700 flex items-center gap-1.5">
-              <span>📋</span> Copy List
+            <button id="btnCopyMasterList" onclick="copyFullShoppingList()" class="hidden bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold py-2 px-3 rounded-lg transition border border-slate-700 flex items-center gap-1.5 shadow">
+              <span>📋</span> Copy All (Notes Apps)
             </button>
           </div>
         </div>
 
-        <!-- Savings Hero -->
+        <!-- Savings & Shopping Trip Metrics -->
         <div id="savingsHero" class="hidden mb-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          <div class="bg-slate-950/70 border border-slate-800 p-4 rounded-lg">
+          <div class="bg-slate-950/70 border border-slate-800 p-4 rounded-xl">
             <div class="text-xs text-slate-400">Optimal Split Basket Cost</div>
-            <div id="heroSplitCost" class="text-2xl font-bold text-emerald-400 mt-1">$0.00</div>
-            <div class="text-[11px] text-slate-500 mt-0.5">Cheapest retailer per item</div>
+            <div id="heroSplitCost" class="text-2xl font-black text-emerald-400 mt-1">$0.00</div>
+            <div class="text-[11px] text-slate-500 mt-0.5">Lowest cost per ingredient</div>
           </div>
-          <div class="bg-slate-950/70 border border-slate-800 p-4 rounded-lg">
+          <div class="bg-slate-950/70 border border-slate-800 p-4 rounded-xl">
             <div class="text-xs text-slate-400">Best 1-Stop Store Pick</div>
             <div id="heroSingleCost" class="text-2xl font-bold text-white mt-1">$0.00</div>
             <div id="heroSingleStore" class="text-[11px] text-slate-400 mt-0.5">Single store run</div>
           </div>
-          <div class="bg-emerald-950/40 border border-emerald-800/80 p-4 rounded-lg">
+          <div class="bg-emerald-950/40 border border-emerald-800/80 p-4 rounded-xl">
             <div class="text-xs text-emerald-400 font-semibold">Multi-Store Savings</div>
             <div id="heroSavings" class="text-2xl font-black text-emerald-300 mt-1">$0.00</div>
             <div class="text-[11px] text-emerald-400/80 mt-0.5">Arbitrage gain vs single store</div>
           </div>
-          <div class="bg-slate-950/70 border border-slate-800 p-4 rounded-lg flex flex-col justify-between">
+          <div class="bg-slate-950/70 border border-slate-800 p-4 rounded-xl flex flex-col justify-between">
             <div>
-              <div class="text-xs text-slate-400">Shopping Trip Progress</div>
-              <div id="shoppingProgressText" class="text-lg font-bold text-slate-200 mt-1">0 / 0 Items</div>
+              <div class="flex items-center justify-between text-xs text-slate-400">
+                <span>Trip Shopping Progress</span>
+                <span id="shoppingProgressPercent" class="font-mono text-emerald-400 font-bold">0%</span>
+              </div>
+              <div id="shoppingProgressText" class="text-lg font-bold text-slate-200 mt-0.5">0 / 0 Items Done</div>
             </div>
             <div class="w-full bg-slate-800 h-2 rounded-full overflow-hidden mt-2">
               <div id="shoppingProgressBar" class="bg-emerald-500 h-full transition-all duration-300" style="width: 0%"></div>
@@ -182,19 +200,34 @@
           </div>
         </div>
 
-        <!-- Store Comparison Cards -->
+        <!-- Store Comparison Summary Cards -->
         <div id="retailerCards" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6"></div>
 
-        <!-- Interactive Checkable Live Shopping Columns -->
+        <!-- Live In-Store Checkable Shopping Columns -->
         <div id="splitBreakdownContainer" class="hidden">
-          <div class="flex items-center justify-between mb-3">
-            <h3 class="text-sm font-semibold text-slate-200 flex items-center gap-2">
-              <span>🛒</span> Live In-Store Shopping Columns (Grouped by Retailer)
-            </h3>
-            <button onclick="clearAllChecks()" class="text-xs text-slate-400 hover:text-slate-200 underline">
-              Reset Checks
-            </button>
+          
+          <!-- Controls toolbar -->
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-slate-950/90 border border-slate-800 p-3 rounded-xl mb-4">
+            <div class="flex items-center gap-3">
+              <span class="text-xs font-semibold text-slate-300 flex items-center gap-1.5">
+                <span>🛒</span> In-Store Execution:
+              </span>
+              <label class="flex items-center gap-1.5 text-xs text-slate-300 cursor-pointer select-none">
+                <input id="hideCompletedCheck" type="checkbox" onchange="toggleHideCompleted(this.checked)" class="rounded border-slate-700 bg-slate-900 text-emerald-500 focus:ring-0">
+                <span>Hide Completed</span>
+              </label>
+            </div>
+            <div class="flex items-center gap-2 text-xs">
+              <button onclick="selectAllChecks()" class="px-2.5 py-1 rounded bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-800 transition">
+                Check All
+              </button>
+              <button onclick="clearAllChecks()" class="px-2.5 py-1 rounded bg-slate-900 hover:bg-slate-800 text-rose-400 border border-slate-800 transition">
+                Reset Checks
+              </button>
+            </div>
           </div>
+
+          <!-- Retailer Columns Grid -->
           <div id="splitBasketGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4"></div>
         </div>
       </section>
@@ -261,11 +294,10 @@
             </button>
           </div>
           <div id="ingredientRows" class="space-y-2">
-            <!-- Row 1 -->
             <div class="ingredient-row flex items-center gap-2">
               <input type="text" placeholder="Item (e.g. Chicken Breast)" class="ing-name flex-1 bg-slate-950 border border-slate-700 rounded px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-emerald-500" required>
               <input type="number" step="0.1" value="1.0" placeholder="Qty" class="ing-qty w-20 bg-slate-950 border border-slate-700 rounded px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-emerald-500" required>
-              <input type="text" placeholder="Unit (lbs, cups)" value="lbs" class="ing-unit w-24 bg-slate-950 border border-slate-700 rounded px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-emerald-500" required>
+              <input type="text" placeholder="Unit" value="lbs" class="ing-unit w-24 bg-slate-950 border border-slate-700 rounded px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-emerald-500" required>
               <button type="button" onclick="removeIngredientRow(this)" class="text-slate-500 hover:text-rose-400 text-xs px-1">✕</button>
             </div>
           </div>
@@ -294,25 +326,87 @@
     let isPlanLocked = false;
     let currentGroceryData = null;
     let checkedItemsState = {}; // Key: "store:item_name" -> boolean
+    let hideCompleted = false;
     let selectedTags = new Set(["gluten-free", "dairy-free"]);
     let recipeUploadTags = new Set(["gluten-free", "dairy-free"]);
 
-    // Initialize tags on load
-    document.querySelectorAll('.tag-btn').forEach(btn => {
-      const tag = btn.innerText.trim();
-      if (selectedTags.has(tag)) {
-        btn.classList.remove('bg-slate-950', 'text-slate-400', 'border-slate-700');
-        btn.classList.add('bg-emerald-900/60', 'text-emerald-300', 'border-emerald-600');
+    // Retailer Color/Badge Config
+    const STORE_THEMES = {
+      Aldi: {
+        border: "border-blue-700/60",
+        bg: "bg-blue-950/20",
+        badge: "bg-blue-900/60 text-blue-300 border-blue-700",
+        accent: "text-blue-400",
+        icon: "🛒"
+      },
+      Walmart: {
+        border: "border-sky-600/60",
+        bg: "bg-sky-950/20",
+        badge: "bg-sky-900/60 text-sky-300 border-sky-700",
+        accent: "text-sky-400",
+        icon: "⚡"
+      },
+      Meijer: {
+        border: "border-rose-700/60",
+        bg: "bg-rose-950/20",
+        badge: "bg-rose-900/60 text-rose-300 border-rose-700",
+        accent: "text-rose-400",
+        icon: "🥩"
+      },
+      Amazon: {
+        border: "border-amber-600/60",
+        bg: "bg-amber-950/20",
+        badge: "bg-amber-900/60 text-amber-300 border-amber-700",
+        accent: "text-amber-400",
+        icon: "📦"
+      }
+    };
+
+    // On Page Load: Restore cached state if available
+    window.addEventListener('DOMContentLoaded', () => {
+      // Tags init
+      document.querySelectorAll('.tag-btn').forEach(btn => {
+        const tag = btn.innerText.trim();
+        if (selectedTags.has(tag)) {
+          btn.classList.remove('bg-slate-950', 'text-slate-400', 'border-slate-700');
+          btn.classList.add('bg-emerald-900/60', 'text-emerald-300', 'border-emerald-600');
+        }
+      });
+
+      document.querySelectorAll('.rec-tag-btn').forEach(btn => {
+        const tag = btn.innerText.trim();
+        if (recipeUploadTags.has(tag)) {
+          btn.classList.remove('bg-slate-950', 'text-slate-400', 'border-slate-700');
+          btn.classList.add('bg-emerald-900/60', 'text-emerald-300', 'border-emerald-600');
+        }
+      });
+
+      // Restore Cached Grocery List (offline/supermarket persistence)
+      const cachedPlanId = localStorage.getItem('splitbites_last_plan_id');
+      const cachedGrocery = localStorage.getItem('splitbites_cached_grocery');
+      if (cachedPlanId && cachedGrocery) {
+        try {
+          activePlanId = cachedPlanId;
+          const parsed = JSON.parse(cachedGrocery);
+          currentGroceryData = parsed;
+          renderGroceries(parsed);
+        } catch (e) {
+          console.log("Cached grocery restore error", e);
+        }
       }
     });
 
-    document.querySelectorAll('.rec-tag-btn').forEach(btn => {
-      const tag = btn.innerText.trim();
-      if (recipeUploadTags.has(tag)) {
-        btn.classList.remove('bg-slate-950', 'text-slate-400', 'border-slate-700');
-        btn.classList.add('bg-emerald-900/60', 'text-emerald-300', 'border-emerald-600');
-      }
-    });
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      const toastMsg = document.getElementById('toastMsg');
+      toastMsg.innerText = msg;
+      toast.classList.remove('translate-y-20', 'opacity-0');
+      toast.classList.add('translate-y-0', 'opacity-100');
+      setTimeout(() => {
+        toast.classList.add('translate-y-20', 'opacity-0');
+        toast.classList.remove('translate-y-0', 'opacity-100');
+      }, 2500);
+    }
 
     function switchTab(tab) {
       const planTab = document.getElementById('tabMealPlan');
@@ -323,13 +417,13 @@
       if (tab === 'mealplan') {
         planTab.classList.remove('hidden');
         recipeTab.classList.add('hidden');
-        planBtn.className = "px-4 py-2 text-sm font-semibold rounded-lg bg-emerald-950 text-emerald-300 border border-emerald-800 transition";
-        recipeBtn.className = "px-4 py-2 text-sm font-semibold rounded-lg bg-slate-900 text-slate-400 hover:text-slate-200 border border-slate-800 transition flex items-center gap-2";
+        planBtn.className = "px-4 py-2 text-xs sm:text-sm font-semibold rounded-lg bg-emerald-950 text-emerald-300 border border-emerald-800 transition shrink-0";
+        recipeBtn.className = "px-4 py-2 text-xs sm:text-sm font-semibold rounded-lg bg-slate-900 text-slate-400 hover:text-slate-200 border border-slate-800 transition flex items-center gap-2 shrink-0";
       } else {
         planTab.classList.add('hidden');
         recipeTab.classList.remove('hidden');
-        recipeBtn.className = "px-4 py-2 text-sm font-semibold rounded-lg bg-emerald-950 text-emerald-300 border border-emerald-800 transition flex items-center gap-2";
-        planBtn.className = "px-4 py-2 text-sm font-semibold rounded-lg bg-slate-900 text-slate-400 hover:text-slate-200 border border-slate-800 transition";
+        recipeBtn.className = "px-4 py-2 text-xs sm:text-sm font-semibold rounded-lg bg-emerald-950 text-emerald-300 border border-emerald-800 transition flex items-center gap-2 shrink-0";
+        planBtn.className = "px-4 py-2 text-xs sm:text-sm font-semibold rounded-lg bg-slate-900 text-slate-400 hover:text-slate-200 border border-slate-800 transition shrink-0";
       }
     }
 
@@ -390,7 +484,6 @@
       const difficulty = document.getElementById('recDifficulty').value;
       const rawInst = document.getElementById('recInstructions').value.trim();
 
-      // Gather ingredients
       const ingRows = document.querySelectorAll('.ingredient-row');
       const ingredients = [];
       ingRows.forEach(row => {
@@ -424,8 +517,8 @@
           throw new Error(errData.detail || 'Upload failed');
         }
         const data = await res.json();
-        statusEl.innerHTML = `<span class="text-emerald-400 font-bold">✓ Recipe Uploaded!</span> "${data.title}" added with 1536-dim vector embedding.`;
-        // Reset form partially
+        statusEl.innerHTML = `<span class="text-emerald-400 font-bold">✓ Recipe Uploaded!</span> "${data.title}" indexed into vector pool.`;
+        showToast(`✓ "${data.title}" added to recipe pool!`);
         document.getElementById('recTitle').value = '';
         document.getElementById('recDesc').value = '';
         setTimeout(() => switchTab('mealplan'), 1800);
@@ -452,7 +545,8 @@
         });
         const data = await res.json();
         activeHouseholdId = data.household_id;
-        statusEl.innerHTML = `<span class="text-emerald-400 font-semibold">✓ Profile Saved:</span> ${data.household_name} (${data.dietary_preferences.join(', ') || 'No restrictions'})`;
+        statusEl.innerHTML = `<span class="text-emerald-400 font-semibold">✓ Profile Saved:</span> ${data.household_name} (${data.dietary_preferences.join(', ') || 'None'})`;
+        showToast("✓ Household profile saved!");
       } catch (err) {
         statusEl.innerHTML = `<span class="text-rose-400">Error:</span> ${err.message}`;
       }
@@ -476,6 +570,7 @@
         });
         const plan = await res.json();
         renderPlan(plan);
+        showToast("✓ 5-Day Plan Generated!");
       } catch (err) {
         container.innerHTML = `<div class="text-rose-400 py-8 text-center">Failed to generate plan: ${err.message}</div>`;
       }
@@ -484,6 +579,7 @@
     function renderPlan(plan) {
       activePlanId = plan.plan_id;
       isPlanLocked = plan.is_locked;
+      localStorage.setItem('splitbites_last_plan_id', activePlanId);
 
       document.getElementById('btnShuffle').disabled = isPlanLocked;
       document.getElementById('btnLock').disabled = false;
@@ -502,19 +598,19 @@
         if (!meal) return;
 
         const row = document.createElement('div');
-        row.className = "flex flex-col sm:flex-row sm:items-center justify-between p-3 rounded-lg bg-slate-950/60 border border-slate-800 hover:border-slate-700 transition gap-3";
+        row.className = "flex flex-col sm:flex-row sm:items-center justify-between p-3 rounded-lg bg-slate-950/60 border border-slate-800 hover:border-slate-700 transition gap-2.5 sm:gap-3";
         row.innerHTML = `
-          <div class="flex items-start sm:items-center gap-3">
-            <span class="text-xs font-bold font-mono px-2.5 py-1 rounded bg-slate-800 text-slate-300 w-24 text-center">${day}</span>
+          <div class="flex items-start sm:items-center gap-2.5 sm:gap-3">
+            <span class="text-xs font-bold font-mono px-2.5 py-1 rounded bg-slate-800 text-slate-300 w-24 text-center shrink-0">${day}</span>
             <div>
               <div class="flex items-center gap-2">
-                <span class="font-semibold text-sm text-white">${meal.title}</span>
+                <span class="font-semibold text-xs sm:text-sm text-white">${meal.title}</span>
                 ${meal.is_modified ? '<span class="text-[10px] px-1.5 py-0.5 rounded bg-amber-950 text-amber-400 border border-amber-800 font-mono">Modified</span>' : ''}
               </div>
-              <p class="text-xs text-slate-400 mt-0.5 line-clamp-1">${meal.description || ''}</p>
+              <p class="text-[11px] text-slate-400 mt-0.5 line-clamp-1">${meal.description || ''}</p>
             </div>
           </div>
-          <div class="flex items-center justify-between sm:justify-end gap-3 shrink-0">
+          <div class="flex items-center justify-between sm:justify-end gap-3 shrink-0 pt-1 sm:pt-0">
             <span class="text-xs text-slate-500 font-mono">${meal.prep_time_minutes}m • ${meal.difficulty_level}</span>
             <button onclick="swapMeal('${day}')" ${isPlanLocked ? 'disabled' : ''} class="disabled:opacity-30 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs px-2.5 py-1 rounded transition flex items-center gap-1 border border-slate-700">
               <span>🔄</span> Swap
@@ -535,6 +631,7 @@
         });
         const updated = await res.json();
         renderPlan(updated);
+        showToast(`✓ Swapped ${day} with pgvector match`);
       } catch (err) {
         alert("Failed to swap: " + err.message);
       }
@@ -550,6 +647,7 @@
         });
         const updated = await res.json();
         renderPlan(updated);
+        showToast("✓ Shuffled unlocked slots");
       } catch (err) {
         alert("Failed to shuffle: " + err.message);
       }
@@ -566,6 +664,7 @@
         });
         const updated = await res.json();
         renderPlan(updated);
+        showToast(targetState ? "🔒 Plan Locked for Shopping" : "🔓 Plan Unlocked");
       } catch (err) {
         alert("Failed to update lock: " + err.message);
       }
@@ -599,7 +698,9 @@
         const res = await fetch(`/api/meal-plans/${activePlanId}/grocery-list`);
         const data = await res.json();
         currentGroceryData = data;
+        localStorage.setItem('splitbites_cached_grocery', JSON.stringify(data));
         renderGroceries(data);
+        showToast("✓ Multi-store groceries analyzed!");
       } catch (err) {
         alert("Failed to fetch groceries: " + err.message);
       } finally {
@@ -611,29 +712,30 @@
     function renderGroceries(data) {
       document.getElementById('savingsHero').classList.remove('hidden');
       document.getElementById('splitBreakdownContainer').classList.remove('hidden');
-      document.getElementById('btnCopyList').classList.remove('hidden');
+      document.getElementById('btnCopyMasterList').classList.remove('hidden');
 
       document.getElementById('heroSplitCost').innerText = `$${data.optimal_split_total_cost.toFixed(2)}`;
       document.getElementById('heroSingleCost').innerText = `$${data.single_store_cost.toFixed(2)}`;
       document.getElementById('heroSingleStore').innerText = `Best 1-stop: ${data.recommended_single_store}`;
       document.getElementById('heroSavings').innerText = `$${data.potential_split_savings.toFixed(2)}`;
 
-      // Store comparison cards
+      // Store comparison overview cards
       const retailerCards = document.getElementById('retailerCards');
       retailerCards.innerHTML = '';
 
       for (const [store, info] of Object.entries(data.store_baskets)) {
         const card = document.createElement('div');
         const isBest = store === data.recommended_single_store;
-        card.className = `p-4 rounded-lg bg-slate-950/60 border ${isBest ? 'border-emerald-600 bg-emerald-950/10' : 'border-slate-800'}`;
+        const theme = STORE_THEMES[store] || { border: 'border-slate-800', bg: 'bg-slate-950/60' };
+        card.className = `p-4 rounded-xl bg-slate-950/70 border ${isBest ? 'border-emerald-500 bg-emerald-950/20' : theme.border}`;
         card.innerHTML = `
           <div class="flex items-center justify-between mb-1">
             <span class="font-bold text-sm text-white">${store}</span>
-            ${isBest ? '<span class="text-[10px] bg-emerald-900 text-emerald-300 px-1.5 py-0.5 rounded font-mono">Top Single</span>' : ''}
+            ${isBest ? '<span class="text-[10px] bg-emerald-900 text-emerald-300 px-1.5 py-0.5 rounded font-mono">Best Single-Store</span>' : ''}
           </div>
-          <div class="text-xl font-extrabold text-slate-200 mb-2">$${info.total_estimated_cost.toFixed(2)}</div>
-          <div class="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden mb-1.5">
-            <div class="bg-emerald-500 h-full" style="width: ${info.fulfillment_percentage}%"></div>
+          <div class="text-2xl font-black text-slate-100 mb-2">$${info.total_estimated_cost.toFixed(2)}</div>
+          <div class="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden mb-2">
+            <div class="bg-emerald-500 h-full transition-all" style="width: ${info.fulfillment_percentage}%"></div>
           </div>
           <div class="flex justify-between text-[11px] text-slate-400 font-mono">
             <span>${info.fulfillment_percentage}% fulfill</span>
@@ -643,19 +745,21 @@
         retailerCards.appendChild(card);
       }
 
-      // Checkable Live Shopping Columns
+      // Checkable Live Itemized Shopping Grid
       const splitGrid = document.getElementById('splitBasketGrid');
       splitGrid.innerHTML = '';
 
-      // Load persistent checked state if exists
-      const savedChecks = localStorage.getItem(`splitbites_checks_${activePlanId}`);
+      // Load persistent client-side storage
+      const storageKey = `splitbites_checks_${activePlanId || 'default'}`;
+      const savedChecks = localStorage.getItem(storageKey);
       if (savedChecks) {
         try { checkedItemsState = JSON.parse(savedChecks); } catch (e) { checkedItemsState = {}; }
       }
 
       for (const [store, items] of Object.entries(data.optimal_split_basket)) {
         const col = document.createElement('div');
-        col.className = "bg-slate-950/80 border border-slate-800 rounded-lg p-3.5 flex flex-col justify-between";
+        const theme = STORE_THEMES[store] || { border: 'border-slate-800', bg: 'bg-slate-950/80', badge: 'bg-slate-800 text-slate-300', accent: 'text-emerald-400', icon: '🛒' };
+        col.className = `bg-slate-950/90 border ${theme.border} rounded-xl p-4 flex flex-col justify-between shadow-lg`;
         const storeSubtotal = items.reduce((acc, it) => acc + it.cost, 0);
 
         let itemsHtml = '';
@@ -663,27 +767,45 @@
           const itemKey = `${store}:${it.name}`;
           const isChecked = checkedItemsState[itemKey] || false;
           itemsHtml += `
-            <label class="flex items-start gap-2.5 p-1.5 rounded hover:bg-slate-900/60 transition cursor-pointer group">
-              <input type="checkbox" onchange="toggleItemCheck('${store}', '${it.name}', this.checked)" ${isChecked ? 'checked' : ''} class="mt-0.5 rounded border-slate-700 text-emerald-500 focus:ring-0 focus:ring-offset-0 bg-slate-900 shrink-0">
-              <div class="flex-1 text-[11px] leading-snug">
-                <span id="label-${itemKey}" class="${isChecked ? 'item-checked' : 'text-slate-200'} font-medium block">${it.name}</span>
-                <span class="text-slate-400 text-[10px] font-mono">${it.quantity} ${it.unit}</span>
-              </div>
-              <span class="font-mono text-[11px] text-slate-400 shrink-0">$${it.cost.toFixed(2)}</span>
-            </label>
+            <div id="row-${itemKey}" class="item-row ${isChecked ? 'item-row-checked' : ''} touch-target flex items-center justify-between gap-2.5 p-2 rounded-lg hover:bg-slate-900 transition border border-transparent hover:border-slate-800">
+              <label class="flex items-center gap-2.5 flex-1 cursor-pointer min-w-0">
+                <input type="checkbox" onchange="toggleItemCheck('${store}', '${it.name}', this.checked)" ${isChecked ? 'checked' : ''} class="w-4 h-4 rounded border-slate-700 bg-slate-900 text-emerald-500 focus:ring-0 cursor-pointer shrink-0">
+                <div class="min-w-0 pr-1">
+                  <span id="label-${itemKey}" class="text-xs ${isChecked ? 'item-checked' : 'text-slate-200'} font-medium block truncate">${it.name}</span>
+                  <span class="text-[10px] text-slate-400 font-mono">${it.quantity} ${it.unit}</span>
+                </div>
+              </label>
+              <span class="font-mono text-xs font-semibold text-slate-300 shrink-0">$${it.cost.toFixed(2)}</span>
+            </div>
           `;
         });
 
         col.innerHTML = `
           <div>
-            <div class="flex items-center justify-between pb-2 border-b border-slate-800 mb-2">
+            <div class="flex items-center justify-between pb-3 border-b border-slate-800 mb-3">
               <div>
-                <span class="font-bold text-xs text-emerald-400 uppercase tracking-wide">${store}</span>
-                <span id="store-counter-${store}" class="text-[10px] text-slate-400 block font-mono">0 / ${items.length} done</span>
+                <div class="flex items-center gap-1.5">
+                  <span class="text-sm">${theme.icon}</span>
+                  <span class="font-black text-sm uppercase tracking-wide ${theme.accent}">${store}</span>
+                  <span class="text-[10px] font-mono px-2 py-0.5 rounded-full ${theme.badge}">${items.length} items</span>
+                </div>
+                <div id="store-counter-${store}" class="text-[11px] text-slate-400 font-mono mt-0.5">0 / ${items.length} done (0%)</div>
               </div>
-              <span class="text-xs font-mono font-bold text-white">$${storeSubtotal.toFixed(2)}</span>
+              <div class="text-right">
+                <span class="text-sm font-mono font-black text-white block">$${storeSubtotal.toFixed(2)}</span>
+                <button onclick="copyStoreShoppingList('${store}')" class="text-[10px] text-slate-400 hover:text-emerald-400 transition underline font-mono">
+                  Copy Store
+                </button>
+              </div>
             </div>
-            <div class="space-y-1 max-h-72 overflow-y-auto pr-1">
+
+            <!-- Per-store mini progress bar -->
+            <div class="w-full bg-slate-900 h-1.5 rounded-full overflow-hidden mb-3">
+              <div id="store-progress-${store}" class="bg-emerald-500 h-full transition-all duration-300" style="width: 0%"></div>
+            </div>
+
+            <!-- Checkable item list -->
+            <div class="space-y-1 max-h-80 overflow-y-auto pr-1">
               ${itemsHtml}
             </div>
           </div>
@@ -697,16 +819,32 @@
     function toggleItemCheck(store, itemName, checked) {
       const itemKey = `${store}:${itemName}`;
       checkedItemsState[itemKey] = checked;
+      
       const label = document.getElementById(`label-${itemKey}`);
+      const row = document.getElementById(`row-${itemKey}`);
       if (label) {
         if (checked) {
           label.classList.add('item-checked');
+          if (row) row.classList.add('item-row-checked');
         } else {
           label.classList.remove('item-checked');
+          if (row) row.classList.remove('item-row-checked');
         }
       }
-      localStorage.setItem(`splitbites_checks_${activePlanId}`, JSON.stringify(checkedItemsState));
+
+      const storageKey = `splitbites_checks_${activePlanId || 'default'}`;
+      localStorage.setItem(storageKey, JSON.stringify(checkedItemsState));
       updateShoppingProgress();
+    }
+
+    function toggleHideCompleted(isChecked) {
+      hideCompleted = isChecked;
+      const grid = document.getElementById('splitBasketGrid');
+      if (isChecked) {
+        grid.classList.add('hide-checked');
+      } else {
+        grid.classList.remove('hide-checked');
+      }
     }
 
     function updateShoppingProgress() {
@@ -725,45 +863,115 @@
             storeChecked++;
           }
         });
+
+        const storePercent = items.length > 0 ? Math.round((storeChecked / items.length) * 100) : 0;
         const storeCounter = document.getElementById(`store-counter-${store}`);
+        const storeBar = document.getElementById(`store-progress-${store}`);
         if (storeCounter) {
-          storeCounter.innerText = `${storeChecked} / ${items.length} done`;
+          storeCounter.innerText = `${storeChecked} / ${items.length} done (${storePercent}%)`;
+        }
+        if (storeBar) {
+          storeBar.style.width = `${storePercent}%`;
         }
       }
 
-      const percent = totalItems > 0 ? Math.round((checkedItems / totalItems) * 100) : 0;
-      document.getElementById('shoppingProgressText').innerText = `${checkedItems} / ${totalItems} Items (${percent}%)`;
-      document.getElementById('shoppingProgressBar').style.width = `${percent}%`;
+      const overallPercent = totalItems > 0 ? Math.round((checkedItems / totalItems) * 100) : 0;
+      document.getElementById('shoppingProgressText').innerText = `${checkedItems} / ${totalItems} Items Done`;
+      document.getElementById('shoppingProgressPercent').innerText = `${overallPercent}%`;
+      document.getElementById('shoppingProgressBar').style.width = `${overallPercent}%`;
+    }
+
+    function selectAllChecks() {
+      if (!currentGroceryData) return;
+      for (const [store, items] of Object.entries(currentGroceryData.optimal_split_basket)) {
+        items.forEach(it => {
+          const itemKey = `${store}:${it.name}`;
+          checkedItemsState[itemKey] = true;
+        });
+      }
+      const storageKey = `splitbites_checks_${activePlanId || 'default'}`;
+      localStorage.setItem(storageKey, JSON.stringify(checkedItemsState));
+      document.querySelectorAll('#splitBasketGrid input[type="checkbox"]').forEach(cb => cb.checked = true);
+      document.querySelectorAll('#splitBasketGrid span[id^="label-"]').forEach(span => span.classList.add('item-checked'));
+      document.querySelectorAll('#splitBasketGrid div[id^="row-"]').forEach(row => row.classList.add('item-row-checked'));
+      updateShoppingProgress();
+      showToast("✓ All items marked as checked");
     }
 
     function clearAllChecks() {
       checkedItemsState = {};
-      if (activePlanId) {
-        localStorage.removeItem(`splitbites_checks_${activePlanId}`);
-      }
+      const storageKey = `splitbites_checks_${activePlanId || 'default'}`;
+      localStorage.removeItem(storageKey);
       document.querySelectorAll('#splitBasketGrid input[type="checkbox"]').forEach(cb => cb.checked = false);
       document.querySelectorAll('#splitBasketGrid span[id^="label-"]').forEach(span => span.classList.remove('item-checked'));
+      document.querySelectorAll('#splitBasketGrid div[id^="row-"]').forEach(row => row.classList.remove('item-row-checked'));
       updateShoppingProgress();
+      showToast("Cleared checked items");
     }
 
-    function copyShoppingList() {
+    // 1-Click Copy-to-Clipboard for Mobile Notes Apps (Entire Split Trip)
+    function copyFullShoppingList() {
       if (!currentGroceryData) return;
-      let text = `🛒 SPLITBITES MULTI-STORE SHOPPING LIST\nWeek of: ${currentGroceryData.week_start_date}\nOptimal Total Cost: $${currentGroceryData.optimal_split_total_cost.toFixed(2)} (Savings: $${currentGroceryData.potential_split_savings.toFixed(2)})\n\n`;
+      let text = `🛒 SPLITBITES MULTI-STORE SHOPPING LIST\n`;
+      text += `📅 Week of: ${currentGroceryData.week_start_date}\n`;
+      text += `💰 Optimal Split Cost: $${currentGroceryData.optimal_split_total_cost.toFixed(2)} (Savings: $${currentGroceryData.potential_split_savings.toFixed(2)})\n`;
+      text += `🌐 Source: https://splitbites.tbannon80-hp-mini.stream\n\n`;
 
       for (const [store, items] of Object.entries(currentGroceryData.optimal_split_basket)) {
         const subtotal = items.reduce((a, b) => a + b.cost, 0);
-        text += `🏬 ${store.toUpperCase()} (${items.length} items - $${subtotal.toFixed(2)}):\n`;
+        text += `🏬 ${store.toUpperCase()} (${items.length} items • $${subtotal.toFixed(2)}):\n`;
         items.forEach(it => {
-          text += `  [ ] ${it.name} (${it.quantity} ${it.unit}) - $${it.cost.toFixed(2)}\n`;
+          const itemKey = `${store}:${it.name}`;
+          const isDone = checkedItemsState[itemKey] ? "[x]" : "[ ]";
+          text += `  ${isDone} ${it.name} (${it.quantity} ${it.unit}) - $${it.cost.toFixed(2)}\n`;
         });
         text += `\n`;
       }
 
       navigator.clipboard.writeText(text).then(() => {
-        alert("Shopping list copied to clipboard!");
+        showToast("✓ Master list copied for Apple Notes / Google Keep!");
       }).catch(err => {
-        alert("Could not copy list: " + err);
+        fallbackCopyTextToClipboard(text);
       });
+    }
+
+    // 1-Click Copy-to-Clipboard for an Individual Store List
+    function copyStoreShoppingList(storeName) {
+      if (!currentGroceryData || !currentGroceryData.optimal_split_basket[storeName]) return;
+      const items = currentGroceryData.optimal_split_basket[storeName];
+      const subtotal = items.reduce((a, b) => a + b.cost, 0);
+
+      let text = `🏬 SPLITBITES SHOPPING LIST: ${storeName.toUpperCase()}\n`;
+      text += `💰 Subtotal: $${subtotal.toFixed(2)} (${items.length} items)\n`;
+      text += `📅 Week of: ${currentGroceryData.week_start_date}\n\n`;
+
+      items.forEach(it => {
+        const itemKey = `${storeName}:${it.name}`;
+        const isDone = checkedItemsState[itemKey] ? "[x]" : "[ ]";
+        text += `${isDone} ${it.name} (${it.quantity} ${it.unit}) - $${it.cost.toFixed(2)}\n`;
+      });
+
+      navigator.clipboard.writeText(text).then(() => {
+        showToast(`✓ ${storeName} list copied to clipboard!`);
+      }).catch(err => {
+        fallbackCopyTextToClipboard(text);
+      });
+    }
+
+    function fallbackCopyTextToClipboard(text) {
+      const textArea = document.createElement("textarea");
+      textArea.value = text;
+      textArea.style.position = "fixed";
+      document.body.appendChild(textArea);
+      textArea.focus();
+      textArea.select();
+      try {
+        document.execCommand('copy');
+        showToast("✓ List copied to clipboard!");
+      } catch (err) {
+        alert("Failed to copy list: " + err);
+      }
+      document.body.removeChild(textArea);
     }
   </script>
 </body>

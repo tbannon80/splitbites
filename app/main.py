@@ -38,11 +38,14 @@ app.include_router(households.router)
 app.include_router(recipes.router)
 
 @app.get("/healthz")
+@app.head("/healthz")
 async def health_check():
     return {"status": "healthy", "service": "splitbites-backend"}
 
 @app.get("/", response_class=FileResponse)
+@app.head("/", response_class=FileResponse)
 @app.get("/dashboard", response_class=FileResponse)
+@app.head("/dashboard", response_class=FileResponse)
 async def serve_dashboard():
     index_path = STATIC_DIR / "index.html"
     if index_path.is_file():
