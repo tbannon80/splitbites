@@ -15,6 +15,7 @@ class Recipe(Base):
     __tablename__ = "recipes"
     recipe_id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     creator_id = Column(UUID(as_uuid=True), nullable=True)
+    household_id = Column(UUID(as_uuid=True), ForeignKey("households.household_id", ondelete="SET NULL"), nullable=True)
     title = Column(String(255), nullable=False)
     description = Column(Text)
     prep_time_minutes = Column(Integer)

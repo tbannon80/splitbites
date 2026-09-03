@@ -132,7 +132,17 @@ async def register(payload: RegisterRequest, db: AsyncSession = Depends(get_db))
     db.add(member)
     await db.flush()
 
-    # 4. Optional Spouse Invitation
+    # 4. Seed initial baseline recipes into household's recipe book
+    await db.execute(
+        text("""
+            INSERT INTO household_recipes (household_id, recipe_id)
+            SELECT :hid, recipe_id FROM recipes WHERE creator_id IS NULL
+            ON CONFLICT DO NOTHING
+        """),
+        {"hid": new_household.household_id}
+    )
+
+    # 5. Optional Spouse Invitation
     if payload.spouse_email and payload.spouse_email.strip():
         spouse_clean = payload.spouse_email.strip().lower()
         invite_token = generate_random_token()

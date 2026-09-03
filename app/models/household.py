@@ -17,6 +17,11 @@ class Household(Base):
         secondary="household_dietary_restrictions",
         lazy="selectin"
     )
+    recipes = relationship(
+        "Recipe",
+        secondary="household_recipes",
+        lazy="selectin"
+    )
 
 class HouseholdMember(Base):
     __tablename__ = "household_members"
@@ -30,3 +35,11 @@ class HouseholdDietaryRestriction(Base):
 
     household_id = Column(UUID(as_uuid=True), ForeignKey("households.household_id", ondelete="CASCADE"), primary_key=True)
     preference_id = Column(UUID(as_uuid=True), ForeignKey("dietary_preferences.preference_id", ondelete="CASCADE"), primary_key=True)
+
+class HouseholdRecipe(Base):
+    __tablename__ = "household_recipes"
+
+    household_id = Column(UUID(as_uuid=True), ForeignKey("households.household_id", ondelete="CASCADE"), primary_key=True)
+    recipe_id = Column(UUID(as_uuid=True), ForeignKey("recipes.recipe_id", ondelete="CASCADE"), primary_key=True)
+    added_at = Column(DateTime(timezone=True), server_default=func.now())
+

@@ -236,7 +236,7 @@
         📅 Meal Planner & Live Groceries
       </button>
       <button id="tabCustomRecipeBtn" onclick="switchDashboardTab('customrecipe')" class="px-4 py-2 text-xs sm:text-sm font-semibold rounded-lg bg-slate-900 text-slate-400 hover:text-slate-200 border border-slate-800 transition flex items-center gap-2 shrink-0">
-        <span>🍲</span> Upload Custom Recipe
+        <span>🍲</span> Recipes
       </button>
       <button id="tabFamilyBtn" onclick="switchDashboardTab('family')" class="px-4 py-2 text-xs sm:text-sm font-semibold rounded-lg bg-slate-900 text-slate-400 hover:text-slate-200 border border-slate-800 transition flex items-center gap-2 shrink-0">
         <span>👨‍👩‍👧‍👦</span> Family
@@ -396,107 +396,197 @@
     </div>
 
     <!-- TAB 2: CUSTOM RECIPE UPLOAD -->
-    <div id="tabCustomRecipe" class="hidden max-w-3xl mx-auto bg-slate-900/90 border border-slate-800 rounded-xl p-6 shadow-xl mt-6">
-      <div class="pb-4 border-b border-slate-800 mb-6">
-        <h2 class="text-xl font-bold text-white flex items-center gap-2">
-          <span>🍲</span> Upload Custom Recipe
-        </h2>
-        <p class="text-xs text-slate-400 mt-1">
-          Submit home-cooked meals or import an online recipe. SplitBites automatically reads and indexes the ingredients into your family's recipe pool.
-        </p>
-      </div>
-
-      <!-- URL Scraper Auto-Importer Card -->
-      <div class="bg-slate-950/70 border border-emerald-800/60 rounded-xl p-4 mb-6 shadow-inner">
-        <div class="flex items-center justify-between mb-2">
-          <label class="text-xs font-bold text-emerald-400 uppercase tracking-wide flex items-center gap-1.5">
-            <span>🔗</span> Import from Online Recipe URL
-          </label>
-          <span class="text-[10px] text-slate-400 font-mono hidden sm:inline">Supports Allrecipes, Food Network, NYT, Serious Eats, Blogs</span>
+    <div id="tabCustomRecipe" class="hidden max-w-5xl mx-auto bg-slate-900/90 border border-slate-800 rounded-xl p-5 sm:p-6 shadow-xl mt-6">
+      
+      <!-- Top Header & Sub-Navigation Pills -->
+      <div class="flex flex-col md:flex-row md:items-center justify-between pb-4 border-b border-slate-800 mb-6 gap-3">
+        <div>
+          <h2 class="text-xl font-bold text-white flex items-center gap-2">
+            <span>🍲</span> Family Recipe Book
+          </h2>
+          <p class="text-xs text-slate-400 mt-1">
+            Manage your personal family recipes, explore recipes shared by other families, or import new meals.
+          </p>
         </div>
-        <p class="text-[11px] text-slate-400 mb-3">
-          Paste any recipe link. SplitBites automatically reads the ingredients, steps, cooking times, and dietary tags to pre-fill the form below.
-        </p>
-        <div class="flex flex-col sm:flex-row items-center gap-2">
-          <input id="importUrlInput" type="url" placeholder="https://www.allrecipes.com/recipe/..." class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500 font-mono">
-          <button id="btnFetchUrl" type="button" onclick="handleUrlImport()" class="w-full sm:w-auto bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs py-2 px-4 rounded-lg transition shrink-0 flex items-center justify-center gap-1.5 shadow">
-            <span>📥</span> Fetch & Pre-Fill
+
+        <!-- Sub-Nav Pills -->
+        <div class="flex items-center gap-1.5 bg-slate-950 p-1.5 rounded-xl border border-slate-800 shrink-0 self-start md:self-auto overflow-x-auto max-w-full">
+          <button id="subTabMyRecipesBtn" onclick="switchRecipeSubTab('myrecipes')" class="px-3 py-1.5 text-xs font-semibold rounded-lg bg-emerald-950 text-emerald-300 border border-emerald-800 transition flex items-center gap-1.5 whitespace-nowrap">
+            <span>📖</span> Your Recipes <span id="myRecipesCountBadge" class="text-[10px] bg-emerald-900 px-1.5 py-0.5 rounded-full font-mono">0</span>
+          </button>
+          <button id="subTabCommunityBtn" onclick="switchRecipeSubTab('community')" class="px-3 py-1.5 text-xs font-semibold rounded-lg text-slate-400 hover:text-slate-200 border border-transparent transition flex items-center gap-1.5 whitespace-nowrap">
+            <span>🌐</span> Recipes Submitted by Others
+          </button>
+          <button id="subTabAddBtn" onclick="switchRecipeSubTab('add')" class="px-3 py-1.5 text-xs font-semibold rounded-lg text-slate-400 hover:text-slate-200 border border-transparent transition flex items-center gap-1.5 whitespace-nowrap">
+            <span>➕</span> Add / Import Recipe
           </button>
         </div>
-        <div id="urlImportFeedback" class="mt-2 text-[11px] font-mono text-slate-400 hidden"></div>
       </div>
 
-      <form id="recipeForm" onsubmit="handleRecipeSubmit(event)" class="space-y-4">
-        <div>
-          <label class="block text-xs font-semibold text-slate-300 mb-1">Recipe Title *</label>
-          <input id="recTitle" type="text" required placeholder="e.g. Grandma's Lemon Rosemary Roasted Chicken" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-emerald-500">
-        </div>
-
-        <div>
-          <label class="block text-xs font-semibold text-slate-300 mb-1">Description</label>
-          <textarea id="recDesc" rows="2" placeholder="Briefly describe flavor profile, textures, and origins..." class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-emerald-500"></textarea>
-        </div>
-
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div>
-            <label class="block text-xs font-semibold text-slate-300 mb-1">Prep Time (minutes)</label>
-            <input id="recPrep" type="number" min="5" max="240" value="30" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-emerald-500">
-          </div>
-          <div>
-            <label class="block text-xs font-semibold text-slate-300 mb-1">Difficulty Level</label>
-            <select id="recDifficulty" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-emerald-500">
-              <option value="easy">Easy</option>
-              <option value="quick">Quick (under 20m)</option>
-              <option value="medium">Medium</option>
-              <option value="hard">Advanced</option>
-            </select>
-          </div>
-        </div>
-
-        <div>
-          <label class="block text-xs font-semibold text-slate-300 mb-1.5">Dietary Tags</label>
-          <div id="recipeDietaryTags" class="flex flex-wrap gap-1.5">
-            <button type="button" onclick="toggleRecipeTag(this, 'gluten-free')" class="rec-tag-btn text-xs px-2.5 py-1 rounded-full border border-slate-700 bg-slate-950 text-slate-400 transition">gluten-free</button>
-            <button type="button" onclick="toggleRecipeTag(this, 'dairy-free')" class="rec-tag-btn text-xs px-2.5 py-1 rounded-full border border-slate-700 bg-slate-950 text-slate-400 transition">dairy-free</button>
-            <button type="button" onclick="toggleRecipeTag(this, 'high-protein')" class="rec-tag-btn text-xs px-2.5 py-1 rounded-full border border-slate-700 bg-slate-950 text-slate-400 transition">high-protein</button>
-            <button type="button" onclick="toggleRecipeTag(this, 'vegetarian')" class="rec-tag-btn text-xs px-2.5 py-1 rounded-full border border-slate-700 bg-slate-950 text-slate-400 transition">vegetarian</button>
-            <button type="button" onclick="toggleRecipeTag(this, 'vegan')" class="rec-tag-btn text-xs px-2.5 py-1 rounded-full border border-slate-700 bg-slate-950 text-slate-400 transition">vegan</button>
-            <button type="button" onclick="toggleRecipeTag(this, 'keto')" class="rec-tag-btn text-xs px-2.5 py-1 rounded-full border border-slate-700 bg-slate-950 text-slate-400 transition">keto</button>
-            <button type="button" onclick="toggleRecipeTag(this, 'pescatarian')" class="rec-tag-btn text-xs px-2.5 py-1 rounded-full border border-slate-700 bg-slate-950 text-slate-400 transition">pescatarian</button>
-          </div>
-        </div>
-
-        <!-- Ingredients Builder -->
-        <div>
-          <div class="flex items-center justify-between mb-2">
-            <label class="block text-xs font-semibold text-slate-300">Ingredients Builder</label>
-            <button type="button" onclick="addIngredientRow()" class="text-xs bg-slate-800 hover:bg-slate-700 text-emerald-400 px-2.5 py-1 rounded border border-slate-700 transition">
-              + Add Ingredient
+      <!-- SUB-VIEW 1: YOUR RECIPES -->
+      <div id="subViewMyRecipes" class="space-y-4">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-slate-950/60 p-3 rounded-xl border border-slate-800">
+          <input id="searchMyRecipesInput" oninput="filterMyRecipes()" type="text" placeholder="Search your recipes by name or dietary tag..." class="w-full sm:w-80 bg-slate-900 border border-slate-700 rounded-lg px-3 py-1.5 text-xs text-white focus:outline-none focus:border-emerald-500">
+          <div class="flex items-center gap-2">
+            <button onclick="switchRecipeSubTab('community')" class="text-xs text-emerald-400 hover:text-emerald-300 transition flex items-center gap-1">
+              <span>🌐</span> Click to view recipes submitted by others &rarr;
             </button>
           </div>
-          <div id="ingredientRows" class="space-y-2">
-            <div class="ingredient-row flex items-center gap-2">
-              <input type="text" placeholder="Item (e.g. Chicken Breast)" class="ing-name flex-1 bg-slate-950 border border-slate-700 rounded px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-emerald-500" required>
-              <input type="number" step="0.1" value="1.0" placeholder="Qty" class="ing-qty w-20 bg-slate-950 border border-slate-700 rounded px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-emerald-500" required>
-              <input type="text" placeholder="Unit" value="lbs" class="ing-unit w-24 bg-slate-950 border border-slate-700 rounded px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-emerald-500" required>
-              <button type="button" onclick="removeIngredientRow(this)" class="text-slate-500 hover:text-rose-400 text-xs px-1">✕</button>
-            </div>
+        </div>
+
+        <div id="myRecipesLoading" class="text-center py-12 text-slate-400 text-xs">
+          <div class="animate-spin text-2xl mb-2">⚡</div> Loading your family recipe book...
+        </div>
+
+        <div id="myRecipesEmpty" class="hidden text-center py-12 bg-slate-950/40 border border-dashed border-slate-800 rounded-xl p-6">
+          <span class="text-3xl">📖</span>
+          <h3 class="text-sm font-bold text-white mt-2">Your family recipe book is currently empty</h3>
+          <p class="text-xs text-slate-400 mt-1 max-w-md mx-auto">
+            You can add recipes created by other families or upload your own favorites using our online recipe URL importer.
+          </p>
+          <div class="flex items-center justify-center gap-3 mt-4">
+            <button onclick="switchRecipeSubTab('community')" class="bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold px-3 py-2 rounded-lg transition">
+              Browse Recipes from Others
+            </button>
+            <button onclick="switchRecipeSubTab('add')" class="bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold px-3 py-2 rounded-lg border border-slate-700 transition">
+              Import a Recipe URL
+            </button>
           </div>
         </div>
 
-        <!-- Step Instructions -->
-        <div>
-          <label class="block text-xs font-semibold text-slate-300 mb-1">Preparation Instructions (One step per line)</label>
-          <textarea id="recInstructions" rows="4" required placeholder="Step 1: Pat chicken dry and season generously with salt and pepper.&#10;Step 2: Sear skin-side down in cast iron for 6 minutes until golden.&#10;Step 3: Transfer to 400°F oven and roast until internal temp reaches 165°F." class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-emerald-500"></textarea>
+        <div id="myRecipesGrid" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+      </div>
+
+      <!-- SUB-VIEW 2: RECIPES SUBMITTED BY OTHERS (COMMUNITY) -->
+      <div id="subViewCommunity" class="space-y-4 hidden">
+        <div class="bg-emerald-950/20 border border-emerald-800/60 p-4 rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div>
+            <h3 class="text-sm font-bold text-white flex items-center gap-1.5">
+              <span>🌐</span> Recipes Submitted by Other Family Groups
+            </h3>
+            <p class="text-xs text-slate-400 mt-0.5">
+              These recipes were added by other families or chefs. Click <strong>+ Add to Your Recipe Book</strong> to copy them into your personal rotation.
+            </p>
+          </div>
+          <button onclick="switchRecipeSubTab('myrecipes')" class="text-xs text-slate-400 hover:text-white transition shrink-0 underline">
+            &larr; Back to Your Recipes
+          </button>
         </div>
 
-        <div class="pt-3">
-          <button id="btnUploadRecipe" type="submit" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-semibold py-2.5 px-4 rounded-lg text-sm transition shadow-lg shadow-emerald-950 flex items-center justify-center gap-2">
-            <span>🚀</span> Save & Index Recipe
-          </button>
-          <div id="recipeUploadStatus" class="mt-3 text-xs text-slate-400 font-mono text-center"></div>
+        <div id="communityLoading" class="text-center py-12 text-slate-400 text-xs">
+          <div class="animate-spin text-2xl mb-2">⚡</div> Discovering community recipes...
         </div>
-      </form>
+
+        <div id="communityEmpty" class="hidden text-center py-12 bg-slate-950/40 border border-dashed border-slate-800 rounded-xl p-6">
+          <span class="text-3xl">✨</span>
+          <h3 class="text-sm font-bold text-white mt-2">No new community recipes found</h3>
+          <p class="text-xs text-slate-400 mt-1 max-w-md mx-auto">
+            You've already added all currently available recipes into your family recipe book, or none have been submitted yet.
+          </p>
+          <button onclick="switchRecipeSubTab('add')" class="mt-4 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold px-3.5 py-2 rounded-lg transition">
+            Be the first to upload a new recipe!
+          </button>
+        </div>
+
+        <div id="communityRecipesGrid" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+      </div>
+
+      <!-- SUB-VIEW 3: ADD / IMPORT CUSTOM RECIPE -->
+      <div id="subViewAddRecipe" class="space-y-6 hidden">
+        
+        <!-- URL Scraper Auto-Importer Card -->
+        <div class="bg-slate-950/70 border border-emerald-800/60 rounded-xl p-4 shadow-inner">
+          <div class="flex items-center justify-between mb-2">
+            <label class="text-xs font-bold text-emerald-400 uppercase tracking-wide flex items-center gap-1.5">
+              <span>🔗</span> Import from Online Recipe URL
+            </label>
+            <span class="text-[10px] text-slate-400 font-mono hidden sm:inline">Supports Allrecipes, Food Network, NYT, Serious Eats, Blogs</span>
+          </div>
+          <p class="text-[11px] text-slate-400 mb-3">
+            Paste any recipe link. SplitBites automatically reads the ingredients, steps, cooking times, and dietary tags to pre-fill the form below.
+          </p>
+          <div class="flex flex-col sm:flex-row items-center gap-2">
+            <input id="importUrlInput" type="url" placeholder="https://www.allrecipes.com/recipe/..." class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500 font-mono">
+            <button id="btnFetchUrl" type="button" onclick="handleUrlImport()" class="w-full sm:w-auto bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs py-2 px-4 rounded-lg transition shrink-0 flex items-center justify-center gap-1.5 shadow">
+              <span>📥</span> Fetch & Pre-Fill
+            </button>
+          </div>
+          <div id="urlImportFeedback" class="mt-2 text-[11px] font-mono text-slate-400 hidden"></div>
+        </div>
+
+        <form id="recipeForm" onsubmit="handleRecipeSubmit(event)" class="space-y-4 bg-slate-950/40 border border-slate-800 p-5 rounded-xl">
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1">Recipe Title *</label>
+            <input id="recTitle" type="text" required placeholder="e.g. Grandma's Lemon Rosemary Roasted Chicken" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-emerald-500">
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1">Description</label>
+            <textarea id="recDesc" rows="2" placeholder="Briefly describe flavor profile, textures, and origins..." class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-emerald-500"></textarea>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-semibold text-slate-300 mb-1">Prep Time (minutes)</label>
+              <input id="recPrep" type="number" min="5" max="240" value="30" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-emerald-500">
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-slate-300 mb-1">Difficulty Level</label>
+              <select id="recDifficulty" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-emerald-500">
+                <option value="easy">Easy</option>
+                <option value="quick">Quick (under 20m)</option>
+                <option value="medium">Medium</option>
+                <option value="hard">Advanced</option>
+              </select>
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1.5">Dietary Tags</label>
+            <div id="recipeDietaryTags" class="flex flex-wrap gap-1.5">
+              <button type="button" onclick="toggleRecipeTag(this, 'gluten-free')" class="rec-tag-btn text-xs px-2.5 py-1 rounded-full border border-slate-700 bg-slate-950 text-slate-400 transition">gluten-free</button>
+              <button type="button" onclick="toggleRecipeTag(this, 'dairy-free')" class="rec-tag-btn text-xs px-2.5 py-1 rounded-full border border-slate-700 bg-slate-950 text-slate-400 transition">dairy-free</button>
+              <button type="button" onclick="toggleRecipeTag(this, 'high-protein')" class="rec-tag-btn text-xs px-2.5 py-1 rounded-full border border-slate-700 bg-slate-950 text-slate-400 transition">high-protein</button>
+              <button type="button" onclick="toggleRecipeTag(this, 'vegetarian')" class="rec-tag-btn text-xs px-2.5 py-1 rounded-full border border-slate-700 bg-slate-950 text-slate-400 transition">vegetarian</button>
+              <button type="button" onclick="toggleRecipeTag(this, 'vegan')" class="rec-tag-btn text-xs px-2.5 py-1 rounded-full border border-slate-700 bg-slate-950 text-slate-400 transition">vegan</button>
+              <button type="button" onclick="toggleRecipeTag(this, 'keto')" class="rec-tag-btn text-xs px-2.5 py-1 rounded-full border border-slate-700 bg-slate-950 text-slate-400 transition">keto</button>
+              <button type="button" onclick="toggleRecipeTag(this, 'pescatarian')" class="rec-tag-btn text-xs px-2.5 py-1 rounded-full border border-slate-700 bg-slate-950 text-slate-400 transition">pescatarian</button>
+            </div>
+          </div>
+
+          <!-- Ingredients Builder -->
+          <div>
+            <div class="flex items-center justify-between mb-2">
+              <label class="block text-xs font-semibold text-slate-300">Ingredients Builder</label>
+              <button type="button" onclick="addIngredientRow()" class="text-xs bg-slate-800 hover:bg-slate-700 text-emerald-400 px-2.5 py-1 rounded border border-slate-700 transition">
+                + Add Ingredient
+              </button>
+            </div>
+            <div id="ingredientRows" class="space-y-2">
+              <div class="ingredient-row flex items-center gap-2">
+                <input type="text" placeholder="Item (e.g. Chicken Breast)" class="ing-name flex-1 bg-slate-950 border border-slate-700 rounded px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-emerald-500" required>
+                <input type="number" step="0.1" value="1.0" placeholder="Qty" class="ing-qty w-20 bg-slate-950 border border-slate-700 rounded px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-emerald-500" required>
+                <input type="text" placeholder="Unit" value="lbs" class="ing-unit w-24 bg-slate-950 border border-slate-700 rounded px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-emerald-500" required>
+                <button type="button" onclick="removeIngredientRow(this)" class="text-slate-500 hover:text-rose-400 text-xs px-1">✕</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Step Instructions -->
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1">Preparation Instructions (One step per line)</label>
+            <textarea id="recInstructions" rows="4" required placeholder="Step 1: Pat chicken dry and season generously with salt and pepper.&#10;Step 2: Sear skin-side down in cast iron for 6 minutes until golden.&#10;Step 3: Transfer to 400°F oven and roast until internal temp reaches 165°F." class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-emerald-500"></textarea>
+          </div>
+
+          <div class="pt-3">
+            <button id="btnUploadRecipe" type="submit" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-semibold py-2.5 px-4 rounded-lg text-sm transition shadow-lg shadow-emerald-950 flex items-center justify-center gap-2">
+              <span>🚀</span> Save & Index to Family Recipe Book
+            </button>
+            <div id="recipeUploadStatus" class="mt-3 text-xs text-slate-400 font-mono text-center"></div>
+          </div>
+        </form>
+      </div>
+
     </div>
 
     <!-- TAB 3: FAMILY -->
@@ -752,7 +842,7 @@
 
         const res = await fetch('/api/auth/register', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${authToken}` },
           body: JSON.stringify(payload)
         });
         const data = await res.json();
@@ -909,6 +999,256 @@
       showAuthScreen();
     }
 
+    
+    // Recipe Book & Community Recipes State
+    let myRecipesList = [];
+
+    function switchRecipeSubTab(subTab) {
+      const myTab = document.getElementById('subViewMyRecipes');
+      const commTab = document.getElementById('subViewCommunity');
+      const addTab = document.getElementById('subViewAddRecipe');
+
+      const myBtn = document.getElementById('subTabMyRecipesBtn');
+      const commBtn = document.getElementById('subTabCommunityBtn');
+      const addBtn = document.getElementById('subTabAddBtn');
+
+      myTab.classList.add('hidden');
+      commTab.classList.add('hidden');
+      addTab.classList.add('hidden');
+
+      myBtn.className = "px-3 py-1.5 text-xs font-semibold rounded-lg text-slate-400 hover:text-slate-200 border border-transparent transition flex items-center gap-1.5 whitespace-nowrap";
+      commBtn.className = "px-3 py-1.5 text-xs font-semibold rounded-lg text-slate-400 hover:text-slate-200 border border-transparent transition flex items-center gap-1.5 whitespace-nowrap";
+      addBtn.className = "px-3 py-1.5 text-xs font-semibold rounded-lg text-slate-400 hover:text-slate-200 border border-transparent transition flex items-center gap-1.5 whitespace-nowrap";
+
+      if (subTab === 'myrecipes') {
+        myTab.classList.remove('hidden');
+        myBtn.className = "px-3 py-1.5 text-xs font-semibold rounded-lg bg-emerald-950 text-emerald-300 border border-emerald-800 transition flex items-center gap-1.5 whitespace-nowrap";
+        loadMyRecipes();
+      } else if (subTab === 'community') {
+        commTab.classList.remove('hidden');
+        commBtn.className = "px-3 py-1.5 text-xs font-semibold rounded-lg bg-emerald-950 text-emerald-300 border border-emerald-800 transition flex items-center gap-1.5 whitespace-nowrap";
+        loadCommunityRecipes();
+      } else if (subTab === 'add') {
+        addTab.classList.remove('hidden');
+        addBtn.className = "px-3 py-1.5 text-xs font-semibold rounded-lg bg-emerald-950 text-emerald-300 border border-emerald-800 transition flex items-center gap-1.5 whitespace-nowrap";
+      }
+    }
+
+    async function loadMyRecipes() {
+      if (!authToken) return;
+      const loader = document.getElementById('myRecipesLoading');
+      const empty = document.getElementById('myRecipesEmpty');
+      const grid = document.getElementById('myRecipesGrid');
+      const badge = document.getElementById('myRecipesCountBadge');
+
+      loader.classList.remove('hidden');
+      empty.classList.add('hidden');
+      grid.innerHTML = '';
+
+      try {
+        const res = await fetch('/api/recipes/my-recipes', {
+          headers: { 'Authorization': `Bearer ${authToken}` }
+        });
+        if (!res.ok) throw new Error("Failed to load your recipes");
+        const recipes = await res.json();
+        myRecipesList = recipes;
+        badge.innerText = recipes.length;
+        renderMyRecipes(recipes);
+      } catch (err) {
+        console.error("Error fetching my recipes:", err);
+        grid.innerHTML = `<div class="text-rose-400 text-xs py-4 col-span-2">${err.message}</div>`;
+      } finally {
+        loader.classList.add('hidden');
+      }
+    }
+
+    function renderMyRecipes(recipes) {
+      const empty = document.getElementById('myRecipesEmpty');
+      const grid = document.getElementById('myRecipesGrid');
+      grid.innerHTML = '';
+
+      if (!recipes || recipes.length === 0) {
+        empty.classList.remove('hidden');
+        return;
+      }
+      empty.classList.add('hidden');
+
+      recipes.forEach(r => {
+        const card = document.createElement('div');
+        card.className = "bg-slate-950/80 border border-slate-800 hover:border-slate-700 transition rounded-xl p-4 flex flex-col justify-between shadow-lg";
+
+        const tagBadges = (r.dietary_tags || []).map(t =>
+          `<span class="text-[10px] px-2 py-0.5 rounded-full bg-slate-900 border border-slate-700 text-slate-300 font-mono">${t}</span>`
+        ).join(' ');
+
+        const ingCount = (r.ingredients || []).length;
+        const ingPreview = (r.ingredients || []).slice(0, 3).map(i => i.name).join(', ');
+        const ingMore = ingCount > 3 ? ` +${ingCount - 3} more` : '';
+
+        card.innerHTML = `
+          <div>
+            <div class="flex items-start justify-between gap-2 mb-1.5">
+              <h4 class="font-bold text-sm text-white leading-tight">${r.title}</h4>
+              <span class="text-[10px] font-mono uppercase px-2 py-0.5 rounded-full shrink-0 ${r.is_created_by_family ? 'bg-emerald-950 text-emerald-300 border border-emerald-800' : 'bg-slate-800 text-slate-400'}">
+                ${r.is_created_by_family ? 'Family Recipe' : 'Catalog / Added'}
+              </span>
+            </div>
+            ${r.description ? `<p class="text-xs text-slate-400 mb-2 line-clamp-2">${r.description}</p>` : ''}
+            <div class="flex items-center gap-2 text-[11px] text-slate-400 font-mono mb-2.5">
+              <span>⏱ ${r.prep_time_minutes || 30}m</span>
+              <span>•</span>
+              <span class="capitalize">📊 ${r.difficulty_level || 'medium'}</span>
+              <span>•</span>
+              <span>🥕 ${ingCount} items</span>
+            </div>
+            ${ingCount > 0 ? `<div class="text-[11px] text-slate-400 bg-slate-900/60 p-2 rounded-lg border border-slate-800/80 mb-3 font-mono truncate"><strong class="text-slate-300">Items:</strong> ${ingPreview}${ingMore}</div>` : ''}
+            <div class="flex flex-wrap gap-1 mb-3">
+              ${tagBadges}
+            </div>
+          </div>
+          <div class="pt-3 border-t border-slate-800/80 flex items-center justify-between">
+            <span class="text-[10px] text-slate-400 font-mono">In your meal rotation</span>
+            <button onclick="deleteMyRecipe('${r.recipe_id}', '${r.title.replace(/'/g, "\\'")}')" class="text-xs bg-rose-950/40 hover:bg-rose-900/60 text-rose-300 border border-rose-900/60 hover:border-rose-700 px-2.5 py-1 rounded-lg transition flex items-center gap-1 shadow">
+              <span>🗑️</span> Delete
+            </button>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    function filterMyRecipes() {
+      const q = document.getElementById('searchMyRecipesInput').value.toLowerCase().trim();
+      if (!q) {
+        renderMyRecipes(myRecipesList);
+        return;
+      }
+      const filtered = myRecipesList.filter(r => {
+        const titleMatch = r.title.toLowerCase().includes(q);
+        const descMatch = (r.description || '').toLowerCase().includes(q);
+        const tagMatch = (r.dietary_tags || []).some(t => t.toLowerCase().includes(q));
+        return titleMatch || descMatch || tagMatch;
+      });
+      renderMyRecipes(filtered);
+    }
+
+    async function deleteMyRecipe(recipeId, recipeTitle) {
+      if (!confirm(`Are you sure you want to remove "${recipeTitle}" from your family recipe book? It will no longer auto-populate in your meal plans.`)) {
+        return;
+      }
+
+      try {
+        const res = await fetch(`/api/recipes/my-recipes/${recipeId}`, {
+          method: 'DELETE',
+          headers: { 'Authorization': `Bearer ${authToken}` }
+        });
+        if (!res.ok) {
+          const err = await res.json();
+          throw new Error(err.detail || "Failed to delete recipe");
+        }
+        showToast(`✓ Removed "${recipeTitle}" from your recipe book`);
+        loadMyRecipes();
+      } catch (err) {
+        alert(err.message);
+      }
+    }
+
+    async function loadCommunityRecipes() {
+      if (!authToken) return;
+      const loader = document.getElementById('communityLoading');
+      const empty = document.getElementById('communityEmpty');
+      const grid = document.getElementById('communityRecipesGrid');
+
+      loader.classList.remove('hidden');
+      empty.classList.add('hidden');
+      grid.innerHTML = '';
+
+      try {
+        const res = await fetch('/api/recipes/community', {
+          headers: { 'Authorization': `Bearer ${authToken}` }
+        });
+        if (!res.ok) throw new Error("Failed to load community recipes");
+        const recipes = await res.json();
+        renderCommunityRecipes(recipes);
+      } catch (err) {
+        console.error("Error fetching community recipes:", err);
+        grid.innerHTML = `<div class="text-rose-400 text-xs py-4 col-span-2">${err.message}</div>`;
+      } finally {
+        loader.classList.add('hidden');
+      }
+    }
+
+    function renderCommunityRecipes(recipes) {
+      const empty = document.getElementById('communityEmpty');
+      const grid = document.getElementById('communityRecipesGrid');
+      grid.innerHTML = '';
+
+      if (!recipes || recipes.length === 0) {
+        empty.classList.remove('hidden');
+        return;
+      }
+      empty.classList.add('hidden');
+
+      recipes.forEach(r => {
+        const card = document.createElement('div');
+        card.className = "bg-slate-950/80 border border-slate-800 hover:border-slate-700 transition rounded-xl p-4 flex flex-col justify-between shadow-lg";
+
+        const tagBadges = (r.dietary_tags || []).map(t =>
+          `<span class="text-[10px] px-2 py-0.5 rounded-full bg-slate-900 border border-slate-700 text-slate-300 font-mono">${t}</span>`
+        ).join(' ');
+
+        const ingCount = (r.ingredients || []).length;
+        const ingPreview = (r.ingredients || []).slice(0, 3).map(i => i.name).join(', ');
+        const ingMore = ingCount > 3 ? ` +${ingCount - 3} more` : '';
+
+        card.innerHTML = `
+          <div>
+            <div class="flex items-start justify-between gap-2 mb-1.5">
+              <h4 class="font-bold text-sm text-white leading-tight">${r.title}</h4>
+              <span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-teal-950 text-teal-300 border border-teal-800 shrink-0">
+                Shared by ${r.submitted_by_family || 'Community'}
+              </span>
+            </div>
+            ${r.description ? `<p class="text-xs text-slate-400 mb-2 line-clamp-2">${r.description}</p>` : ''}
+            <div class="flex items-center gap-2 text-[11px] text-slate-400 font-mono mb-2.5">
+              <span>⏱ ${r.prep_time_minutes || 30}m</span>
+              <span>•</span>
+              <span class="capitalize">📊 ${r.difficulty_level || 'medium'}</span>
+              <span>•</span>
+              <span>🥕 ${ingCount} items</span>
+            </div>
+            ${ingCount > 0 ? `<div class="text-[11px] text-slate-400 bg-slate-900/60 p-2 rounded-lg border border-slate-800/80 mb-3 font-mono truncate"><strong class="text-slate-300">Items:</strong> ${ingPreview}${ingMore}</div>` : ''}
+            <div class="flex flex-wrap gap-1 mb-3">
+              ${tagBadges}
+            </div>
+          </div>
+          <div class="pt-3 border-t border-slate-800/80 flex items-center justify-end">
+            <button onclick="addCommunityRecipe('${r.recipe_id}', '${r.title.replace(/'/g, "\\'")}')" class="text-xs bg-emerald-600 hover:bg-emerald-500 text-white font-semibold px-3 py-1.5 rounded-lg transition flex items-center gap-1.5 shadow shadow-emerald-950">
+              <span>➕</span> Add to Your Recipe Book
+            </button>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    async function addCommunityRecipe(recipeId, recipeTitle) {
+      try {
+        const res = await fetch(`/api/recipes/community/${recipeId}/add`, {
+          method: 'POST',
+          headers: { 'Authorization': `Bearer ${authToken}` }
+        });
+        if (!res.ok) {
+          const err = await res.json();
+          throw new Error(err.detail || "Failed to add recipe");
+        }
+        showToast(`✓ Added "${recipeTitle}" to your recipe book!`);
+        loadCommunityRecipes();
+      } catch (err) {
+        alert(err.message);
+      }
+    }
+
     function switchDashboardTab(tab) {
       const mealPlanTab = document.getElementById('tabMealPlan');
       const recipeTab = document.getElementById('tabCustomRecipe');
@@ -931,6 +1271,7 @@
       } else if (tab === 'customrecipe') {
         recipeTab.classList.remove('hidden');
         recipeBtn.className = "px-4 py-2 text-xs sm:text-sm font-semibold rounded-lg bg-emerald-950 text-emerald-300 border border-emerald-800 transition flex items-center gap-2 shrink-0";
+        switchRecipeSubTab('myrecipes');
       } else if (tab === 'family') {
         familyTab.classList.remove('hidden');
         familyBtn.className = "px-4 py-2 text-xs sm:text-sm font-semibold rounded-lg bg-emerald-950 text-emerald-300 border border-emerald-800 transition flex items-center gap-2 shrink-0";
@@ -1092,7 +1433,7 @@
 
         const res = await fetch('/api/meal-plans/generate', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${authToken}` },
           body: JSON.stringify(payload)
         });
         const plan = await res.json();
@@ -1629,7 +1970,7 @@
       try {
         const res = await fetch('/api/recipes/', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${authToken}` },
           body: JSON.stringify(payload)
         });
         if (!res.ok) {

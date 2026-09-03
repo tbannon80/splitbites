@@ -9,7 +9,7 @@ from sqlalchemy import select, text
 from sqlalchemy.orm import selectinload
 
 from app.database.session import AsyncSessionLocal
-from app.models import MealPlan, MealPlanItem, Recipe, Household, DietaryPreference
+from app.models import MealPlan, MealPlanItem, Recipe, Household, DietaryPreference, HouseholdRecipe
 from app.schemas.meal_plan import (
     MealPlanGenerateRequest,
     MealPlanSwapRequest,
@@ -78,10 +78,25 @@ async def generate_weekly_plan(
         for tag in payload.dietary_tags:
             required_tags.add(tag.lower())
 
-    # 2. Fetch recipes with their dietary preferences
-    rec_stmt = select(Recipe).options(selectinload(Recipe.dietary_preferences))
-    result = await db.execute(rec_stmt)
-    all_recipes = result.scalars().all()
+    # 2. Fetch recipes: strictly restrict to this household's recipe book if household is known
+    if household:
+        rec_stmt = (
+            select(Recipe)
+            .join(HouseholdRecipe, Recipe.recipe_id == HouseholdRecipe.recipe_id)
+            .where(HouseholdRecipe.household_id == household.household_id)
+            .options(selectinload(Recipe.dietary_preferences))
+        )
+        result = await db.execute(rec_stmt)
+        all_recipes = result.scalars().all()
+        # If household has no recipes in their book yet, fall back to baseline catalog
+        if not all_recipes:
+            rec_stmt = select(Recipe).options(selectinload(Recipe.dietary_preferences)).where(Recipe.creator_id == None)
+            result = await db.execute(rec_stmt)
+            all_recipes = result.scalars().all()
+    else:
+        rec_stmt = select(Recipe).options(selectinload(Recipe.dietary_preferences))
+        result = await db.execute(rec_stmt)
+        all_recipes = result.scalars().all()
 
     if not all_recipes:
         raise HTTPException(status_code=404, detail="No recipes found in database. Please run the seeder script.")
@@ -245,9 +260,22 @@ async def swap_meal(
             vec_list = [float(x) for x in current_recipe.embedding]
             vec_str = "[" + ",".join(str(x) for x in vec_list) + "]"
 
-            # Query candidate recipes with dietary tags
-            all_rec_res = await db.execute(select(Recipe).options(selectinload(Recipe.dietary_preferences)))
-            candidates = all_rec_res.scalars().all()
+            # Query candidate recipes from this household's recipe book if available
+            if plan.household_id:
+                cand_stmt = (
+                    select(Recipe)
+                    .join(HouseholdRecipe, Recipe.recipe_id == HouseholdRecipe.recipe_id)
+                    .where(HouseholdRecipe.household_id == plan.household_id)
+                    .options(selectinload(Recipe.dietary_preferences))
+                )
+                all_rec_res = await db.execute(cand_stmt)
+                candidates = all_rec_res.scalars().all()
+                if not candidates:
+                    all_rec_res = await db.execute(select(Recipe).options(selectinload(Recipe.dietary_preferences)))
+                    candidates = all_rec_res.scalars().all()
+            else:
+                all_rec_res = await db.execute(select(Recipe).options(selectinload(Recipe.dietary_preferences)))
+                candidates = all_rec_res.scalars().all()
             eligible_ids = [
                 r.recipe_id for r in candidates
                 if r.recipe_id not in scheduled_ids and household_tags.issubset({p.preference_name.lower() for p in r.dietary_preferences})
@@ -349,8 +377,20 @@ async def shuffle_meal_plan(
 
     preserve_modified = payload.preserve_modified if payload else True
 
-    all_res = await db.execute(select(Recipe))
-    all_recipes = all_res.scalars().all()
+    if plan.household_id:
+        cand_stmt = (
+            select(Recipe)
+            .join(HouseholdRecipe, Recipe.recipe_id == HouseholdRecipe.recipe_id)
+            .where(HouseholdRecipe.household_id == plan.household_id)
+        )
+        all_res = await db.execute(cand_stmt)
+        all_recipes = all_res.scalars().all()
+        if not all_recipes:
+            all_res = await db.execute(select(Recipe))
+            all_recipes = all_res.scalars().all()
+    else:
+        all_res = await db.execute(select(Recipe))
+        all_recipes = all_res.scalars().all()
 
     assigned_ids = {it.recipe_id for it in plan.items if it.is_modified and preserve_modified}
     candidate_pool = [r for r in all_recipes if r.recipe_id not in assigned_ids]
