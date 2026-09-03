@@ -1,6 +1,7 @@
 from sqlalchemy import Column, String, Integer, Text, Boolean, DECIMAL, ForeignKey, DateTime
 from sqlalchemy.dialects.postgresql import UUID, JSONB
 from sqlalchemy.sql import func
+from pgvector.sqlalchemy import Vector
 from app.database.session import Base
 import uuid
 
@@ -20,6 +21,7 @@ class Recipe(Base):
     instructions = Column(JSONB, nullable=False)
     is_public = Column(Boolean, default=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
+    embedding = Column(Vector(1536), nullable=True)
 
 class Ingredient(Base):
     __tablename__ = "ingredients"
