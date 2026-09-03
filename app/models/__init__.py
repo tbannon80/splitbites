@@ -3,6 +3,7 @@ from app.models.recipe import Recipe, Ingredient, RecipeIngredient, DietaryPrefe
 from app.models.user import User
 from app.models.household import Household, HouseholdMember, HouseholdDietaryRestriction
 from app.models.meal_plan import MealPlan, MealPlanItem
+from app.models.retailer import RetailerPricing
 
 __all__ = [
     "Base",
@@ -16,4 +17,5 @@ __all__ = [
     "HouseholdDietaryRestriction",
     "MealPlan",
     "MealPlanItem",
+    "RetailerPricing",
 ]
