@@ -4,7 +4,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse, HTMLResponse
-from app.routers import meal_plans, households, recipes
+from app.routers import meal_plans, households, recipes, auth
 
 app = FastAPI(title="SplitBites API", version="1.0.0")
 
@@ -33,6 +33,7 @@ STATIC_DIR = Path(__file__).parent / "static"
 if STATIC_DIR.is_dir():
     app.mount("/static", StaticFiles(directory=str(STATIC_DIR)), name="static")
 
+app.include_router(auth.router)
 app.include_router(meal_plans.router)
 app.include_router(households.router)
 app.include_router(recipes.router)
@@ -46,6 +47,10 @@ async def health_check():
 @app.head("/", response_class=FileResponse)
 @app.get("/dashboard", response_class=FileResponse)
 @app.head("/dashboard", response_class=FileResponse)
+@app.get("/register", response_class=FileResponse)
+@app.head("/register", response_class=FileResponse)
+@app.get("/login", response_class=FileResponse)
+@app.head("/login", response_class=FileResponse)
 async def serve_dashboard():
     index_path = STATIC_DIR / "index.html"
     if index_path.is_file():

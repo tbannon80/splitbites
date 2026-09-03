@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>SplitBites - Homelab Meal Planning & Multi-Store Grocery Aggregator</title>
+  <title>SplitBites - Smart Meal Planning & Multi-Store Grocery Aggregator</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -19,7 +19,6 @@
     }
   </script>
   <style>
-    /* Strikethrough & dimming for checked items */
     .item-checked {
       text-decoration: line-through;
       opacity: 0.4;
@@ -27,7 +26,6 @@
     .hide-checked .item-row-checked {
       display: none !important;
     }
-    /* Touch friendly tap targets */
     .touch-target {
       min-height: 44px;
     }
@@ -35,13 +33,172 @@
 </head>
 <body class="bg-dark-950 text-slate-100 min-h-screen font-sans antialiased selection:bg-emerald-500 selection:text-white pb-16">
   
-  <!-- Toast Notification Container -->
+  <!-- Toast Notification -->
   <div id="toast" class="fixed bottom-6 right-6 z-50 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none bg-slate-900 border border-emerald-500 text-emerald-300 px-4 py-3 rounded-xl shadow-2xl flex items-center gap-2.5 text-xs font-medium">
     <span class="text-emerald-400 text-base">✓</span>
-    <span id="toastMsg">Copied to clipboard!</span>
+    <span id="toastMsg">Action completed</span>
   </div>
 
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
+  <!-- AUTH GATE SCREEN (Shown when not logged in) -->
+  <div id="authScreen" class="min-h-screen flex items-center justify-center px-4 py-12">
+    <div class="max-w-md w-full bg-slate-900/90 border border-slate-800 rounded-2xl p-6 sm:p-8 shadow-2xl backdrop-blur">
+      
+      <!-- Brand Logo -->
+      <div class="text-center mb-6">
+        <div class="inline-flex items-center justify-center text-4xl mb-2">🥑</div>
+        <h1 class="text-2xl sm:text-3xl font-black tracking-tight bg-gradient-to-r from-emerald-400 to-teal-200 bg-clip-text text-transparent">
+          SplitBites
+        </h1>
+        <p class="text-xs text-slate-400 mt-1">Smart Family Meal Planning & Multi-Store Grocery Arbitrage</p>
+      </div>
+
+      <!-- Auth Tabs -->
+      <div id="authTabs" class="flex items-center border-b border-slate-800 mb-6">
+        <button id="tabLoginBtn" onclick="switchAuthView('login')" class="flex-1 pb-3 text-sm font-semibold text-emerald-400 border-b-2 border-emerald-500 transition">
+          Sign In
+        </button>
+        <button id="tabRegisterBtn" onclick="switchAuthView('register')" class="flex-1 pb-3 text-sm font-semibold text-slate-400 hover:text-slate-200 border-b-2 border-transparent transition">
+          Create Family
+        </button>
+      </div>
+
+      <!-- VIEW 1: LOGIN FORM -->
+      <form id="loginForm" onsubmit="handleLogin(event)" class="space-y-4">
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 mb-1">Email Address</label>
+          <input id="loginEmail" type="email" required placeholder="you@example.com" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2.5 text-sm text-white focus:outline-none focus:border-emerald-500">
+        </div>
+        <div>
+          <div class="flex items-center justify-between mb-1">
+            <label class="text-xs font-semibold text-slate-300">Password</label>
+            <button type="button" onclick="switchAuthView('forgot')" class="text-xs text-emerald-400 hover:underline">Forgot password?</button>
+          </div>
+          <input id="loginPassword" type="password" required placeholder="••••••••" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2.5 text-sm text-white focus:outline-none focus:border-emerald-500">
+        </div>
+        <button id="btnLoginSubmit" type="submit" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-semibold py-2.5 px-4 rounded-lg text-sm transition shadow-lg shadow-emerald-950 flex items-center justify-center gap-2">
+          <span>Sign In to Your Kitchen</span>
+        </button>
+        <div class="text-center mt-4">
+          <p class="text-xs text-slate-400">
+            Don't have a family account? <button type="button" onclick="switchAuthView('register')" class="text-emerald-400 font-semibold hover:underline">Register your family</button>
+          </p>
+        </div>
+      </form>
+
+      <!-- VIEW 2: REGISTER FORM (NEW FAMILY) -->
+      <form id="registerForm" onsubmit="handleRegister(event)" class="space-y-3.5 hidden">
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 mb-1">Your Full Name *</label>
+          <input id="regName" type="text" required placeholder="e.g. Timothy Bannon" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-emerald-500">
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 mb-1">Email Address *</label>
+          <input id="regEmail" type="email" required placeholder="you@example.com" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-emerald-500">
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 mb-1">Password * (min. 6 characters)</label>
+          <input id="regPassword" type="password" minlength="6" required placeholder="••••••••" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-emerald-500">
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 mb-1">Family / Household Name *</label>
+          <input id="regHouseholdName" type="text" required placeholder="e.g. The Bannon Family" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-emerald-500">
+          <span class="text-[11px] text-slate-400">Displayed at the top of your family meal planner.</span>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 mb-1.5">Dietary Restrictions (Initial)</label>
+          <div id="regDietaryTags" class="flex flex-wrap gap-1.5">
+            <button type="button" onclick="toggleRegTag(this, 'gluten-free')" class="reg-tag-btn text-xs px-2.5 py-1 rounded-full border border-slate-700 bg-slate-950 text-slate-400 transition">gluten-free</button>
+            <button type="button" onclick="toggleRegTag(this, 'dairy-free')" class="reg-tag-btn text-xs px-2.5 py-1 rounded-full border border-slate-700 bg-slate-950 text-slate-400 transition">dairy-free</button>
+            <button type="button" onclick="toggleRegTag(this, 'high-protein')" class="reg-tag-btn text-xs px-2.5 py-1 rounded-full border border-slate-700 bg-slate-950 text-slate-400 transition">high-protein</button>
+            <button type="button" onclick="toggleRegTag(this, 'vegetarian')" class="reg-tag-btn text-xs px-2.5 py-1 rounded-full border border-slate-700 bg-slate-950 text-slate-400 transition">vegetarian</button>
+            <button type="button" onclick="toggleRegTag(this, 'vegan')" class="reg-tag-btn text-xs px-2.5 py-1 rounded-full border border-slate-700 bg-slate-950 text-slate-400 transition">vegan</button>
+            <button type="button" onclick="toggleRegTag(this, 'pescatarian')" class="reg-tag-btn text-xs px-2.5 py-1 rounded-full border border-slate-700 bg-slate-950 text-slate-400 transition">pescatarian</button>
+          </div>
+        </div>
+
+        <!-- Optional Spouse Invite -->
+        <div class="pt-2 border-t border-slate-800">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-xs font-semibold text-slate-300">Invite Spouse / Partner (Optional)</span>
+            <button type="button" onclick="toggleSpouseSection()" class="text-xs text-emerald-400 hover:underline">
+              <span id="spouseToggleText">+ Add Spouse</span>
+            </button>
+          </div>
+          <div id="spouseSection" class="space-y-2 hidden bg-slate-950/60 p-3 rounded-lg border border-slate-800">
+            <input id="spouseName" type="text" placeholder="Spouse's Name (e.g. Sarah)" class="w-full bg-slate-900 border border-slate-700 rounded px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-emerald-500">
+            <input id="spouseEmail" type="email" placeholder="Spouse's Email (receives invitation link)" class="w-full bg-slate-900 border border-slate-700 rounded px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-emerald-500">
+            <p class="text-[10px] text-slate-400">They will receive an email to choose their password and join your family kitchen.</p>
+          </div>
+        </div>
+
+        <button id="btnRegisterSubmit" type="submit" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-semibold py-2.5 px-4 rounded-lg text-sm transition shadow-lg shadow-emerald-950 flex items-center justify-center gap-2 mt-2">
+          <span>Create Family Kitchen</span>
+        </button>
+      </form>
+
+      <!-- VIEW 3: SPOUSE INVITATION REGISTRATION -->
+      <div id="inviteView" class="hidden space-y-4">
+        <div class="bg-emerald-950/40 border border-emerald-800/80 p-3.5 rounded-xl text-center">
+          <span class="text-xl">💌</span>
+          <h2 class="text-sm font-bold text-white mt-1">You're invited to join <span id="inviteFamilyName" class="text-emerald-400">The Family</span>!</h2>
+          <p class="text-xs text-slate-400 mt-1">Set up your password to access your family's shared meal planner and grocery list.</p>
+        </div>
+        <form id="inviteForm" onsubmit="handleAcceptInvite(event)" class="space-y-3.5">
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1">Your Name</label>
+            <input id="inviteNameInput" type="text" required class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-emerald-500">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1">Your Email (From Invitation)</label>
+            <input id="inviteEmailInput" type="email" readonly class="w-full bg-slate-950/50 border border-slate-800 rounded-lg px-3 py-2 text-sm text-slate-400 focus:outline-none">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1">Choose Password * (min. 6 chars)</label>
+            <input id="invitePasswordInput" type="password" minlength="6" required placeholder="••••••••" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-emerald-500">
+          </div>
+          <button id="btnInviteSubmit" type="submit" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-semibold py-2.5 px-4 rounded-lg text-sm transition shadow-lg shadow-emerald-950">
+            Accept Invitation & Join Family
+          </button>
+        </form>
+      </div>
+
+      <!-- VIEW 4: FORGOT PASSWORD FORM -->
+      <form id="forgotForm" onsubmit="handleForgotPassword(event)" class="space-y-4 hidden">
+        <div>
+          <h2 class="text-sm font-bold text-white mb-1">Reset Your Password</h2>
+          <p class="text-xs text-slate-400 mb-3">Enter your email address and we'll send you a password reset link.</p>
+          <input id="forgotEmail" type="email" required placeholder="you@example.com" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-emerald-500">
+        </div>
+        <button id="btnForgotSubmit" type="submit" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-semibold py-2.5 px-4 rounded-lg text-sm transition shadow-lg shadow-emerald-950">
+          Send Reset Link
+        </button>
+        <div class="text-center mt-2">
+          <button type="button" onclick="switchAuthView('login')" class="text-xs text-slate-400 hover:text-white underline">Back to Sign In</button>
+        </div>
+      </form>
+
+      <!-- VIEW 5: RESET PASSWORD FORM (When arriving via ?reset=token) -->
+      <form id="resetForm" onsubmit="handleResetPassword(event)" class="space-y-4 hidden">
+        <div>
+          <h2 class="text-sm font-bold text-white mb-1">Set New Password</h2>
+          <p class="text-xs text-slate-400 mb-3">Please choose a new password for your account.</p>
+          <input id="newPasswordInput" type="password" minlength="6" required placeholder="New Password (min 6 chars)" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-emerald-500">
+        </div>
+        <button id="btnResetSubmit" type="submit" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-semibold py-2.5 px-4 rounded-lg text-sm transition shadow-lg shadow-emerald-950">
+          Update Password & Sign In
+        </button>
+      </form>
+
+    </div>
+  </div>
+
+
+  <!-- MAIN APPLICATION DASHBOARD (Shown when logged in) -->
+  <div id="mainDashboard" class="hidden max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
     
     <!-- Top Header -->
     <header class="flex flex-col md:flex-row md:items-center justify-between pb-6 border-b border-slate-800 gap-4">
@@ -51,49 +208,57 @@
           <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight bg-gradient-to-r from-emerald-400 to-teal-200 bg-clip-text text-transparent">
             SplitBites
           </h1>
-          <span class="text-[11px] uppercase px-2.5 py-0.5 rounded-full bg-emerald-950 text-emerald-400 border border-emerald-800 font-mono">
-            Rev 1.2 Homelab
+          <span id="dashboardFamilyBadge" class="text-xs uppercase px-2.5 py-0.5 rounded-full bg-emerald-950 text-emerald-300 border border-emerald-800 font-mono font-bold">
+            The Family
           </span>
         </div>
-        <p class="text-slate-400 text-xs sm:text-sm mt-1">pgvector Semantic Meal Optimization & Multi-Store Grocery Arbitrage</p>
+        <p class="text-slate-400 text-xs sm:text-sm mt-1">Smart Meal Planning & Multi-Store Grocery Arbitrage (Aldi • Walmart • Meijer • Amazon)</p>
       </div>
-      <div class="flex flex-wrap items-center gap-2.5 text-xs font-mono">
-        <a href="https://splitbites.tbannon80-hp-mini.stream" target="_blank" class="flex items-center gap-1.5 bg-slate-900 border border-slate-800 hover:border-slate-700 px-3 py-1.5 rounded-lg text-emerald-400 transition">
-          <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-          <span>splitbites.tbannon80-hp-mini.stream</span>
-        </a>
-        <span class="bg-slate-900 border border-slate-800 px-3 py-1.5 rounded-lg text-slate-400">
-          HP Mini (192.168.4.35:8001)
-        </span>
+
+      <!-- User Account & Log Out -->
+      <div class="flex items-center gap-3">
+        <div class="flex items-center gap-2 bg-slate-900 border border-slate-800 px-3 py-1.5 rounded-xl">
+          <span class="text-xs">👤</span>
+          <div class="text-xs leading-tight">
+            <span id="userDisplayName" class="font-semibold text-white block">User Name</span>
+            <span id="userEmailDisplay" class="text-[10px] text-slate-400 font-mono">user@example.com</span>
+          </div>
+        </div>
+        <button onclick="handleLogout()" class="bg-slate-900 hover:bg-slate-800 text-rose-300 border border-rose-900/50 hover:border-rose-700 text-xs px-3 py-1.5 rounded-xl transition font-medium">
+          Log Out
+        </button>
       </div>
     </header>
 
     <!-- Navigation Tabs -->
     <div class="flex items-center gap-2 mt-6 border-b border-slate-800 pb-2 overflow-x-auto">
-      <button id="tabMealPlanBtn" onclick="switchTab('mealplan')" class="px-4 py-2 text-xs sm:text-sm font-semibold rounded-lg bg-emerald-950 text-emerald-300 border border-emerald-800 transition shrink-0">
+      <button id="tabMealPlanBtn" onclick="switchDashboardTab('mealplan')" class="px-4 py-2 text-xs sm:text-sm font-semibold rounded-lg bg-emerald-950 text-emerald-300 border border-emerald-800 transition shrink-0">
         📅 Meal Planner & Live Groceries
       </button>
-      <button id="tabCustomRecipeBtn" onclick="switchTab('customrecipe')" class="px-4 py-2 text-xs sm:text-sm font-semibold rounded-lg bg-slate-900 text-slate-400 hover:text-slate-200 border border-slate-800 transition flex items-center gap-2 shrink-0">
-        <span>🍲</span> Upload Custom Recipe (pgvector)
+      <button id="tabCustomRecipeBtn" onclick="switchDashboardTab('customrecipe')" class="px-4 py-2 text-xs sm:text-sm font-semibold rounded-lg bg-slate-900 text-slate-400 hover:text-slate-200 border border-slate-800 transition flex items-center gap-2 shrink-0">
+        <span>🍲</span> Upload Custom Recipe
+      </button>
+      <button id="tabFamilyBtn" onclick="switchDashboardTab('family')" class="px-4 py-2 text-xs sm:text-sm font-semibold rounded-lg bg-slate-900 text-slate-400 hover:text-slate-200 border border-slate-800 transition flex items-center gap-2 shrink-0">
+        <span>👨‍👩‍👧‍👦</span> Family
       </button>
     </div>
 
     <!-- TAB 1: MEAL PLANNER & LIVE GROCERIES -->
     <div id="tabMealPlan" class="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8 mt-6">
       
-      <!-- Step 1: Household Onboarding -->
+      <!-- Step 1: Household Dietary Preferences -->
       <section class="bg-slate-900/80 border border-slate-800 rounded-xl p-5 sm:p-6 shadow-xl flex flex-col justify-between">
         <div>
           <div class="flex items-center justify-between mb-3">
             <h2 class="text-base font-bold text-white flex items-center gap-2">
               <span class="bg-emerald-500/20 text-emerald-400 w-6 h-6 rounded-full flex items-center justify-center text-xs">1</span>
-              Household Onboarding
+              Family Dietary Preferences
             </h2>
           </div>
-          <p class="text-xs text-slate-400 mb-4">Set household profile and dietary restrictions for vector filtering.</p>
+          <p class="text-xs text-slate-400 mb-4">Recipes will strictly adhere to these household restrictions.</p>
 
           <label class="block text-xs font-semibold text-slate-300 mb-1">Household Name</label>
-          <input id="householdName" type="text" value="The Bannon Family" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-emerald-500 mb-4">
+          <input id="householdName" type="text" readonly class="w-full bg-slate-950/60 border border-slate-800 rounded-lg px-3 py-2 text-sm text-slate-300 font-semibold mb-4 focus:outline-none">
 
           <label class="block text-xs font-semibold text-slate-300 mb-2">Dietary Restrictions</label>
           <div id="dietaryTags" class="flex flex-wrap gap-1.5 mb-4">
@@ -108,20 +273,20 @@
         </div>
 
         <div>
-          <button id="btnOnboard" onclick="onboardHousehold()" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-medium py-2 px-4 rounded-lg text-sm transition shadow-lg shadow-emerald-950">
-            Save Household Profile
+          <button id="btnUpdatePrefs" onclick="updateHouseholdPreferences()" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-medium py-2 px-4 rounded-lg text-sm transition shadow-lg shadow-emerald-950">
+            Save Preferences
           </button>
-          <div id="householdStatus" class="mt-3 text-xs text-slate-400 font-mono truncate">Status: Ready to onboard</div>
+          <div id="householdStatus" class="mt-3 text-xs text-slate-400 font-mono truncate">Ready</div>
         </div>
       </section>
 
-      <!-- Step 2: Meal Plan Generation & Customization -->
+      <!-- Step 2: Monday - Friday Schedule -->
       <section class="lg:col-span-2 bg-slate-900/80 border border-slate-800 rounded-xl p-5 sm:p-6 shadow-xl flex flex-col justify-between">
         <div>
           <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-slate-800 mb-4 gap-3">
             <h2 class="text-base font-bold text-white flex items-center gap-2">
               <span class="bg-emerald-500/20 text-emerald-400 w-6 h-6 rounded-full flex items-center justify-center text-xs">2</span>
-              Monday - Friday Schedule (pgvector Filtered)
+              Monday - Friday Schedule
             </h2>
             <div class="flex items-center gap-2">
               <button id="btnGenerate" onclick="generatePlan()" class="bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold py-1.5 px-3 rounded-md transition flex items-center gap-1.5 shadow">
@@ -149,7 +314,7 @@
         </div>
       </section>
 
-      <!-- Step 3: Multi-Store Grocery Aggregation & Checkable Itemized Shopping List -->
+      <!-- Step 3: Multi-Store Grocery Aggregation -->
       <section class="lg:col-span-3 bg-slate-900/80 border border-slate-800 rounded-xl p-5 sm:p-6 shadow-xl">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-slate-800 mb-6 gap-3">
           <div>
@@ -205,8 +370,6 @@
 
         <!-- Live In-Store Checkable Shopping Columns -->
         <div id="splitBreakdownContainer" class="hidden">
-          
-          <!-- Controls toolbar -->
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-slate-950/90 border border-slate-800 p-3 rounded-xl mb-4">
             <div class="flex items-center gap-3">
               <span class="text-xs font-semibold text-slate-300 flex items-center gap-1.5">
@@ -226,23 +389,23 @@
               </button>
             </div>
           </div>
-
-          <!-- Retailer Columns Grid -->
           <div id="splitBasketGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4"></div>
         </div>
       </section>
 
     </div>
 
-    <!-- TAB 2: CUSTOM RECIPE UPLOAD (PGVECTOR) -->
+    <!-- TAB 2: CUSTOM RECIPE UPLOAD -->
     <div id="tabCustomRecipe" class="hidden max-w-3xl mx-auto bg-slate-900/90 border border-slate-800 rounded-xl p-6 shadow-xl mt-6">
       <div class="pb-4 border-b border-slate-800 mb-6">
         <h2 class="text-xl font-bold text-white flex items-center gap-2">
-          <span>🍲</span> Upload Custom Recipe with 1536-dim Embedding
+          <span>🍲</span> Upload Custom Recipe
         </h2>
         <p class="text-xs text-slate-400 mt-1">
-          Submit home-cooked meals. SplitBites automatically vectorizes the recipe description and ingredients via pgvector, adding it to your household candidate pool.
+          Submit home-cooked meals or import an online recipe. SplitBites automatically reads and indexes the ingredients into your family's recipe pool.
         </p>
+      </div>
+
       <!-- URL Scraper Auto-Importer Card -->
       <div class="bg-slate-950/70 border border-emerald-800/60 rounded-xl p-4 mb-6 shadow-inner">
         <div class="flex items-center justify-between mb-2">
@@ -329,89 +492,132 @@
 
         <div class="pt-3">
           <button id="btnUploadRecipe" type="submit" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-semibold py-2.5 px-4 rounded-lg text-sm transition shadow-lg shadow-emerald-950 flex items-center justify-center gap-2">
-            <span>🚀</span> Upload & Compute 1536-dim Embedding
+            <span>🚀</span> Save & Index Recipe
           </button>
           <div id="recipeUploadStatus" class="mt-3 text-xs text-slate-400 font-mono text-center"></div>
         </div>
       </form>
     </div>
 
+    <!-- TAB 3: FAMILY -->
+    <div id="tabFamily" class="hidden max-w-4xl mx-auto bg-slate-900/90 border border-slate-800 rounded-xl p-6 shadow-xl mt-6">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-slate-800 mb-6 gap-3">
+        <div>
+          <h2 class="text-xl font-bold text-white flex items-center gap-2">
+            <span>👨‍👩‍👧‍👦</span> <span id="familyTabTitle">Family Roster</span>
+          </h2>
+          <p class="text-xs text-slate-400 mt-1">
+            Everyone in this family shares the same weekly meal planner, custom recipes, and live shopping checklist.
+          </p>
+        </div>
+        <button onclick="openInviteModal()" class="bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs py-2 px-3.5 rounded-lg transition shadow flex items-center gap-1.5 self-start sm:self-auto">
+          <span>➕</span> Invite Spouse / Member
+        </button>
+      </div>
+
+      <!-- Members Grid -->
+      <div class="mb-6">
+        <h3 class="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-3">Family Members</h3>
+        <div id="familyMembersList" class="grid grid-cols-1 sm:grid-cols-2 gap-3"></div>
+      </div>
+
+      <!-- Pending Invitations -->
+      <div id="pendingInvitesSection" class="hidden pt-4 border-t border-slate-800">
+        <h3 class="text-xs font-semibold uppercase tracking-wider text-amber-400 mb-2 flex items-center gap-1.5">
+          <span>⏳</span> Pending Invitations Sent
+        </h3>
+        <div id="pendingInvitesList" class="space-y-2"></div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- INVITE MODAL -->
+  <div id="inviteModal" class="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+    <div class="max-w-md w-full bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-2xl">
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="text-base font-bold text-white flex items-center gap-2">
+          <span>💌</span> Invite Family Member / Spouse
+        </h3>
+        <button onclick="closeInviteModal()" class="text-slate-400 hover:text-white">✕</button>
+      </div>
+      <p class="text-xs text-slate-400 mb-4">
+        We'll send an email with an invitation link so they can register their password and join your family kitchen.
+      </p>
+      <form onsubmit="handleSendInvite(event)" class="space-y-3">
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 mb-1">Name (Optional)</label>
+          <input id="modalSpouseName" type="text" placeholder="e.g. Sarah Bannon" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500">
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 mb-1">Email Address *</label>
+          <input id="modalSpouseEmail" type="email" required placeholder="spouse@example.com" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500">
+        </div>
+        <div class="flex justify-end gap-2 pt-2">
+          <button type="button" onclick="closeInviteModal()" class="px-3 py-1.5 rounded-lg text-xs font-medium text-slate-400 hover:text-white border border-slate-800">Cancel</button>
+          <button id="btnSendInviteModal" type="submit" class="px-4 py-1.5 rounded-lg text-xs font-semibold bg-emerald-600 hover:bg-emerald-500 text-white transition shadow">Send Invitation Email</button>
+        </div>
+      </form>
+    </div>
   </div>
 
   <script>
+    // Global Auth State
+    let authToken = localStorage.getItem('splitbites_token') || null;
+    let currentUser = null;
+    let currentHousehold = null;
+
+    // Planner State
     let activeHouseholdId = null;
     let activePlanId = null;
     let isPlanLocked = false;
     let currentGroceryData = null;
-    let checkedItemsState = {}; // Key: "store:item_name" -> boolean
+    let checkedItemsState = {};
     let hideCompleted = false;
     let selectedTags = new Set(["gluten-free", "dairy-free"]);
+    let regTags = new Set(["gluten-free", "dairy-free"]);
     let recipeUploadTags = new Set(["gluten-free", "dairy-free"]);
 
-    // Retailer Color/Badge Config
     const STORE_THEMES = {
-      Aldi: {
-        border: "border-blue-700/60",
-        bg: "bg-blue-950/20",
-        badge: "bg-blue-900/60 text-blue-300 border-blue-700",
-        accent: "text-blue-400",
-        icon: "🛒"
-      },
-      Walmart: {
-        border: "border-sky-600/60",
-        bg: "bg-sky-950/20",
-        badge: "bg-sky-900/60 text-sky-300 border-sky-700",
-        accent: "text-sky-400",
-        icon: "⚡"
-      },
-      Meijer: {
-        border: "border-rose-700/60",
-        bg: "bg-rose-950/20",
-        badge: "bg-rose-900/60 text-rose-300 border-rose-700",
-        accent: "text-rose-400",
-        icon: "🥩"
-      },
-      Amazon: {
-        border: "border-amber-600/60",
-        bg: "bg-amber-950/20",
-        badge: "bg-amber-900/60 text-amber-300 border-amber-700",
-        accent: "text-amber-400",
-        icon: "📦"
-      }
+      Aldi: { border: "border-blue-700/60", bg: "bg-blue-950/20", badge: "bg-blue-900/60 text-blue-300 border-blue-700", accent: "text-blue-400", icon: "🛒" },
+      Walmart: { border: "border-sky-600/60", bg: "bg-sky-950/20", badge: "bg-sky-900/60 text-sky-300 border-sky-700", accent: "text-sky-400", icon: "⚡" },
+      Meijer: { border: "border-rose-700/60", bg: "bg-rose-950/20", badge: "bg-rose-900/60 text-rose-300 border-rose-700", accent: "text-rose-400", icon: "🥩" },
+      Amazon: { border: "border-amber-600/60", bg: "bg-amber-950/20", badge: "bg-amber-900/60 text-amber-300 border-amber-700", accent: "text-amber-400", icon: "📦" }
     };
 
-    // On Page Load: Restore cached state if available
-    window.addEventListener('DOMContentLoaded', () => {
-      // Tags init
-      document.querySelectorAll('.tag-btn').forEach(btn => {
-        const tag = btn.innerText.trim();
-        if (selectedTags.has(tag)) {
-          btn.classList.remove('bg-slate-950', 'text-slate-400', 'border-slate-700');
-          btn.classList.add('bg-emerald-900/60', 'text-emerald-300', 'border-emerald-600');
-        }
-      });
+    window.addEventListener('DOMContentLoaded', async () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const inviteToken = urlParams.get('invite');
+      const resetToken = urlParams.get('reset');
 
-      document.querySelectorAll('.rec-tag-btn').forEach(btn => {
-        const tag = btn.innerText.trim();
-        if (recipeUploadTags.has(tag)) {
-          btn.classList.remove('bg-slate-950', 'text-slate-400', 'border-slate-700');
-          btn.classList.add('bg-emerald-900/60', 'text-emerald-300', 'border-emerald-600');
-        }
-      });
+      if (inviteToken) {
+        await setupInviteView(inviteToken);
+        return;
+      }
 
-      // Restore Cached Grocery List (offline/supermarket persistence)
-      const cachedPlanId = localStorage.getItem('splitbites_last_plan_id');
-      const cachedGrocery = localStorage.getItem('splitbites_cached_grocery');
-      if (cachedPlanId && cachedGrocery) {
+      if (resetToken) {
+        setupResetView(resetToken);
+        return;
+      }
+
+      if (authToken) {
         try {
-          activePlanId = cachedPlanId;
-          const parsed = JSON.parse(cachedGrocery);
-          currentGroceryData = parsed;
-          renderGroceries(parsed);
+          const res = await fetch('/api/auth/me', {
+            headers: { 'Authorization': `Bearer ${authToken}` }
+          });
+          if (res.ok) {
+            const authData = await res.json();
+            handleAuthSuccess(authData);
+            return;
+          } else {
+            handleLogout(false);
+          }
         } catch (e) {
-          console.log("Cached grocery restore error", e);
+          console.error("Auth check failed:", e);
         }
       }
+
+      showAuthScreen();
     });
 
     function showToast(msg) {
@@ -423,26 +629,423 @@
       setTimeout(() => {
         toast.classList.add('translate-y-20', 'opacity-0');
         toast.classList.remove('translate-y-0', 'opacity-100');
-      }, 2500);
+      }, 3000);
     }
 
-    function switchTab(tab) {
-      const planTab = document.getElementById('tabMealPlan');
+    function showAuthScreen() {
+      document.getElementById('authScreen').classList.remove('hidden');
+      document.getElementById('mainDashboard').classList.add('hidden');
+      switchAuthView('login');
+    }
+
+    function switchAuthView(view) {
+      const loginForm = document.getElementById('loginForm');
+      const regForm = document.getElementById('registerForm');
+      const forgotForm = document.getElementById('forgotForm');
+      const inviteView = document.getElementById('inviteView');
+      const resetForm = document.getElementById('resetForm');
+      const authTabs = document.getElementById('authTabs');
+      const tabLoginBtn = document.getElementById('tabLoginBtn');
+      const tabRegisterBtn = document.getElementById('tabRegisterBtn');
+
+      loginForm.classList.add('hidden');
+      regForm.classList.add('hidden');
+      forgotForm.classList.add('hidden');
+      inviteView.classList.add('hidden');
+      resetForm.classList.add('hidden');
+      authTabs.classList.remove('hidden');
+
+      tabLoginBtn.className = "flex-1 pb-3 text-sm font-semibold text-slate-400 hover:text-slate-200 border-b-2 border-transparent transition";
+      tabRegisterBtn.className = "flex-1 pb-3 text-sm font-semibold text-slate-400 hover:text-slate-200 border-b-2 border-transparent transition";
+
+      if (view === 'login') {
+        loginForm.classList.remove('hidden');
+        tabLoginBtn.className = "flex-1 pb-3 text-sm font-semibold text-emerald-400 border-b-2 border-emerald-500 transition";
+      } else if (view === 'register') {
+        regForm.classList.remove('hidden');
+        tabRegisterBtn.className = "flex-1 pb-3 text-sm font-semibold text-emerald-400 border-b-2 border-emerald-500 transition";
+      } else if (view === 'forgot') {
+        authTabs.classList.add('hidden');
+        forgotForm.classList.remove('hidden');
+      } else if (view === 'reset') {
+        authTabs.classList.add('hidden');
+        resetForm.classList.remove('hidden');
+      } else if (view === 'invite') {
+        authTabs.classList.add('hidden');
+        inviteView.classList.remove('hidden');
+      }
+    }
+
+    async function handleLogin(e) {
+      e.preventDefault();
+      const email = document.getElementById('loginEmail').value.trim();
+      const password = document.getElementById('loginPassword').value;
+      const btn = document.getElementById('btnLoginSubmit');
+      btn.disabled = true;
+      btn.innerText = "Signing In...";
+
+      try {
+        const res = await fetch('/api/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password })
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.detail || 'Login failed');
+        handleAuthSuccess(data);
+        showToast(`Welcome back, ${data.user.full_name}!`);
+      } catch (err) {
+        alert(err.message);
+      } finally {
+        btn.disabled = false;
+        btn.innerText = "Sign In to Your Kitchen";
+      }
+    }
+
+    function toggleSpouseSection() {
+      const sec = document.getElementById('spouseSection');
+      const txt = document.getElementById('spouseToggleText');
+      if (sec.classList.contains('hidden')) {
+        sec.classList.remove('hidden');
+        txt.innerText = "- Remove Spouse";
+      } else {
+        sec.classList.add('hidden');
+        txt.innerText = "+ Add Spouse";
+      }
+    }
+
+    function toggleRegTag(btn, tag) {
+      if (regTags.has(tag)) {
+        regTags.delete(tag);
+        btn.classList.remove('bg-emerald-900/60', 'text-emerald-300', 'border-emerald-600');
+        btn.classList.add('bg-slate-950', 'text-slate-400', 'border-slate-700');
+      } else {
+        regTags.add(tag);
+        btn.classList.add('bg-emerald-900/60', 'text-emerald-300', 'border-emerald-600');
+        btn.classList.remove('bg-slate-950', 'text-slate-400', 'border-slate-700');
+      }
+    }
+
+    async function handleRegister(e) {
+      e.preventDefault();
+      const full_name = document.getElementById('regName').value.trim();
+      const email = document.getElementById('regEmail').value.trim();
+      const password = document.getElementById('regPassword').value;
+      const household_name = document.getElementById('regHouseholdName').value.trim();
+      const spouse_name = document.getElementById('spouseName').value.trim();
+      const spouse_email = document.getElementById('spouseEmail').value.trim();
+
+      const btn = document.getElementById('btnRegisterSubmit');
+      btn.disabled = true;
+      btn.innerText = "Creating Family Kitchen...";
+
+      try {
+        const payload = {
+          full_name,
+          email,
+          password,
+          household_name,
+          dietary_preferences: Array.from(regTags),
+          spouse_name: spouse_name || null,
+          spouse_email: spouse_email || null
+        };
+
+        const res = await fetch('/api/auth/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.detail || 'Registration failed');
+        handleAuthSuccess(data);
+        if (spouse_email) {
+          showToast(`✓ Account created & welcome invitation sent to ${spouse_email}!`);
+        } else {
+          showToast(`✓ Welcome to SplitBites, ${full_name}!`);
+        }
+      } catch (err) {
+        alert(err.message);
+      } finally {
+        btn.disabled = false;
+        btn.innerText = "Create Family Kitchen";
+      }
+    }
+
+    async function setupInviteView(token) {
+      switchAuthView('invite');
+      try {
+        const res = await fetch(`/api/auth/invitation/${token}`);
+        if (!res.ok) {
+          const err = await res.json();
+          throw new Error(err.detail || 'Invalid invitation link');
+        }
+        const data = await res.json();
+        document.getElementById('inviteFamilyName').innerText = data.household_name;
+        document.getElementById('inviteNameInput').value = data.spouse_name || '';
+        document.getElementById('inviteEmailInput').value = data.spouse_email;
+        window.activeInviteToken = token;
+      } catch (err) {
+        alert(err.message);
+        switchAuthView('login');
+      }
+    }
+
+    async function handleAcceptInvite(e) {
+      e.preventDefault();
+      const password = document.getElementById('invitePasswordInput').value;
+      const full_name = document.getElementById('inviteNameInput').value.trim();
+      const btn = document.getElementById('btnInviteSubmit');
+      btn.disabled = true;
+      btn.innerText = "Joining Family...";
+
+      try {
+        const res = await fetch('/api/auth/register-invited', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            token: window.activeInviteToken,
+            password,
+            full_name
+          })
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.detail || 'Failed to join family');
+        window.history.replaceState({}, document.title, window.location.pathname);
+        handleAuthSuccess(data);
+        showToast(`✓ You are now a member of ${data.household.household_name}!`);
+      } catch (err) {
+        alert(err.message);
+      } finally {
+        btn.disabled = false;
+        btn.innerText = "Accept Invitation & Join Family";
+      }
+    }
+
+    function setupResetView(token) {
+      switchAuthView('reset');
+      window.activeResetToken = token;
+    }
+
+    async function handleForgotPassword(e) {
+      e.preventDefault();
+      const email = document.getElementById('forgotEmail').value.trim();
+      const btn = document.getElementById('btnForgotSubmit');
+      btn.disabled = true;
+      btn.innerText = "Sending Link...";
+
+      try {
+        const res = await fetch('/api/auth/forgot-password', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email })
+        });
+        const data = await res.json();
+        alert(data.message || "Password reset link sent to your email!");
+        switchAuthView('login');
+      } catch (err) {
+        alert(err.message);
+      } finally {
+        btn.disabled = false;
+        btn.innerText = "Send Reset Link";
+      }
+    }
+
+    async function handleResetPassword(e) {
+      e.preventDefault();
+      const new_password = document.getElementById('newPasswordInput').value;
+      const btn = document.getElementById('btnResetSubmit');
+      btn.disabled = true;
+
+      try {
+        const res = await fetch('/api/auth/reset-password', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ token: window.activeResetToken, new_password })
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.detail || 'Reset failed');
+        window.history.replaceState({}, document.title, window.location.pathname);
+        alert(data.message || "Password reset successfully!");
+        switchAuthView('login');
+      } catch (err) {
+        alert(err.message);
+      } finally {
+        btn.disabled = false;
+      }
+    }
+
+    function handleAuthSuccess(authData) {
+      authToken = authData.access_token;
+      currentUser = authData.user;
+      currentHousehold = authData.household;
+      activeHouseholdId = currentHousehold.household_id;
+
+      localStorage.setItem('splitbites_token', authToken);
+
+      document.getElementById('authScreen').classList.add('hidden');
+      document.getElementById('mainDashboard').classList.remove('hidden');
+
+      document.getElementById('dashboardFamilyBadge').innerText = currentHousehold.household_name;
+      document.getElementById('familyTabTitle').innerText = `${currentHousehold.household_name} Roster`;
+      document.getElementById('userDisplayName').innerText = currentUser.full_name || 'Member';
+      document.getElementById('userEmailDisplay').innerText = currentUser.email;
+      document.getElementById('householdName').value = currentHousehold.household_name;
+
+      selectedTags = new Set(currentHousehold.dietary_preferences || []);
+      syncDietaryTagsUI();
+
+      loadFamilyRoster();
+      switchDashboardTab('mealplan');
+    }
+
+    function handleLogout(notify = true) {
+      authToken = null;
+      currentUser = null;
+      currentHousehold = null;
+      activeHouseholdId = null;
+      activePlanId = null;
+      localStorage.removeItem('splitbites_token');
+      if (notify) showToast("Logged out successfully");
+      showAuthScreen();
+    }
+
+    function switchDashboardTab(tab) {
+      const mealPlanTab = document.getElementById('tabMealPlan');
       const recipeTab = document.getElementById('tabCustomRecipe');
-      const planBtn = document.getElementById('tabMealPlanBtn');
+      const familyTab = document.getElementById('tabFamily');
+      const mealPlanBtn = document.getElementById('tabMealPlanBtn');
       const recipeBtn = document.getElementById('tabCustomRecipeBtn');
+      const familyBtn = document.getElementById('tabFamilyBtn');
+
+      mealPlanTab.classList.add('hidden');
+      recipeTab.classList.add('hidden');
+      familyTab.classList.add('hidden');
+
+      mealPlanBtn.className = "px-4 py-2 text-xs sm:text-sm font-semibold rounded-lg bg-slate-900 text-slate-400 hover:text-slate-200 border border-slate-800 transition shrink-0";
+      recipeBtn.className = "px-4 py-2 text-xs sm:text-sm font-semibold rounded-lg bg-slate-900 text-slate-400 hover:text-slate-200 border border-slate-800 transition flex items-center gap-2 shrink-0";
+      familyBtn.className = "px-4 py-2 text-xs sm:text-sm font-semibold rounded-lg bg-slate-900 text-slate-400 hover:text-slate-200 border border-slate-800 transition flex items-center gap-2 shrink-0";
 
       if (tab === 'mealplan') {
-        planTab.classList.remove('hidden');
-        recipeTab.classList.add('hidden');
-        planBtn.className = "px-4 py-2 text-xs sm:text-sm font-semibold rounded-lg bg-emerald-950 text-emerald-300 border border-emerald-800 transition shrink-0";
-        recipeBtn.className = "px-4 py-2 text-xs sm:text-sm font-semibold rounded-lg bg-slate-900 text-slate-400 hover:text-slate-200 border border-slate-800 transition flex items-center gap-2 shrink-0";
-      } else {
-        planTab.classList.add('hidden');
+        mealPlanTab.classList.remove('hidden');
+        mealPlanBtn.className = "px-4 py-2 text-xs sm:text-sm font-semibold rounded-lg bg-emerald-950 text-emerald-300 border border-emerald-800 transition shrink-0";
+      } else if (tab === 'customrecipe') {
         recipeTab.classList.remove('hidden');
         recipeBtn.className = "px-4 py-2 text-xs sm:text-sm font-semibold rounded-lg bg-emerald-950 text-emerald-300 border border-emerald-800 transition flex items-center gap-2 shrink-0";
-        planBtn.className = "px-4 py-2 text-xs sm:text-sm font-semibold rounded-lg bg-slate-900 text-slate-400 hover:text-slate-200 border border-slate-800 transition shrink-0";
+      } else if (tab === 'family') {
+        familyTab.classList.remove('hidden');
+        familyBtn.className = "px-4 py-2 text-xs sm:text-sm font-semibold rounded-lg bg-emerald-950 text-emerald-300 border border-emerald-800 transition flex items-center gap-2 shrink-0";
+        loadFamilyRoster();
       }
+    }
+
+    async function loadFamilyRoster() {
+      if (!authToken) return;
+      try {
+        const res = await fetch('/api/auth/family', {
+          headers: { 'Authorization': `Bearer ${authToken}` }
+        });
+        if (!res.ok) return;
+        const data = await res.json();
+
+        const list = document.getElementById('familyMembersList');
+        list.innerHTML = '';
+        data.members.forEach(m => {
+          const card = document.createElement('div');
+          const isYou = m.is_current_user;
+          card.className = "bg-slate-950/80 border border-slate-800 rounded-xl p-3.5 flex items-center justify-between";
+          card.innerHTML = `
+            <div class="flex items-center gap-3">
+              <div class="w-9 h-9 rounded-full bg-emerald-950 text-emerald-400 border border-emerald-800 flex items-center justify-center font-bold text-sm">
+                ${(m.full_name || m.email)[0].toUpperCase()}
+              </div>
+              <div>
+                <div class="flex items-center gap-1.5">
+                  <span class="text-xs font-bold text-white">${m.full_name || 'Family Member'}</span>
+                  ${isYou ? '<span class="text-[9px] bg-slate-800 text-slate-300 px-1.5 py-0.5 rounded font-mono">You</span>' : ''}
+                </div>
+                <span class="text-[11px] text-slate-400 font-mono block">${m.email}</span>
+              </div>
+            </div>
+            <span class="text-[10px] font-mono uppercase px-2 py-0.5 rounded-full ${m.role === 'admin' ? 'bg-emerald-950 text-emerald-400 border border-emerald-800' : 'bg-slate-800 text-slate-400'}">
+              ${m.role}
+            </span>
+          `;
+          list.appendChild(card);
+        });
+
+        const pendingSection = document.getElementById('pendingInvitesSection');
+        const pendingList = document.getElementById('pendingInvitesList');
+        if (data.pending_invitations && data.pending_invitations.length > 0) {
+          pendingSection.classList.remove('hidden');
+          pendingList.innerHTML = '';
+          data.pending_invitations.forEach(inv => {
+            const row = document.createElement('div');
+            row.className = "text-xs font-mono bg-slate-950/60 border border-slate-800 p-2.5 rounded-lg flex items-center justify-between";
+            row.innerHTML = `
+              <span class="text-slate-300">Invitation sent to: <strong class="text-white">${inv.email}</strong> ${inv.name ? '(' + inv.name + ')' : ''}</span>
+              <span class="text-[10px] text-amber-400">Awaiting acceptance</span>
+            `;
+            pendingList.appendChild(row);
+          });
+        } else {
+          pendingSection.classList.add('hidden');
+        }
+      } catch (e) {
+        console.error("Failed to load family roster:", e);
+      }
+    }
+
+    function openInviteModal() {
+      document.getElementById('inviteModal').classList.remove('hidden');
+    }
+
+    function closeInviteModal() {
+      document.getElementById('inviteModal').classList.add('hidden');
+    }
+
+    async function handleSendInvite(e) {
+      e.preventDefault();
+      const name = document.getElementById('modalSpouseName').value.trim();
+      const email = document.getElementById('modalSpouseEmail').value.trim();
+      const btn = document.getElementById('btnSendInviteModal');
+      btn.disabled = true;
+      btn.innerText = "Dispatching Email...";
+
+      try {
+        const res = await fetch('/api/auth/invite', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${authToken}`
+          },
+          body: JSON.stringify({ name, email })
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.detail || 'Failed to send invite');
+        closeInviteModal();
+        document.getElementById('modalSpouseEmail').value = '';
+        document.getElementById('modalSpouseName').value = '';
+        showToast(`✓ Invitation email dispatched to ${email}!`);
+        loadFamilyRoster();
+      } catch (err) {
+        alert(err.message);
+      } finally {
+        btn.disabled = false;
+        btn.innerText = "Send Invitation Email";
+      }
+    }
+
+    function syncDietaryTagsUI() {
+      document.querySelectorAll('.tag-btn').forEach(btn => {
+        const tag = btn.innerText.trim();
+        if (selectedTags.has(tag)) {
+          btn.classList.remove('bg-slate-950', 'text-slate-400', 'border-slate-700');
+          btn.classList.add('bg-emerald-900/60', 'text-emerald-300', 'border-emerald-600');
+        } else {
+          btn.classList.add('bg-slate-950', 'text-slate-400', 'border-slate-700');
+          btn.classList.remove('bg-emerald-900/60', 'text-emerald-300', 'border-emerald-600');
+        }
+      });
     }
 
     function toggleTag(el, tag) {
@@ -457,199 +1060,20 @@
       }
     }
 
-    function toggleRecipeTag(el, tag) {
-      if (recipeUploadTags.has(tag)) {
-        recipeUploadTags.delete(tag);
-        el.classList.remove('bg-emerald-900/60', 'text-emerald-300', 'border-emerald-600');
-        el.classList.add('bg-slate-950', 'text-slate-400', 'border-slate-700');
-      } else {
-        recipeUploadTags.add(tag);
-        el.classList.remove('bg-slate-950', 'text-slate-400', 'border-slate-700');
-        el.classList.add('bg-emerald-900/60', 'text-emerald-300', 'border-emerald-600');
-      }
-    }
-
-    function addIngredientRow() {
-      const container = document.getElementById('ingredientRows');
-      const div = document.createElement('div');
-      div.className = "ingredient-row flex items-center gap-2";
-      div.innerHTML = `
-        <input type="text" placeholder="Item name" class="ing-name flex-1 bg-slate-950 border border-slate-700 rounded px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-emerald-500" required>
-        <input type="number" step="0.1" value="1.0" placeholder="Qty" class="ing-qty w-20 bg-slate-950 border border-slate-700 rounded px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-emerald-500" required>
-        <input type="text" placeholder="Unit" value="ea" class="ing-unit w-24 bg-slate-950 border border-slate-700 rounded px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-emerald-500" required>
-        <button type="button" onclick="removeIngredientRow(this)" class="text-slate-500 hover:text-rose-400 text-xs px-1">✕</button>
-      `;
-      container.appendChild(div);
-    }
-
-    function removeIngredientRow(btn) {
-      const rows = document.querySelectorAll('.ingredient-row');
-      if (rows.length > 1) {
-        btn.closest('.ingredient-row').remove();
-      }
-    }
-
-    async function handleUrlImport() {
-      const input = document.getElementById('importUrlInput');
-      const btn = document.getElementById('btnFetchUrl');
-      const feedback = document.getElementById('urlImportFeedback');
-      const url = input.value.trim();
-
-      if (!url || (!url.startsWith('http://') && !url.startsWith('https://'))) {
-        alert("Please enter a valid HTTP or HTTPS recipe URL.");
-        return;
-      }
-
-      btn.disabled = true;
-      btn.innerHTML = '<span class="animate-spin text-sm">⚡</span> Fetching...';
-      feedback.classList.remove('hidden');
-      feedback.innerHTML = '<span class="text-emerald-400">Reading recipe microdata & parsing ingredients...</span>';
-
-      try {
-        const res = await fetch('/api/recipes/extract-url', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ url })
-        });
-        if (!res.ok) {
-          const err = await res.json();
-          throw new Error(err.detail || 'Could not parse recipe from URL');
-        }
-        const data = await res.json();
-
-        // 1. Populate basic fields
-        if (data.title) document.getElementById('recTitle').value = data.title;
-        if (data.description) document.getElementById('recDesc').value = data.description;
-        if (data.prep_time_minutes) document.getElementById('recPrep').value = data.prep_time_minutes;
-        if (data.difficulty_level) document.getElementById('recDifficulty').value = data.difficulty_level;
-
-        // 2. Populate dietary tags
-        recipeUploadTags.clear();
-        if (data.dietary_tags && Array.isArray(data.dietary_tags)) {
-          data.dietary_tags.forEach(t => recipeUploadTags.add(t));
-        }
-        document.querySelectorAll('.rec-tag-btn').forEach(btn => {
-          const tag = btn.innerText.trim();
-          if (recipeUploadTags.has(tag)) {
-            btn.classList.remove('bg-slate-950', 'text-slate-400', 'border-slate-700');
-            btn.classList.add('bg-emerald-900/60', 'text-emerald-300', 'border-emerald-600');
-          } else {
-            btn.classList.add('bg-slate-950', 'text-slate-400', 'border-slate-700');
-            btn.classList.remove('bg-emerald-900/60', 'text-emerald-300', 'border-emerald-600');
-          }
-        });
-
-        // 3. Populate ingredients builder
-        const container = document.getElementById('ingredientRows');
-        container.innerHTML = '';
-        if (data.ingredients && data.ingredients.length > 0) {
-          data.ingredients.forEach(it => {
-            const div = document.createElement('div');
-            div.className = "ingredient-row flex items-center gap-2";
-            div.innerHTML = `
-              <input type="text" placeholder="Item" value="${it.name || ''}" class="ing-name flex-1 bg-slate-950 border border-slate-700 rounded px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-emerald-500" required>
-              <input type="number" step="0.1" value="${it.quantity || 1.0}" placeholder="Qty" class="ing-qty w-20 bg-slate-950 border border-slate-700 rounded px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-emerald-500" required>
-              <input type="text" placeholder="Unit" value="${it.unit || 'count'}" class="ing-unit w-24 bg-slate-950 border border-slate-700 rounded px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-emerald-500" required>
-              <button type="button" onclick="removeIngredientRow(this)" class="text-slate-500 hover:text-rose-400 text-xs px-1">✕</button>
-            `;
-            container.appendChild(div);
-          });
-        } else {
-          addIngredientRow();
-        }
-
-        // 4. Populate instructions
-        if (data.instructions && data.instructions.length > 0) {
-          const instTexts = data.instructions.map(step => typeof step === 'string' ? step : (step.text || ''));
-          document.getElementById('recInstructions').value = instTexts.join('\n');
-        }
-
-        feedback.innerHTML = `<span class="text-emerald-400 font-bold">✓ Successfully imported:</span> "${data.title}" (${data.ingredients.length} ingredients). Review below and click Upload to vectorize!`;
-        showToast(`✓ Recipe imported: ${data.title}`);
-      } catch (err) {
-        feedback.innerHTML = `<span class="text-rose-400">Import failed:</span> ${err.message}`;
-      } finally {
-        btn.disabled = false;
-        btn.innerHTML = '<span>📥</span> Fetch & Pre-Fill';
-      }
-    }
-
-    async function handleRecipeSubmit(e) {
-      e.preventDefault();
-      const statusEl = document.getElementById('recipeUploadStatus');
-      const btn = document.getElementById('btnUploadRecipe');
-      btn.disabled = true;
-      statusEl.innerHTML = '<span class="text-emerald-400">Computing 1536-dim embedding & persisting recipe...</span>';
-
-      const title = document.getElementById('recTitle').value.trim();
-      const description = document.getElementById('recDesc').value.trim();
-      const prepTime = parseInt(document.getElementById('recPrep').value) || 30;
-      const difficulty = document.getElementById('recDifficulty').value;
-      const rawInst = document.getElementById('recInstructions').value.trim();
-
-      const ingRows = document.querySelectorAll('.ingredient-row');
-      const ingredients = [];
-      ingRows.forEach(row => {
-        const name = row.querySelector('.ing-name').value.trim();
-        const qty = parseFloat(row.querySelector('.ing-qty').value) || 1.0;
-        const unit = row.querySelector('.ing-unit').value.trim() || 'units';
-        if (name) {
-          ingredients.push({ name, quantity: qty, unit });
-        }
-      });
-
-      const payload = {
-        title,
-        description,
-        prep_time_minutes: prepTime,
-        difficulty_level: difficulty,
-        dietary_tags: Array.from(recipeUploadTags),
-        ingredients,
-        instructions: rawInst.split('\n').map(s => s.trim()).filter(Boolean),
-        is_public: true
-      };
-
-      try {
-        const res = await fetch('/api/recipes/', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
-        });
-        if (!res.ok) {
-          const errData = await res.json();
-          throw new Error(errData.detail || 'Upload failed');
-        }
-        const data = await res.json();
-        statusEl.innerHTML = `<span class="text-emerald-400 font-bold">✓ Recipe Uploaded!</span> "${data.title}" indexed into vector pool.`;
-        showToast(`✓ "${data.title}" added to recipe pool!`);
-        document.getElementById('recTitle').value = '';
-        document.getElementById('recDesc').value = '';
-        setTimeout(() => switchTab('mealplan'), 1800);
-      } catch (err) {
-        statusEl.innerHTML = `<span class="text-rose-400">Error:</span> ${err.message}`;
-      } finally {
-        btn.disabled = false;
-      }
-    }
-
-    async function onboardHousehold() {
-      const name = document.getElementById('householdName').value.trim() || 'My Household';
+    async function updateHouseholdPreferences() {
+      if (!activeHouseholdId) return;
       const statusEl = document.getElementById('householdStatus');
-      statusEl.innerText = "Registering household...";
+      statusEl.innerText = "Saving...";
 
       try {
-        const res = await fetch('/api/households/', {
-          method: 'POST',
+        const res = await fetch(`/api/households/${activeHouseholdId}/dietary-preferences`, {
+          method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            household_name: name,
-            dietary_preferences: Array.from(selectedTags)
-          })
+          body: JSON.stringify({ dietary_preferences: Array.from(selectedTags) })
         });
         const data = await res.json();
-        activeHouseholdId = data.household_id;
-        statusEl.innerHTML = `<span class="text-emerald-400 font-semibold">✓ Profile Saved:</span> ${data.household_name} (${data.dietary_preferences.join(', ') || 'None'})`;
-        showToast("✓ Household profile saved!");
+        statusEl.innerHTML = `<span class="text-emerald-400 font-semibold">✓ Saved:</span> ${data.dietary_preferences.join(', ') || 'None'}`;
+        showToast("✓ Dietary preferences updated!");
       } catch (err) {
         statusEl.innerHTML = `<span class="text-rose-400">Error:</span> ${err.message}`;
       }
@@ -657,7 +1081,7 @@
 
     async function generatePlan() {
       const container = document.getElementById('planContainer');
-      container.innerHTML = '<div class="text-center text-slate-400 py-12"><div class="animate-spin text-2xl mb-2">⚡</div>Generating meal plan with pgvector preference matching...</div>';
+      container.innerHTML = '<div class="text-center text-slate-400 py-12"><div class="animate-spin text-2xl mb-2">⚡</div>Generating meal plan with preference matching...</div>';
 
       try {
         const payload = {
@@ -682,7 +1106,6 @@
     function renderPlan(plan) {
       activePlanId = plan.plan_id;
       isPlanLocked = plan.is_locked;
-      localStorage.setItem('splitbites_last_plan_id', activePlanId);
 
       document.getElementById('btnShuffle').disabled = isPlanLocked;
       document.getElementById('btnLock').disabled = false;
@@ -690,7 +1113,7 @@
 
       updateLockUI(isPlanLocked);
 
-      document.getElementById('planMeta').innerText = `Plan ID: ${plan.plan_id.slice(0, 8)}... | Week: ${plan.week_start_date}`;
+      document.getElementById('planMeta').innerText = `Plan: ${plan.plan_id.slice(0, 8)}... | Week: ${plan.week_start_date}`;
 
       const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
       const container = document.getElementById('planContainer');
@@ -734,7 +1157,7 @@
         });
         const updated = await res.json();
         renderPlan(updated);
-        showToast(`✓ Swapped ${day} with pgvector match`);
+        showToast(`✓ Swapped ${day} with matching recipe`);
       } catch (err) {
         alert("Failed to swap: " + err.message);
       }
@@ -801,7 +1224,6 @@
         const res = await fetch(`/api/meal-plans/${activePlanId}/grocery-list`);
         const data = await res.json();
         currentGroceryData = data;
-        localStorage.setItem('splitbites_cached_grocery', JSON.stringify(data));
         renderGroceries(data);
         showToast("✓ Multi-store groceries analyzed!");
       } catch (err) {
@@ -822,7 +1244,6 @@
       document.getElementById('heroSingleStore').innerText = `Best 1-stop: ${data.recommended_single_store}`;
       document.getElementById('heroSavings').innerText = `$${data.potential_split_savings.toFixed(2)}`;
 
-      // Store comparison overview cards
       const retailerCards = document.getElementById('retailerCards');
       retailerCards.innerHTML = '';
 
@@ -848,11 +1269,9 @@
         retailerCards.appendChild(card);
       }
 
-      // Checkable Live Itemized Shopping Grid
       const splitGrid = document.getElementById('splitBasketGrid');
       splitGrid.innerHTML = '';
 
-      // Load persistent client-side storage
       const storageKey = `splitbites_checks_${activePlanId || 'default'}`;
       const savedChecks = localStorage.getItem(storageKey);
       if (savedChecks) {
@@ -901,13 +1320,9 @@
                 </button>
               </div>
             </div>
-
-            <!-- Per-store mini progress bar -->
             <div class="w-full bg-slate-900 h-1.5 rounded-full overflow-hidden mb-3">
               <div id="store-progress-${store}" class="bg-emerald-500 h-full transition-all duration-300" style="width: 0%"></div>
             </div>
-
-            <!-- Checkable item list -->
             <div class="space-y-1 max-h-80 overflow-y-auto pr-1">
               ${itemsHtml}
             </div>
@@ -922,7 +1337,6 @@
     function toggleItemCheck(store, itemName, checked) {
       const itemKey = `${store}:${itemName}`;
       checkedItemsState[itemKey] = checked;
-      
       const label = document.getElementById(`label-${itemKey}`);
       const row = document.getElementById(`row-${itemKey}`);
       if (label) {
@@ -934,7 +1348,6 @@
           if (row) row.classList.remove('item-row-checked');
         }
       }
-
       const storageKey = `splitbites_checks_${activePlanId || 'default'}`;
       localStorage.setItem(storageKey, JSON.stringify(checkedItemsState));
       updateShoppingProgress();
@@ -952,7 +1365,6 @@
 
     function updateShoppingProgress() {
       if (!currentGroceryData) return;
-
       let totalItems = 0;
       let checkedItems = 0;
 
@@ -966,16 +1378,11 @@
             storeChecked++;
           }
         });
-
         const storePercent = items.length > 0 ? Math.round((storeChecked / items.length) * 100) : 0;
         const storeCounter = document.getElementById(`store-counter-${store}`);
         const storeBar = document.getElementById(`store-progress-${store}`);
-        if (storeCounter) {
-          storeCounter.innerText = `${storeChecked} / ${items.length} done (${storePercent}%)`;
-        }
-        if (storeBar) {
-          storeBar.style.width = `${storePercent}%`;
-        }
+        if (storeCounter) storeCounter.innerText = `${storeChecked} / ${items.length} done (${storePercent}%)`;
+        if (storeBar) storeBar.style.width = `${storePercent}%`;
       }
 
       const overallPercent = totalItems > 0 ? Math.round((checkedItems / totalItems) * 100) : 0;
@@ -1012,69 +1419,236 @@
       showToast("Cleared checked items");
     }
 
-    // 1-Click Copy-to-Clipboard for Mobile Notes Apps (Entire Split Trip)
     function copyFullShoppingList() {
       if (!currentGroceryData) return;
-      let text = `🛒 SPLITBITES MULTI-STORE SHOPPING LIST\n`;
-      text += `📅 Week of: ${currentGroceryData.week_start_date}\n`;
-      text += `💰 Optimal Split Cost: $${currentGroceryData.optimal_split_total_cost.toFixed(2)} (Savings: $${currentGroceryData.potential_split_savings.toFixed(2)})\n`;
-      text += `🌐 Source: https://splitbites.tbannon80-hp-mini.stream\n\n`;
+      let text = `🛒 SPLITBITES MULTI-STORE SHOPPING LIST
+`;
+      text += `📅 Week of: ${currentGroceryData.week_start_date}
+`;
+      text += `💰 Optimal Split Cost: $${currentGroceryData.optimal_split_total_cost.toFixed(2)} (Savings: $${currentGroceryData.potential_split_savings.toFixed(2)})
+
+`;
 
       for (const [store, items] of Object.entries(currentGroceryData.optimal_split_basket)) {
         const subtotal = items.reduce((a, b) => a + b.cost, 0);
-        text += `🏬 ${store.toUpperCase()} (${items.length} items • $${subtotal.toFixed(2)}):\n`;
+        text += `🏬 ${store.toUpperCase()} (${items.length} items • $${subtotal.toFixed(2)}):
+`;
         items.forEach(it => {
           const itemKey = `${store}:${it.name}`;
           const isDone = checkedItemsState[itemKey] ? "[x]" : "[ ]";
-          text += `  ${isDone} ${it.name} (${it.quantity} ${it.unit}) - $${it.cost.toFixed(2)}\n`;
+          text += `  ${isDone} ${it.name} (${it.quantity} ${it.unit}) - $${it.cost.toFixed(2)}
+`;
         });
-        text += `\n`;
+        text += `
+`;
       }
 
       navigator.clipboard.writeText(text).then(() => {
         showToast("✓ Master list copied for Apple Notes / Google Keep!");
       }).catch(err => {
-        fallbackCopyTextToClipboard(text);
+        alert("Failed to copy: " + err);
       });
     }
 
-    // 1-Click Copy-to-Clipboard for an Individual Store List
     function copyStoreShoppingList(storeName) {
       if (!currentGroceryData || !currentGroceryData.optimal_split_basket[storeName]) return;
       const items = currentGroceryData.optimal_split_basket[storeName];
       const subtotal = items.reduce((a, b) => a + b.cost, 0);
 
-      let text = `🏬 SPLITBITES SHOPPING LIST: ${storeName.toUpperCase()}\n`;
-      text += `💰 Subtotal: $${subtotal.toFixed(2)} (${items.length} items)\n`;
-      text += `📅 Week of: ${currentGroceryData.week_start_date}\n\n`;
+      let text = `🏬 SPLITBITES SHOPPING LIST: ${storeName.toUpperCase()}
+`;
+      text += `💰 Subtotal: $${subtotal.toFixed(2)} (${items.length} items)
+`;
+      text += `📅 Week of: ${currentGroceryData.week_start_date}
+
+`;
 
       items.forEach(it => {
         const itemKey = `${storeName}:${it.name}`;
         const isDone = checkedItemsState[itemKey] ? "[x]" : "[ ]";
-        text += `${isDone} ${it.name} (${it.quantity} ${it.unit}) - $${it.cost.toFixed(2)}\n`;
+        text += `${isDone} ${it.name} (${it.quantity} ${it.unit}) - $${it.cost.toFixed(2)}
+`;
       });
 
       navigator.clipboard.writeText(text).then(() => {
         showToast(`✓ ${storeName} list copied to clipboard!`);
       }).catch(err => {
-        fallbackCopyTextToClipboard(text);
+        alert("Failed to copy: " + err);
       });
     }
 
-    function fallbackCopyTextToClipboard(text) {
-      const textArea = document.createElement("textarea");
-      textArea.value = text;
-      textArea.style.position = "fixed";
-      document.body.appendChild(textArea);
-      textArea.focus();
-      textArea.select();
-      try {
-        document.execCommand('copy');
-        showToast("✓ List copied to clipboard!");
-      } catch (err) {
-        alert("Failed to copy list: " + err);
+    // Custom Recipe & URL Scraper Handlers
+    function toggleRecipeTag(el, tag) {
+      if (recipeUploadTags.has(tag)) {
+        recipeUploadTags.delete(tag);
+        el.classList.remove('bg-emerald-900/60', 'text-emerald-300', 'border-emerald-600');
+        el.classList.add('bg-slate-950', 'text-slate-400', 'border-slate-700');
+      } else {
+        recipeUploadTags.add(tag);
+        el.classList.remove('bg-slate-950', 'text-slate-400', 'border-slate-700');
+        el.classList.add('bg-emerald-900/60', 'text-emerald-300', 'border-emerald-600');
       }
-      document.body.removeChild(textArea);
+    }
+
+    function addIngredientRow() {
+      const container = document.getElementById('ingredientRows');
+      const div = document.createElement('div');
+      div.className = "ingredient-row flex items-center gap-2";
+      div.innerHTML = `
+        <input type="text" placeholder="Item name" class="ing-name flex-1 bg-slate-950 border border-slate-700 rounded px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-emerald-500" required>
+        <input type="number" step="0.1" value="1.0" placeholder="Qty" class="ing-qty w-20 bg-slate-950 border border-slate-700 rounded px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-emerald-500" required>
+        <input type="text" placeholder="Unit" value="ea" class="ing-unit w-24 bg-slate-950 border border-slate-700 rounded px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-emerald-500" required>
+        <button type="button" onclick="removeIngredientRow(this)" class="text-slate-500 hover:text-rose-400 text-xs px-1">✕</button>
+      `;
+      container.appendChild(div);
+    }
+
+    function removeIngredientRow(btn) {
+      const rows = document.querySelectorAll('.ingredient-row');
+      if (rows.length > 1) {
+        btn.closest('.ingredient-row').remove();
+      }
+    }
+
+    async function handleUrlImport() {
+      const input = document.getElementById('importUrlInput');
+      const btn = document.getElementById('btnFetchUrl');
+      const feedback = document.getElementById('urlImportFeedback');
+      const url = input.value.trim();
+
+      if (!url || (!url.startsWith('http://') && !url.startsWith('https://'))) {
+        alert("Please enter a valid HTTP or HTTPS recipe URL.");
+        return;
+      }
+
+      btn.disabled = true;
+      btn.innerHTML = '<span class="animate-spin text-sm">⚡</span> Fetching...';
+      feedback.classList.remove('hidden');
+      feedback.innerHTML = '<span class="text-emerald-400">Reading recipe microdata & parsing ingredients...</span>';
+
+      try {
+        const res = await fetch('/api/recipes/extract-url', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ url })
+        });
+        if (!res.ok) {
+          const err = await res.json();
+          throw new Error(err.detail || 'Could not parse recipe from URL');
+        }
+        const data = await res.json();
+
+        if (data.title) document.getElementById('recTitle').value = data.title;
+        if (data.description) document.getElementById('recDesc').value = data.description;
+        if (data.prep_time_minutes) document.getElementById('recPrep').value = data.prep_time_minutes;
+        if (data.difficulty_level) document.getElementById('recDifficulty').value = data.difficulty_level;
+
+        recipeUploadTags.clear();
+        if (data.dietary_tags && Array.isArray(data.dietary_tags)) {
+          data.dietary_tags.forEach(t => recipeUploadTags.add(t));
+        }
+        document.querySelectorAll('.rec-tag-btn').forEach(b => {
+          const tag = b.innerText.trim();
+          if (recipeUploadTags.has(tag)) {
+            b.classList.remove('bg-slate-950', 'text-slate-400', 'border-slate-700');
+            b.classList.add('bg-emerald-900/60', 'text-emerald-300', 'border-emerald-600');
+          } else {
+            b.classList.add('bg-slate-950', 'text-slate-400', 'border-slate-700');
+            b.classList.remove('bg-emerald-900/60', 'text-emerald-300', 'border-emerald-600');
+          }
+        });
+
+        const container = document.getElementById('ingredientRows');
+        container.innerHTML = '';
+        if (data.ingredients && data.ingredients.length > 0) {
+          data.ingredients.forEach(it => {
+            const div = document.createElement('div');
+            div.className = "ingredient-row flex items-center gap-2";
+            div.innerHTML = `
+              <input type="text" placeholder="Item" value="${it.name || ''}" class="ing-name flex-1 bg-slate-950 border border-slate-700 rounded px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-emerald-500" required>
+              <input type="number" step="0.1" value="${it.quantity || 1.0}" placeholder="Qty" class="ing-qty w-20 bg-slate-950 border border-slate-700 rounded px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-emerald-500" required>
+              <input type="text" placeholder="Unit" value="${it.unit || 'count'}" class="ing-unit w-24 bg-slate-950 border border-slate-700 rounded px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-emerald-500" required>
+              <button type="button" onclick="removeIngredientRow(this)" class="text-slate-500 hover:text-rose-400 text-xs px-1">✕</button>
+            `;
+            container.appendChild(div);
+          });
+        } else {
+          addIngredientRow();
+        }
+
+        if (data.instructions && data.instructions.length > 0) {
+          const instTexts = data.instructions.map(step => typeof step === 'string' ? step : (step.text || ''));
+          document.getElementById('recInstructions').value = instTexts.join('
+');
+        }
+
+        feedback.innerHTML = `<span class="text-emerald-400 font-bold">✓ Successfully imported:</span> "${data.title}" (${data.ingredients.length} ingredients). Review below and click Save!`;
+        showToast(`✓ Recipe imported: ${data.title}`);
+      } catch (err) {
+        feedback.innerHTML = `<span class="text-rose-400">Import failed:</span> ${err.message}`;
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<span>📥</span> Fetch & Pre-Fill';
+      }
+    }
+
+    async function handleRecipeSubmit(e) {
+      e.preventDefault();
+      const statusEl = document.getElementById('recipeUploadStatus');
+      const btn = document.getElementById('btnUploadRecipe');
+      btn.disabled = true;
+      statusEl.innerHTML = '<span class="text-emerald-400">Indexing recipe...</span>';
+
+      const title = document.getElementById('recTitle').value.trim();
+      const description = document.getElementById('recDesc').value.trim();
+      const prepTime = parseInt(document.getElementById('recPrep').value) || 30;
+      const difficulty = document.getElementById('recDifficulty').value;
+      const rawInst = document.getElementById('recInstructions').value.trim();
+
+      const ingRows = document.querySelectorAll('.ingredient-row');
+      const ingredients = [];
+      ingRows.forEach(row => {
+        const name = row.querySelector('.ing-name').value.trim();
+        const qty = parseFloat(row.querySelector('.ing-qty').value) || 1.0;
+        const unit = row.querySelector('.ing-unit').value.trim() || 'units';
+        if (name) {
+          ingredients.push({ name, quantity: qty, unit });
+        }
+      });
+
+      const payload = {
+        title,
+        description,
+        prep_time_minutes: prepTime,
+        difficulty_level: difficulty,
+        dietary_tags: Array.from(recipeUploadTags),
+        ingredients,
+        instructions: rawInst.split('
+').map(s => s.trim()).filter(Boolean),
+        is_public: true
+      };
+
+      try {
+        const res = await fetch('/api/recipes/', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        if (!res.ok) {
+          const errData = await res.json();
+          throw new Error(errData.detail || 'Upload failed');
+        }
+        const data = await res.json();
+        statusEl.innerHTML = `<span class="text-emerald-400 font-bold">✓ Recipe Saved!</span> "${data.title}" added to your family recipes.`;
+        showToast(`✓ "${data.title}" saved!`);
+        document.getElementById('recTitle').value = '';
+        document.getElementById('recDesc').value = '';
+        setTimeout(() => switchDashboardTab('mealplan'), 1800);
+      } catch (err) {
+        statusEl.innerHTML = `<span class="text-rose-400">Error:</span> ${err.message}`;
+      } finally {
+        btn.disabled = false;
+      }
     }
   </script>
 </body>
