@@ -1,6 +1,6 @@
 import random
 from datetime import date
-from typing import Optional, List, Dict
+from typing import Optional, List, Dict, Set
 from uuid import UUID
 
 from fastapi import APIRouter, Depends, HTTPException
@@ -9,7 +9,7 @@ from sqlalchemy import select, text
 from sqlalchemy.orm import selectinload
 
 from app.database.session import AsyncSessionLocal
-from app.models import MealPlan, MealPlanItem, Recipe
+from app.models import MealPlan, MealPlanItem, Recipe, Household, DietaryPreference
 from app.schemas.meal_plan import (
     MealPlanGenerateRequest,
     MealPlanSwapRequest,
@@ -18,6 +18,7 @@ from app.schemas.meal_plan import (
     MealSlotResponse,
     WeeklyMealPlanResponse,
 )
+from app.services.embedding import get_embedding
 from app.services.grocery_aggregation import aggregate_groceries_for_plan
 
 router = APIRouter(prefix="/api/meal-plans", tags=["meal-plans"])
@@ -55,24 +56,94 @@ async def generate_weekly_plan(
 ):
     """
     Generates and persists a 5-day Monday-Friday meal plan.
-    Supports optional dietary tag filtering and custom start dates.
+    Filters recipes by household dietary restrictions (e.g. gluten-free, dairy-free)
+    and leverages pgvector semantic similarity for preference matching.
     """
     days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
     start_date = payload.target_date if payload and payload.target_date else date.today()
+    household: Optional[Household] = None
+    required_tags: Set[str] = set()
 
-    query = select(Recipe)
-    result = await db.execute(query)
-    recipes = result.scalars().all()
+    # 1. Resolve household dietary restrictions if household_id is provided
+    if payload and payload.household_id:
+        h_stmt = select(Household).options(selectinload(Household.dietary_preferences)).where(Household.household_id == payload.household_id)
+        h_res = await db.execute(h_stmt)
+        household = h_res.scalar_one_or_none()
+        if household and household.dietary_preferences:
+            for pref in household.dietary_preferences:
+                required_tags.add(pref.preference_name.lower())
 
-    if not recipes:
+    # Merge explicit dietary tags from payload
+    if payload and payload.dietary_tags:
+        for tag in payload.dietary_tags:
+            required_tags.add(tag.lower())
+
+    # 2. Fetch recipes with their dietary preferences
+    rec_stmt = select(Recipe).options(selectinload(Recipe.dietary_preferences))
+    result = await db.execute(rec_stmt)
+    all_recipes = result.scalars().all()
+
+    if not all_recipes:
         raise HTTPException(status_code=404, detail="No recipes found in database. Please run the seeder script.")
 
-    pool = list(recipes)
-    random.shuffle(pool)
+    # 3. Filter candidates strictly by dietary restrictions
+    if required_tags:
+        matching_candidates = [
+            r for r in all_recipes
+            if required_tags.issubset({p.preference_name.lower() for p in r.dietary_preferences})
+        ]
+        # If strict matching has fewer than 5 recipes, fall back to ranking by most matched tags
+        if len(matching_candidates) < 5:
+            matching_candidates = sorted(
+                all_recipes,
+                key=lambda r: len(required_tags.intersection({p.preference_name.lower() for p in r.dietary_preferences})),
+                reverse=True
+            )[:15]
+    else:
+        matching_candidates = all_recipes
 
-    # Persist MealPlan
+    # 4. Leverage pgvector similarity for preference matching
+    # Construct household preference embedding query text
+    if household:
+        tag_desc = f"with dietary restrictions: {', '.join(sorted(required_tags))}" if required_tags else "healthy family dinners"
+        pref_query = f"Delicious chef-crafted dinner recipes for {household.household_name} {tag_desc}. Balanced, wholesome, high-quality meals."
+    elif required_tags:
+        pref_query = f"Wholesome chef-crafted dinner meals respecting dietary restrictions: {', '.join(sorted(required_tags))}."
+    else:
+        pref_query = "Diverse, delicious, chef-crafted dinner recipes for weekly meal plan."
+
+    pref_vec = await get_embedding(pref_query)
+    vec_str = "[" + ",".join(str(float(x)) for x in pref_vec) + "]"
+
+    cand_ids = [r.recipe_id for r in matching_candidates]
+    stmt_ranked = (
+        select(Recipe)
+        .options(selectinload(Recipe.dietary_preferences))
+        .where(Recipe.recipe_id.in_(cand_ids))
+        .where(Recipe.embedding.isnot(None))
+        .order_by(text("embedding <=> CAST(:vec AS vector)"))
+        .params(vec=vec_str)
+    )
+    ranked_res = await db.execute(stmt_ranked)
+    ranked_pool = ranked_res.scalars().all()
+
+    if not ranked_pool:
+        ranked_pool = matching_candidates
+
+    # Select top 5 distinct meals for the week
+    selected_recipes = list(ranked_pool[:5])
+    while len(selected_recipes) < 5:
+        for cand in matching_candidates:
+            if cand not in selected_recipes:
+                selected_recipes.append(cand)
+            if len(selected_recipes) == 5:
+                break
+        if len(selected_recipes) < 5:
+            selected_recipes.append(matching_candidates[0])
+
+    # 5. Persist MealPlan and Items
     new_plan = MealPlan(
-        household_id=payload.household_id if payload else None,
+        household_id=household.household_id if household else (payload.household_id if payload else None),
         week_start_date=start_date,
         is_locked=False
     )
@@ -80,7 +151,7 @@ async def generate_weekly_plan(
     await db.flush()
 
     for i, day in enumerate(days):
-        chosen_recipe = pool[i % len(pool)]
+        chosen_recipe = selected_recipes[i]
         item = MealPlanItem(
             meal_plan_id=new_plan.plan_id,
             recipe_id=chosen_recipe.recipe_id,
@@ -127,7 +198,7 @@ async def swap_meal(
     Swaps a meal on a given day.
     If new_recipe_id is provided, swaps to that recipe.
     Otherwise, intelligently uses pgvector cosine distance to find the nearest
-    semantic alternative recipe not already scheduled this week.
+    semantic alternative recipe respecting household dietary restrictions.
     """
     stmt = (
         select(MealPlan)
@@ -151,6 +222,15 @@ async def swap_meal(
 
     scheduled_ids = [it.recipe_id for it in plan.items if it.recipe_id]
 
+    # Load household dietary restrictions if available
+    household_tags: Set[str] = set()
+    if plan.household_id:
+        h_stmt = select(Household).options(selectinload(Household.dietary_preferences)).where(Household.household_id == plan.household_id)
+        h_res = await db.execute(h_stmt)
+        h = h_res.scalar_one_or_none()
+        if h and h.dietary_preferences:
+            household_tags = {p.preference_name.lower() for p in h.dietary_preferences}
+
     if payload.new_recipe_id:
         rec_stmt = select(Recipe).where(Recipe.recipe_id == payload.new_recipe_id)
         rec_res = await db.execute(rec_stmt)
@@ -164,25 +244,42 @@ async def swap_meal(
         if payload.use_vector_similarity and current_recipe and current_recipe.embedding is not None:
             vec_list = [float(x) for x in current_recipe.embedding]
             vec_str = "[" + ",".join(str(x) for x in vec_list) + "]"
-            stmt_alt = (
-                select(Recipe)
-                .where(~Recipe.recipe_id.in_(scheduled_ids))
-                .where(Recipe.embedding.isnot(None))
-                .order_by(text("embedding <=> CAST(:vec AS vector)"))
-                .params(vec=vec_str)
-                .limit(1)
-            )
-            sim_res = await db.execute(stmt_alt)
-            alt = sim_res.scalar_one_or_none()
+
+            # Query candidate recipes with dietary tags
+            all_rec_res = await db.execute(select(Recipe).options(selectinload(Recipe.dietary_preferences)))
+            candidates = all_rec_res.scalars().all()
+            eligible_ids = [
+                r.recipe_id for r in candidates
+                if r.recipe_id not in scheduled_ids and household_tags.issubset({p.preference_name.lower() for p in r.dietary_preferences})
+            ]
+
+            if eligible_ids:
+                stmt_alt = (
+                    select(Recipe)
+                    .where(Recipe.recipe_id.in_(eligible_ids))
+                    .where(Recipe.embedding.isnot(None))
+                    .order_by(text("embedding <=> CAST(:vec AS vector)"))
+                    .params(vec=vec_str)
+                    .limit(1)
+                )
+                sim_res = await db.execute(stmt_alt)
+                alt = sim_res.scalar_one_or_none()
+            else:
+                # Fallback without dietary filter if too strict
+                stmt_alt = (
+                    select(Recipe)
+                    .where(~Recipe.recipe_id.in_(scheduled_ids))
+                    .where(Recipe.embedding.isnot(None))
+                    .order_by(text("embedding <=> CAST(:vec AS vector)"))
+                    .params(vec=vec_str)
+                    .limit(1)
+                )
+                sim_res = await db.execute(stmt_alt)
+                alt = sim_res.scalar_one_or_none()
+
             if alt:
                 target_item.recipe = alt
                 target_item.is_modified = True
-            else:
-                alt_res = await db.execute(select(Recipe).where(~Recipe.recipe_id.in_(scheduled_ids)).limit(1))
-                alt = alt_res.scalar_one_or_none()
-                if alt:
-                    target_item.recipe = alt
-                    target_item.is_modified = True
         else:
             alt_res = await db.execute(select(Recipe).where(~Recipe.recipe_id.in_(scheduled_ids)))
             available = alt_res.scalars().all()
@@ -264,7 +361,7 @@ async def shuffle_meal_plan(
         if preserve_modified and item.is_modified:
             continue
         if cand_idx < len(candidate_pool):
-            item.recipe_id = candidate_pool[cand_idx].recipe_id
+            item.recipe = candidate_pool[cand_idx]
             cand_idx += 1
 
     await db.commit()

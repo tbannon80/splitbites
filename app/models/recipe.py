@@ -1,5 +1,6 @@
 from sqlalchemy import Column, String, Integer, Text, Boolean, DECIMAL, ForeignKey, DateTime
 from sqlalchemy.dialects.postgresql import UUID, JSONB
+from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 from pgvector.sqlalchemy import Vector
 from app.database.session import Base
@@ -23,6 +24,17 @@ class Recipe(Base):
     is_public = Column(Boolean, default=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     embedding = Column(Vector(1536), nullable=True)
+
+    dietary_preferences = relationship(
+        "DietaryPreference",
+        secondary="recipe_dietary_tags",
+        lazy="selectin"
+    )
+
+class RecipeDietaryTag(Base):
+    __tablename__ = "recipe_dietary_tags"
+    recipe_id = Column(UUID(as_uuid=True), ForeignKey("recipes.recipe_id", ondelete="CASCADE"), primary_key=True)
+    preference_id = Column(UUID(as_uuid=True), ForeignKey("dietary_preferences.preference_id", ondelete="CASCADE"), primary_key=True)
 
 class Ingredient(Base):
     __tablename__ = "ingredients"

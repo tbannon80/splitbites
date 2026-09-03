@@ -1,5 +1,5 @@
 from app.database.session import Base
-from app.models.recipe import Recipe, Ingredient, RecipeIngredient, DietaryPreference
+from app.models.recipe import Recipe, Ingredient, RecipeIngredient, DietaryPreference, RecipeDietaryTag
 from app.models.user import User
 from app.models.household import Household, HouseholdMember, HouseholdDietaryRestriction
 from app.models.meal_plan import MealPlan, MealPlanItem
@@ -11,6 +11,7 @@ __all__ = [
     "Ingredient",
     "RecipeIngredient",
     "DietaryPreference",
+    "RecipeDietaryTag",
     "User",
     "Household",
     "HouseholdMember",

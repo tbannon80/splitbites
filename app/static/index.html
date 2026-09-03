@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SplitBites - Homelab Meal Planning & Multi-Store Grocery Aggregator</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: { 50: '#ecfdf5', 500: '#10b981', 600: '#059669', 700: '#047857' },
+            dark: { 800: '#1e293b', 900: '#0f172a', 950: '#020617' }
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-dark-950 text-slate-100 min-h-screen font-sans antialiased">
+  <div class="max-w-6xl mx-auto px-4 py-8">
+    <!-- Header -->
+    <header class="flex flex-col md:flex-row md:items-center justify-between pb-6 border-b border-slate-800 gap-4">
+      <div>
+        <div class="flex items-center gap-3">
+          <span class="text-3xl">🥑</span>
+          <h1 class="text-3xl font-extrabold tracking-tight bg-gradient-to-r from-emerald-400 to-teal-200 bg-clip-text text-transparent">
+            SplitBites
+          </h1>
+          <span class="text-xs uppercase px-2.5 py-0.5 rounded-full bg-emerald-950 text-emerald-400 border border-emerald-800 font-mono">
+            v1.2 Homelab
+          </span>
+        </div>
+        <p class="text-slate-400 text-sm mt-1">pgvector Semantic Meal Optimization & Multi-Store Grocery Arbitrage</p>
+      </div>
+      <div class="flex items-center gap-3 text-xs font-mono bg-slate-900 border border-slate-800 px-3 py-2 rounded-lg">
+        <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+        <span class="text-slate-300">HP Mini Homelab (192.168.4.35)</span>
+      </div>
+    </header>
+
+    <!-- Main Grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mt-8">
+      
+      <!-- Step 1: Household Onboarding -->
+      <section class="bg-slate-900/80 border border-slate-800 rounded-xl p-6 shadow-xl flex flex-col justify-between">
+        <div>
+          <div class="flex items-center justify-between mb-4">
+            <h2 class="text-lg font-bold text-white flex items-center gap-2">
+              <span class="bg-emerald-500/20 text-emerald-400 w-6 h-6 rounded-full flex items-center justify-center text-xs">1</span>
+              Household Onboarding
+            </h2>
+          </div>
+          <p class="text-xs text-slate-400 mb-4">Register your household profile and assign mandatory dietary constraints.</p>
+
+          <label class="block text-xs font-semibold text-slate-300 mb-1">Household Name</label>
+          <input id="householdName" type="text" value="The Bannon Family" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-emerald-500 mb-4">
+
+          <label class="block text-xs font-semibold text-slate-300 mb-2">Dietary Restrictions</label>
+          <div id="dietaryTags" class="flex flex-wrap gap-2 mb-4">
+            <!-- Badges dynamically rendered or hardcoded -->
+            <button type="button" onclick="toggleTag(this, 'gluten-free')" class="tag-btn text-xs px-2.5 py-1 rounded-full border border-slate-700 bg-slate-950 text-slate-400 transition-colors">gluten-free</button>
+            <button type="button" onclick="toggleTag(this, 'dairy-free')" class="tag-btn text-xs px-2.5 py-1 rounded-full border border-slate-700 bg-slate-950 text-slate-400 transition-colors">dairy-free</button>
+            <button type="button" onclick="toggleTag(this, 'high-protein')" class="tag-btn text-xs px-2.5 py-1 rounded-full border border-slate-700 bg-slate-950 text-slate-400 transition-colors">high-protein</button>
+            <button type="button" onclick="toggleTag(this, 'vegetarian')" class="tag-btn text-xs px-2.5 py-1 rounded-full border border-slate-700 bg-slate-950 text-slate-400 transition-colors">vegetarian</button>
+            <button type="button" onclick="toggleTag(this, 'vegan')" class="tag-btn text-xs px-2.5 py-1 rounded-full border border-slate-700 bg-slate-950 text-slate-400 transition-colors">vegan</button>
+            <button type="button" onclick="toggleTag(this, 'keto')" class="tag-btn text-xs px-2.5 py-1 rounded-full border border-slate-700 bg-slate-950 text-slate-400 transition-colors">keto</button>
+            <button type="button" onclick="toggleTag(this, 'pescatarian')" class="tag-btn text-xs px-2.5 py-1 rounded-full border border-slate-700 bg-slate-950 text-slate-400 transition-colors">pescatarian</button>
+          </div>
+        </div>
+
+        <div>
+          <button id="btnOnboard" onclick="onboardHousehold()" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-medium py-2 px-4 rounded-lg text-sm transition shadow-lg shadow-emerald-950">
+            Save Household Profile
+          </button>
+          <div id="householdStatus" class="mt-3 text-xs text-slate-400 font-mono">Status: Ready to onboard</div>
+        </div>
+      </section>
+
+      <!-- Step 2: Meal Plan Generation & Customization -->
+      <section class="lg:col-span-2 bg-slate-900/80 border border-slate-800 rounded-xl p-6 shadow-xl flex flex-col justify-between">
+        <div>
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-slate-800 mb-4 gap-3">
+            <h2 class="text-lg font-bold text-white flex items-center gap-2">
+              <span class="bg-emerald-500/20 text-emerald-400 w-6 h-6 rounded-full flex items-center justify-center text-xs">2</span>
+              Monday - Friday Meal Plan
+            </h2>
+            <div class="flex items-center gap-2">
+              <button id="btnGenerate" onclick="generatePlan()" class="bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold py-1.5 px-3 rounded-md transition flex items-center gap-1.5 shadow">
+                <span>⚡</span> Generate Plan
+              </button>
+              <button id="btnShuffle" onclick="shufflePlan()" disabled class="disabled:opacity-40 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-medium py-1.5 px-3 rounded-md transition">
+                🔀 Shuffle
+              </button>
+              <button id="btnLock" onclick="toggleLock()" disabled class="disabled:opacity-40 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-medium py-1.5 px-3 rounded-md transition flex items-center gap-1">
+                <span id="lockIcon">🔒</span> <span id="lockText">Lock Plan</span>
+              </button>
+            </div>
+          </div>
+
+          <div id="planContainer" class="space-y-3 min-h-[300px] flex flex-col justify-center">
+            <div class="text-center text-slate-500 text-sm py-12">
+              Click <strong class="text-slate-400">Generate Plan</strong> to construct a weekly schedule respecting household restrictions.
+            </div>
+          </div>
+        </div>
+
+        <div id="planSummaryBar" class="mt-4 pt-3 border-t border-slate-800 flex items-center justify-between text-xs text-slate-400 font-mono">
+          <span id="planMeta">No plan loaded</span>
+          <span id="planStatusBadge" class="px-2 py-0.5 rounded bg-slate-800 text-slate-400">Draft</span>
+        </div>
+      </section>
+
+      <!-- Step 3: Multi-Store Grocery Aggregation & Savings -->
+      <section class="lg:col-span-3 bg-slate-900/80 border border-slate-800 rounded-xl p-6 shadow-xl">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-slate-800 mb-6 gap-3">
+          <div>
+            <h2 class="text-lg font-bold text-white flex items-center gap-2">
+              <span class="bg-emerald-500/20 text-emerald-400 w-6 h-6 rounded-full flex items-center justify-center text-xs">3</span>
+              Multi-Store Grocery Aggregation & Price Arbitrage
+            </h2>
+            <p class="text-xs text-slate-400 mt-0.5">Ingredient procurement analysis mapped across Aldi, Walmart, Meijer, and Amazon.</p>
+          </div>
+          <button id="btnFetchGroceries" onclick="fetchGroceries()" disabled class="disabled:opacity-40 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold py-2 px-4 rounded-lg transition shadow flex items-center gap-2">
+            <span>🛒</span> Analyze Grocery Pricing
+          </button>
+        </div>
+
+        <!-- Savings Highlights -->
+        <div id="savingsHero" class="hidden mb-6 grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div class="bg-slate-950/70 border border-slate-800 p-4 rounded-lg">
+            <div class="text-xs text-slate-400">Optimal Multi-Store Split Cost</div>
+            <div id="heroSplitCost" class="text-2xl font-bold text-emerald-400 mt-1">$0.00</div>
+            <div class="text-[11px] text-slate-500 mt-0.5">Lowest cost per ingredient</div>
+          </div>
+          <div class="bg-slate-950/70 border border-slate-800 p-4 rounded-lg">
+            <div class="text-xs text-slate-400">Recommended Single Store Run</div>
+            <div id="heroSingleCost" class="text-2xl font-bold text-white mt-1">$0.00</div>
+            <div id="heroSingleStore" class="text-[11px] text-slate-400 mt-0.5">Best 1-stop shopping fulfillment</div>
+          </div>
+          <div class="bg-emerald-950/40 border border-emerald-800/80 p-4 rounded-lg">
+            <div class="text-xs text-emerald-400 font-semibold">Potential Multi-Store Savings</div>
+            <div id="heroSavings" class="text-2xl font-black text-emerald-300 mt-1">$0.00</div>
+            <div class="text-[11px] text-emerald-400/80 mt-0.5">By shopping lowest-price retailer</div>
+          </div>
+        </div>
+
+        <!-- Retailer Comparison Cards -->
+        <div id="retailerCards" class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6"></div>
+
+        <!-- Split Shopping Breakdown -->
+        <div id="splitBreakdownContainer" class="hidden">
+          <h3 class="text-sm font-semibold text-slate-200 mb-3 flex items-center gap-2">
+            <span>📋</span> Optimal Split-Basket Shopping List
+          </h3>
+          <div id="splitBasketGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4"></div>
+        </div>
+      </section>
+
+    </div>
+  </div>
+
+  <script>
+    let activeHouseholdId = null;
+    let activePlanId = null;
+    let isPlanLocked = false;
+    let selectedTags = new Set(["gluten-free", "dairy-free"]);
+
+    // Initialize default selected tags
+    document.querySelectorAll('.tag-btn').forEach(btn => {
+      const tag = btn.innerText.trim();
+      if (selectedTags.has(tag)) {
+        btn.classList.remove('bg-slate-950', 'text-slate-400', 'border-slate-700');
+        btn.classList.add('bg-emerald-900/60', 'text-emerald-300', 'border-emerald-600');
+      }
+    });
+
+    function toggleTag(el, tag) {
+      if (selectedTags.has(tag)) {
+        selectedTags.delete(tag);
+        el.classList.remove('bg-emerald-900/60', 'text-emerald-300', 'border-emerald-600');
+        el.classList.add('bg-slate-950', 'text-slate-400', 'border-slate-700');
+      } else {
+        selectedTags.add(tag);
+        el.classList.remove('bg-slate-950', 'text-slate-400', 'border-slate-700');
+        el.classList.add('bg-emerald-900/60', 'text-emerald-300', 'border-emerald-600');
+      }
+    }
+
+    async function onboardHousehold() {
+      const name = document.getElementById('householdName').value.trim() || 'My Household';
+      const statusEl = document.getElementById('householdStatus');
+      statusEl.innerText = "Registering household...";
+
+      try {
+        const res = await fetch('/api/households/', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            household_name: name,
+            dietary_preferences: Array.from(selectedTags)
+          })
+        });
+        const data = await res.json();
+        activeHouseholdId = data.household_id;
+        statusEl.innerHTML = `<span class="text-emerald-400">✓ Onboarded:</span> ${data.household_name} (${data.dietary_preferences.join(', ') || 'No restrictions'})`;
+      } catch (err) {
+        statusEl.innerHTML = `<span class="text-rose-400">Error:</span> ${err.message}`;
+      }
+    }
+
+    async function generatePlan() {
+      const container = document.getElementById('planContainer');
+      container.innerHTML = '<div class="text-center text-slate-400 py-12"><div class="animate-spin text-2xl mb-2">⚡</div>Generating meal plan with pgvector preference matching...</div>';
+
+      try {
+        const payload = {
+          household_id: activeHouseholdId,
+          dietary_tags: Array.from(selectedTags),
+          days_count: 5
+        };
+
+        const res = await fetch('/api/meal-plans/generate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const plan = await res.json();
+        renderPlan(plan);
+      } catch (err) {
+        container.innerHTML = `<div class="text-rose-400 py-8 text-center">Failed to generate plan: ${err.message}</div>`;
+      }
+    }
+
+    function renderPlan(plan) {
+      activePlanId = plan.plan_id;
+      isPlanLocked = plan.is_locked;
+
+      document.getElementById('btnShuffle').disabled = isPlanLocked;
+      document.getElementById('btnLock').disabled = false;
+      document.getElementById('btnFetchGroceries').disabled = false;
+
+      updateLockUI(isPlanLocked);
+
+      document.getElementById('planMeta').innerText = `Plan ID: ${plan.plan_id.slice(0, 8)}... | Week: ${plan.week_start_date}`;
+
+      const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
+      const container = document.getElementById('planContainer');
+      container.innerHTML = '';
+
+      days.forEach(day => {
+        const meal = plan.meals[day];
+        if (!meal) return;
+
+        const row = document.createElement('div');
+        row.className = "flex flex-col sm:flex-row sm:items-center justify-between p-3 rounded-lg bg-slate-950/60 border border-slate-800 hover:border-slate-700 transition gap-3";
+        row.innerHTML = `
+          <div class="flex items-start sm:items-center gap-3">
+            <span class="text-xs font-bold font-mono px-2.5 py-1 rounded bg-slate-800 text-slate-300 w-24 text-center">${day}</span>
+            <div>
+              <div class="flex items-center gap-2">
+                <span class="font-semibold text-sm text-white">${meal.title}</span>
+                ${meal.is_modified ? '<span class="text-[10px] px-1.5 py-0.5 rounded bg-amber-950 text-amber-400 border border-amber-800">Modified</span>' : ''}
+              </div>
+              <p class="text-xs text-slate-400 mt-0.5 line-clamp-1">${meal.description || ''}</p>
+            </div>
+          </div>
+          <div class="flex items-center justify-between sm:justify-end gap-3 shrink-0">
+            <span class="text-xs text-slate-500 font-mono">${meal.prep_time_minutes}m • ${meal.difficulty_level}</span>
+            <button onclick="swapMeal('${day}')" ${isPlanLocked ? 'disabled' : ''} class="disabled:opacity-30 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs px-2.5 py-1 rounded transition flex items-center gap-1 border border-slate-700">
+              <span>🔄</span> Swap
+            </button>
+          </div>
+        `;
+        container.appendChild(row);
+      });
+    }
+
+    async function swapMeal(day) {
+      if (!activePlanId || isPlanLocked) return;
+      try {
+        const res = await fetch(`/api/meal-plans/${activePlanId}/swap`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ day_of_week: day, use_vector_similarity: true })
+        });
+        const updated = await res.json();
+        renderPlan(updated);
+      } catch (err) {
+        alert("Failed to swap: " + err.message);
+      }
+    }
+
+    async function shufflePlan() {
+      if (!activePlanId || isPlanLocked) return;
+      try {
+        const res = await fetch(`/api/meal-plans/${activePlanId}/shuffle`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ preserve_modified: true })
+        });
+        const updated = await res.json();
+        renderPlan(updated);
+      } catch (err) {
+        alert("Failed to shuffle: " + err.message);
+      }
+    }
+
+    async function toggleLock() {
+      if (!activePlanId) return;
+      const targetState = !isPlanLocked;
+      try {
+        const res = await fetch(`/api/meal-plans/${activePlanId}/lock`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ lock: targetState })
+        });
+        const updated = await res.json();
+        renderPlan(updated);
+      } catch (err) {
+        alert("Failed to update lock: " + err.message);
+      }
+    }
+
+    function updateLockUI(locked) {
+      const lockIcon = document.getElementById('lockIcon');
+      const lockText = document.getElementById('lockText');
+      const badge = document.getElementById('planStatusBadge');
+
+      if (locked) {
+        lockIcon.innerText = "🔓";
+        lockText.innerText = "Unlock Plan";
+        badge.innerText = "Locked";
+        badge.className = "px-2 py-0.5 rounded bg-emerald-950 text-emerald-400 border border-emerald-800 font-semibold";
+      } else {
+        lockIcon.innerText = "🔒";
+        lockText.innerText = "Lock Plan";
+        badge.innerText = "Draft";
+        badge.className = "px-2 py-0.5 rounded bg-slate-800 text-slate-400";
+      }
+    }
+
+    async function fetchGroceries() {
+      if (!activePlanId) return;
+      const btn = document.getElementById('btnFetchGroceries');
+      btn.innerHTML = 'Analyzing...';
+      btn.disabled = true;
+
+      try {
+        const res = await fetch(`/api/meal-plans/${activePlanId}/grocery-list`);
+        const data = await res.json();
+        renderGroceries(data);
+      } catch (err) {
+        alert("Failed to fetch groceries: " + err.message);
+      } finally {
+        btn.innerHTML = '<span>🛒</span> Analyze Grocery Pricing';
+        btn.disabled = false;
+      }
+    }
+
+    function renderGroceries(data) {
+      document.getElementById('savingsHero').classList.remove('hidden');
+      document.getElementById('splitBreakdownContainer').classList.remove('hidden');
+
+      document.getElementById('heroSplitCost').innerText = `$${data.optimal_split_total_cost.toFixed(2)}`;
+      document.getElementById('heroSingleCost').innerText = `$${data.single_store_cost.toFixed(2)}`;
+      document.getElementById('heroSingleStore').innerText = `Best 1-stop run: ${data.recommended_single_store}`;
+      document.getElementById('heroSavings').innerText = `$${data.potential_split_savings.toFixed(2)}`;
+
+      // Store comparison cards
+      const retailerCards = document.getElementById('retailerCards');
+      retailerCards.innerHTML = '';
+
+      for (const [store, info] of Object.entries(data.store_baskets)) {
+        const card = document.createElement('div');
+        const isBest = store === data.recommended_single_store;
+        card.className = `p-4 rounded-lg bg-slate-950/60 border ${isBest ? 'border-emerald-600 bg-emerald-950/10' : 'border-slate-800'}`;
+        card.innerHTML = `
+          <div class="flex items-center justify-between mb-1">
+            <span class="font-bold text-sm text-white">${store}</span>
+            ${isBest ? '<span class="text-[10px] bg-emerald-900 text-emerald-300 px-1.5 py-0.2 rounded">Top Single</span>' : ''}
+          </div>
+          <div class="text-xl font-extrabold text-slate-200 mb-2">$${info.total_estimated_cost.toFixed(2)}</div>
+          <div class="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden mb-1.5">
+            <div class="bg-emerald-500 h-full" style="width: ${info.fulfillment_percentage}%"></div>
+          </div>
+          <div class="flex justify-between text-[11px] text-slate-400 font-mono">
+            <span>${info.fulfillment_percentage}% fulfill</span>
+            <span>${info.items_available_count}/${info.total_needed_count}</span>
+          </div>
+        `;
+        retailerCards.appendChild(card);
+      }
+
+      // Optimal split basket
+      const splitGrid = document.getElementById('splitBasketGrid');
+      splitGrid.innerHTML = '';
+
+      for (const [store, items] of Object.entries(data.optimal_split_basket)) {
+        const col = document.createElement('div');
+        col.className = "bg-slate-950/80 border border-slate-800 rounded-lg p-3";
+        const storeSubtotal = items.reduce((acc, it) => acc + it.cost, 0);
+        col.innerHTML = `
+          <div class="flex items-center justify-between pb-2 border-b border-slate-800 mb-2">
+            <span class="font-bold text-xs text-emerald-400">${store} (${items.length})</span>
+            <span class="text-xs font-mono font-bold text-white">$${storeSubtotal.toFixed(2)}</span>
+          </div>
+          <div class="space-y-1.5 max-h-56 overflow-y-auto pr-1">
+            ${items.map(it => `
+              <div class="flex justify-between text-[11px] text-slate-300">
+                <span class="truncate pr-2">${it.name}</span>
+                <span class="font-mono text-slate-400 shrink-0">$${it.cost.toFixed(2)}</span>
+              </div>
+            `).join('')}
+          </div>
+        `;
+        splitGrid.appendChild(col);
+      }
+    }
+  </script>
+</body>
+</html>
