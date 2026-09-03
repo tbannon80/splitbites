@@ -13,4 +13,5 @@ class User(Base):
     password_hash = Column(String(255), nullable=False)
     reset_token = Column(String(255), nullable=True, index=True)
     reset_token_expires = Column(DateTime(timezone=True), nullable=True)
+    last_login = Column(DateTime(timezone=True), nullable=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now())

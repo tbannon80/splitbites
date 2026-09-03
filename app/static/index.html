@@ -227,8 +227,11 @@
         <p class="text-slate-400 text-xs sm:text-sm mt-1">Smart Meal Planning & Multi-Store Grocery Arbitrage (Aldi • Walmart • Meijer • Amazon)</p>
       </div>
 
-      <!-- User Account & Log Out -->
-      <div class="flex items-center gap-3">
+      <!-- User Account & Log Out & Feedback -->
+      <div class="flex items-center gap-2 sm:gap-3">
+        <button onclick="openFeedbackModal()" class="bg-slate-900 hover:bg-slate-800 text-amber-300 border border-amber-900/50 hover:border-amber-700 text-xs px-2.5 sm:px-3 py-1.5 rounded-xl transition font-medium flex items-center gap-1.5 shadow-sm">
+          <span>💡</span> <span class="hidden sm:inline">Feedback / Bug</span>
+        </button>
         <div class="flex items-center gap-2 bg-slate-900 border border-slate-800 px-3 py-1.5 rounded-xl">
           <span class="text-xs">👤</span>
           <div class="text-xs leading-tight">
@@ -721,6 +724,83 @@
         </button>
       </div>
     </div>
+  </div>
+
+  <!-- FEEDBACK & BUG REPORT MODAL -->
+  <div id="feedbackModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+    <div class="max-w-lg w-full bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-2xl space-y-4">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-800">
+        <div class="flex items-center gap-2">
+          <span class="text-xl">💡</span>
+          <h3 class="text-base font-bold text-white">Send Feedback or Report a Bug</h3>
+        </div>
+        <button type="button" onclick="closeFeedbackModal()" class="text-slate-400 hover:text-white transition text-lg">✕</button>
+      </div>
+
+      <p class="text-xs text-slate-400 leading-relaxed">
+        Notice an issue, missing grocery item, or have an idea to improve SplitBites? Submit it below and it will send a direct alert to Tim.
+      </p>
+
+      <form id="feedbackForm" onsubmit="handleFeedbackSubmit(event)" class="space-y-3.5">
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 mb-1.5">What type of feedback is this?</label>
+          <div class="grid grid-cols-3 gap-2">
+            <label class="flex items-center justify-center gap-1.5 p-2 rounded-xl border border-slate-800 bg-slate-950 cursor-pointer text-xs font-medium text-slate-300 hover:border-slate-700 transition">
+              <input type="radio" name="feedbackCategory" value="bug" class="text-rose-500 focus:ring-0">
+              <span>🐞 Bug</span>
+            </label>
+            <label class="flex items-center justify-center gap-1.5 p-2 rounded-xl border border-slate-800 bg-slate-950 cursor-pointer text-xs font-medium text-slate-300 hover:border-slate-700 transition">
+              <input type="radio" name="feedbackCategory" value="feature" checked class="text-amber-500 focus:ring-0">
+              <span>💡 Feature</span>
+            </label>
+            <label class="flex items-center justify-center gap-1.5 p-2 rounded-xl border border-slate-800 bg-slate-950 cursor-pointer text-xs font-medium text-slate-300 hover:border-slate-700 transition">
+              <input type="radio" name="feedbackCategory" value="feedback" class="text-emerald-500 focus:ring-0">
+              <span>💬 Idea</span>
+            </label>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 mb-1">Subject (Optional)</label>
+          <input id="feedbackSubject" type="text" placeholder="e.g. Add Aldi gluten-free bread option" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500">
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 mb-1">Details & Description *</label>
+          <textarea id="feedbackMessage" required rows="4" placeholder="Describe the issue, suggested feature, or improvement in detail..." class="w-full bg-slate-950 border border-slate-700 rounded-lg p-3 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500 leading-relaxed resize-none"></textarea>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+          <div>
+            <label class="block text-[11px] font-semibold text-slate-400 mb-1">Your Name</label>
+            <input id="feedbackName" type="text" placeholder="Your name" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-slate-300 focus:outline-none focus:border-emerald-500">
+          </div>
+          <div>
+            <label class="block text-[11px] font-semibold text-slate-400 mb-1">Your Email</label>
+            <input id="feedbackEmail" type="email" placeholder="Your email address" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-slate-300 focus:outline-none focus:border-emerald-500">
+          </div>
+        </div>
+
+        <div id="feedbackStatus" class="text-xs"></div>
+
+        <div class="pt-2 flex gap-2 justify-end">
+          <button type="button" onclick="closeFeedbackModal()" class="px-3.5 py-2 rounded-lg text-xs font-semibold text-slate-400 hover:text-white bg-slate-800 hover:bg-slate-700 transition">
+            Cancel
+          </button>
+          <button id="btnSubmitFeedback" type="submit" class="px-5 py-2 rounded-lg text-xs font-semibold text-white bg-emerald-600 hover:bg-emerald-500 transition shadow-lg shadow-emerald-950 flex items-center gap-1.5">
+            <span>🚀 Send to Tim</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- FLOATING FEEDBACK BUTTON -->
+  <div class="fixed bottom-5 right-5 z-40">
+    <button onclick="openFeedbackModal()" class="group flex items-center gap-2 bg-slate-900/95 hover:bg-slate-800 text-slate-300 hover:text-emerald-300 px-3.5 py-2 rounded-full border border-slate-700/80 hover:border-emerald-500 shadow-xl transition-all duration-200 text-xs font-semibold backdrop-blur">
+      <span class="text-base group-hover:scale-125 transition-transform">💡</span>
+      <span>Feedback / Bug Report</span>
+    </button>
   </div>
 
   <script>
@@ -2147,6 +2227,92 @@
         setTimeout(() => switchDashboardTab('mealplan'), 1800);
       } catch (err) {
         statusEl.innerHTML = `<span class="text-rose-400">Error:</span> ${err.message}`;
+      } finally {
+        btn.disabled = false;
+      }
+    }
+
+    // Feedback & Bug Reporting Modal Logic
+    function openFeedbackModal(defaultCategory = 'feature') {
+      const modal = document.getElementById('feedbackModal');
+      if (!modal) return;
+      
+      // Auto-fill user info if logged in
+      if (currentUser) {
+        if (currentUser.full_name) document.getElementById('feedbackName').value = currentUser.full_name;
+        if (currentUser.email) document.getElementById('feedbackEmail').value = currentUser.email;
+      }
+      
+      // Select category
+      const radios = document.getElementsByName('feedbackCategory');
+      for (const r of radios) {
+        if (r.value === defaultCategory) r.checked = true;
+      }
+      
+      document.getElementById('feedbackStatus').innerHTML = '';
+      modal.classList.remove('hidden');
+      setTimeout(() => document.getElementById('feedbackMessage').focus(), 50);
+    }
+
+    function closeFeedbackModal() {
+      const modal = document.getElementById('feedbackModal');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    async function handleFeedbackSubmit(e) {
+      e.preventDefault();
+      const btn = document.getElementById('btnSubmitFeedback');
+      const statusEl = document.getElementById('feedbackStatus');
+      const msg = document.getElementById('feedbackMessage').value.trim();
+      const subject = document.getElementById('feedbackSubject').value.trim();
+      const name = document.getElementById('feedbackName').value.trim();
+      const email = document.getElementById('feedbackEmail').value.trim();
+      
+      let category = 'feature';
+      const radios = document.getElementsByName('feedbackCategory');
+      for (const r of radios) {
+        if (r.checked) category = r.value;
+      }
+
+      if (!msg) {
+        statusEl.innerHTML = '<span class="text-rose-400">Please enter a description or message.</span>';
+        return;
+      }
+
+      btn.disabled = true;
+      statusEl.innerHTML = '<span class="text-slate-400">Dispatching to Tim...</span>';
+
+      const payload = {
+        category,
+        subject: subject || null,
+        message: msg,
+        user_name: name || (currentUser ? currentUser.full_name : null),
+        user_email: email || (currentUser ? currentUser.email : null),
+        household_name: currentHousehold ? currentHousehold.household_name : null,
+        page_url: window.location.href
+      };
+
+      try {
+        const headers = { 'Content-Type': 'application/json' };
+        if (authToken) headers['Authorization'] = `Bearer ${authToken}`;
+
+        const res = await fetch('/api/feedback/', {
+          method: 'POST',
+          headers,
+          body: JSON.stringify(payload)
+        });
+
+        if (!res.ok) {
+          const errData = await res.json().catch(() => ({}));
+          throw new Error(errData.detail || 'Failed to dispatch feedback. Please try again.');
+        }
+
+        showToast('✓ Feedback sent to Tim! Thank you.');
+        document.getElementById('feedbackMessage').value = '';
+        document.getElementById('feedbackSubject').value = '';
+        closeFeedbackModal();
+      } catch (err) {
+        statusEl.innerHTML = `<span class="text-rose-400 font-semibold">Error:</span> ${err.message}`;
       } finally {
         btn.disabled = false;
       }

@@ -68,8 +68,12 @@ async def get_current_user_and_household(
         .options(selectinload(Household.dietary_preferences))
         .where(HouseholdMember.user_id == user.user_id)
     )
-    h_res = await db.execute(member_stmt)
     household = h_res.scalar_one_or_none()
+    # Update last_login if missing or older than 15 minutes
+    now = datetime.now(timezone.utc)
+    if user.last_login is None or (now - user.last_login).total_seconds() > 900:
+        user.last_login = now
+        await db.commit()
 
     return user, household
 
@@ -120,7 +124,8 @@ async def register(payload: RegisterRequest, db: AsyncSession = Depends(get_db))
     new_user = User(
         email=clean_email,
         password_hash=pwd_hash,
-        full_name=payload.full_name.strip() if payload.full_name else clean_email.split("@")[0].capitalize()
+        full_name=payload.full_name.strip() if payload.full_name else clean_email.split("@")[0].capitalize(),
+        last_login=datetime.now(timezone.utc)
     )
     db.add(new_user)
     await db.flush()
@@ -225,7 +230,8 @@ async def login(payload: LoginRequest, db: AsyncSession = Depends(get_db)):
         db.add(household)
         await db.flush()
         db.add(HouseholdMember(household_id=household.household_id, user_id=user.user_id, role="admin"))
-        await db.commit()
+    user.last_login = datetime.now(timezone.utc)
+    await db.commit()
 
     token = create_access_token({"sub": str(user.user_id), "email": user.email, "hid": str(household.household_id)})
 
@@ -286,6 +292,8 @@ async def get_family_roster(
             "full_name": u.full_name,
             "email": u.email,
             "role": role,
+            "created_at": u.created_at,
+            "last_login": u.last_login,
             "is_current_user": (u.user_id == user.user_id)
         })
 
@@ -403,9 +411,11 @@ async def register_invited_member(payload: RegisterInvitedRequest, db: AsyncSess
     if not user:
         pwd_hash = hash_password(payload.password)
         name = payload.full_name.strip() if payload.full_name else (inv.name or inv.email.split("@")[0].capitalize())
-        user = User(email=inv.email, password_hash=pwd_hash, full_name=name)
+        user = User(email=inv.email, password_hash=pwd_hash, full_name=name, last_login=datetime.now(timezone.utc))
         db.add(user)
         await db.flush()
+    else:
+        user.last_login = datetime.now(timezone.utc)
 
     # Link to household as member
     member = HouseholdMember(household_id=inv.household_id, user_id=user.user_id, role="member")
