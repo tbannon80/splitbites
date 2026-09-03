@@ -27,7 +27,7 @@ from app.services.auth import (
     decode_access_token,
     generate_random_token,
 )
-from app.services.email import send_spouse_invitation, send_password_reset
+from app.services.email import send_spouse_invitation, send_password_reset, send_welcome_user_instructions
 
 router = APIRouter(prefix="/api/auth", tags=["auth"])
 
@@ -156,6 +156,14 @@ async def register(payload: RegisterRequest, db: AsyncSession = Depends(get_db))
         )
 
     await db.commit()
+
+    # Dispatch detailed onboarding instructions to the registered originator
+    send_welcome_user_instructions(
+        to_email=new_user.email,
+        user_name=new_user.full_name or "Friend",
+        household_name=new_household.household_name,
+        is_originator=True
+    )
 
     # Fetch fresh household with preferences
     h_stmt = select(Household).options(selectinload(Household.dietary_preferences)).where(Household.household_id == new_household.household_id)
@@ -392,6 +400,14 @@ async def register_invited_member(payload: RegisterInvitedRequest, db: AsyncSess
     # Mark invitation accepted
     inv.status = "accepted"
     await db.commit()
+
+    # Dispatch detailed onboarding instructions to the invited family member
+    send_welcome_user_instructions(
+        to_email=user.email,
+        user_name=user.full_name or "Family Member",
+        household_name=full_household.household_name,
+        is_originator=False
+    )
 
     # Fetch household
     h_stmt = select(Household).options(selectinload(Household.dietary_preferences)).where(Household.household_id == inv.household_id)

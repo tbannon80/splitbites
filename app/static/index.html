@@ -1578,8 +1578,7 @@
 
         if (data.instructions && data.instructions.length > 0) {
           const instTexts = data.instructions.map(step => typeof step === 'string' ? step : (step.text || ''));
-          document.getElementById('recInstructions').value = instTexts.join('
-');
+          document.getElementById('recInstructions').value = instTexts.join('\n');
         }
 
         feedback.innerHTML = `<span class="text-emerald-400 font-bold">✓ Successfully imported:</span> "${data.title}" (${data.ingredients.length} ingredients). Review below and click Save!`;
@@ -1623,8 +1622,7 @@
         difficulty_level: difficulty,
         dietary_tags: Array.from(recipeUploadTags),
         ingredients,
-        instructions: rawInst.split('
-').map(s => s.trim()).filter(Boolean),
+        instructions: rawInst.split('\n').map(s => s.trim()).filter(Boolean),
         is_public: true
       };
 
