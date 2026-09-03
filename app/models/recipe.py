@@ -19,6 +19,7 @@ class Recipe(Base):
     prep_time_minutes = Column(Integer)
     difficulty_level = Column(String(50))
     instructions = Column(JSONB, nullable=False)
+    ingredients = Column(JSONB, nullable=True)
     is_public = Column(Boolean, default=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     embedding = Column(Vector(1536), nullable=True)

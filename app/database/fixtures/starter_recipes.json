@@ -1,0 +1,2011 @@
+[
+  {
+    "title": "Classic Smash Burgers",
+    "description": "Crispy seared beef patties with melted sharp cheddar, pickles, and tangy burger sauce on toasted brioche buns.",
+    "prep_time_minutes": 20,
+    "difficulty_level": "easy",
+    "dietary_tags": [
+      "quick",
+      "high-protein"
+    ],
+    "ingredients": [
+      {
+        "name": "Ground Beef (80/20)",
+        "quantity": 1.0,
+        "unit": "lbs",
+        "default_unit": "lbs"
+      },
+      {
+        "name": "Brioche Buns",
+        "quantity": 4.0,
+        "unit": "count",
+        "default_unit": "count"
+      },
+      {
+        "name": "Sharp Cheddar Cheese",
+        "quantity": 4.0,
+        "unit": "slices",
+        "default_unit": "slices"
+      },
+      {
+        "name": "Dill Pickles",
+        "quantity": 0.25,
+        "unit": "cups",
+        "default_unit": "cups"
+      },
+      {
+        "name": "Dijon Mustard",
+        "quantity": 1.0,
+        "unit": "tbsp",
+        "default_unit": "tbsp"
+      }
+    ],
+    "instructions": [
+      {
+        "step": 1,
+        "text": "Heat a heavy cast iron skillet or flat griddle over high heat until smoking."
+      },
+      {
+        "step": 2,
+        "text": "Divide ground beef into loose round balls and season generously with kosher salt and black pepper."
+      },
+      {
+        "step": 3,
+        "text": "Press beef balls hard and flat onto the hot surface, searing for 2 minutes until deep brown crust forms."
+      },
+      {
+        "step": 4,
+        "text": "Flip, immediately top with cheddar cheese, and cook 1 more minute until cheese melts. Serve on toasted buns."
+      }
+    ]
+  },
+  {
+    "title": "Chicken & Broccoli Stir-Fry",
+    "description": "Tender sliced chicken breast tossed with fresh broccoli florets and savory garlic-ginger soy sauce.",
+    "prep_time_minutes": 25,
+    "difficulty_level": "medium",
+    "dietary_tags": [
+      "gluten-free",
+      "dairy-free",
+      "high-protein",
+      "quick"
+    ],
+    "ingredients": [
+      {
+        "name": "Chicken Breast",
+        "quantity": 1.25,
+        "unit": "lbs",
+        "default_unit": "lbs"
+      },
+      {
+        "name": "Broccoli Florets",
+        "quantity": 3.0,
+        "unit": "cups",
+        "default_unit": "cups"
+      },
+      {
+        "name": "Tamari Soy Sauce (Gluten-Free)",
+        "quantity": 3.0,
+        "unit": "tbsp",
+        "default_unit": "tbsp"
+      },
+      {
+        "name": "Sesame Oil",
+        "quantity": 1.0,
+        "unit": "tbsp",
+        "default_unit": "tbsp"
+      },
+      {
+        "name": "Fresh Ginger",
+        "quantity": 1.0,
+        "unit": "tbsp",
+        "default_unit": "tbsp"
+      },
+      {
+        "name": "Garlic Cloves",
+        "quantity": 3.0,
+        "unit": "count",
+        "default_unit": "count"
+      }
+    ],
+    "instructions": [
+      {
+        "step": 1,
+        "text": "Slice chicken into thin bite-sized strips and toss with 1 tbsp tamari."
+      },
+      {
+        "step": 2,
+        "text": "Heat sesame oil in a wok or large skillet over high heat. Saut\u00e9 chicken until browned and cooked through (5-6 minutes)."
+      },
+      {
+        "step": 3,
+        "text": "Add minced garlic, minced ginger, and broccoli florets with 2 tbsp water. Cover and steam for 3 minutes."
+      },
+      {
+        "step": 4,
+        "text": "Stir in remaining tamari, toss well to glaze, and serve hot over rice."
+      }
+    ]
+  },
+  {
+    "title": "Sheet Pan Lemon Herb Chicken",
+    "description": "Juicy bone-in chicken thighs roasted alongside baby potatoes and green beans with rosemary and fresh lemon.",
+    "prep_time_minutes": 35,
+    "difficulty_level": "easy",
+    "dietary_tags": [
+      "gluten-free",
+      "dairy-free",
+      "high-protein"
+    ],
+    "ingredients": [
+      {
+        "name": "Chicken Thighs",
+        "quantity": 1.5,
+        "unit": "lbs",
+        "default_unit": "lbs"
+      },
+      {
+        "name": "Baby Yukon Potatoes",
+        "quantity": 1.0,
+        "unit": "lbs",
+        "default_unit": "lbs"
+      },
+      {
+        "name": "Fresh Green Beans",
+        "quantity": 0.75,
+        "unit": "lbs",
+        "default_unit": "lbs"
+      },
+      {
+        "name": "Extra Virgin Olive Oil",
+        "quantity": 3.0,
+        "unit": "tbsp",
+        "default_unit": "tbsp"
+      },
+      {
+        "name": "Lemon",
+        "quantity": 1.0,
+        "unit": "count",
+        "default_unit": "count"
+      },
+      {
+        "name": "Fresh Rosemary",
+        "quantity": 2.0,
+        "unit": "sprigs",
+        "default_unit": "sprigs"
+      }
+    ],
+    "instructions": [
+      {
+        "step": 1,
+        "text": "Preheat oven to 425\u00b0F (220\u00b0C). Lightly oil a large rimmed baking sheet."
+      },
+      {
+        "step": 2,
+        "text": "Halve baby potatoes and trim green beans. Toss with olive oil, minced rosemary, salt, and pepper."
+      },
+      {
+        "step": 3,
+        "text": "Arrange chicken thighs skin-side up surrounded by potatoes and beans. Top chicken with thin lemon slices."
+      },
+      {
+        "step": 4,
+        "text": "Roast for 30-35 minutes until chicken internal temperature reaches 165\u00b0F and potatoes are golden and tender."
+      }
+    ]
+  },
+  {
+    "title": "Creamy Tuscan Garlic Salmon",
+    "description": "Pan-seared Atlantic salmon fillets resting in a velvety sun-dried tomato, spinach, and garlic cream sauce.",
+    "prep_time_minutes": 25,
+    "difficulty_level": "medium",
+    "dietary_tags": [
+      "gluten-free",
+      "keto",
+      "pescatarian",
+      "high-protein"
+    ],
+    "ingredients": [
+      {
+        "name": "Salmon Fillets",
+        "quantity": 1.0,
+        "unit": "lbs",
+        "default_unit": "lbs"
+      },
+      {
+        "name": "Baby Spinach",
+        "quantity": 3.0,
+        "unit": "cups",
+        "default_unit": "cups"
+      },
+      {
+        "name": "Sun-Dried Tomatoes",
+        "quantity": 0.5,
+        "unit": "cups",
+        "default_unit": "cups"
+      },
+      {
+        "name": "Heavy Cream",
+        "quantity": 0.75,
+        "unit": "cups",
+        "default_unit": "cups"
+      },
+      {
+        "name": "Parmesan Cheese",
+        "quantity": 0.25,
+        "unit": "cups",
+        "default_unit": "cups"
+      },
+      {
+        "name": "Garlic Cloves",
+        "quantity": 4.0,
+        "unit": "count",
+        "default_unit": "count"
+      }
+    ],
+    "instructions": [
+      {
+        "step": 1,
+        "text": "Season salmon fillets with salt and pepper. Pan-sear in olive oil for 4-5 minutes per side until flaky, then set aside."
+      },
+      {
+        "step": 2,
+        "text": "In the same pan, saut\u00e9 minced garlic and sliced sun-dried tomatoes for 1 minute."
+      },
+      {
+        "step": 3,
+        "text": "Pour in heavy cream and chicken broth; bring to a gentle simmer, then fold in grated parmesan."
+      },
+      {
+        "step": 4,
+        "text": "Add fresh spinach and simmer until wilted (2 minutes). Return salmon to sauce and spoon sauce over fillets."
+      }
+    ]
+  },
+  {
+    "title": "15-Minute Vegetarian Pasta Primavera",
+    "description": "Al dente penne pasta tossed with crisp saut\u00e9ed asparagus, bell peppers, cherry tomatoes, and shaved parmesan.",
+    "prep_time_minutes": 15,
+    "difficulty_level": "quick",
+    "dietary_tags": [
+      "vegetarian",
+      "quick"
+    ],
+    "ingredients": [
+      {
+        "name": "Penne Pasta",
+        "quantity": 0.75,
+        "unit": "lbs",
+        "default_unit": "lbs"
+      },
+      {
+        "name": "Cherry Tomatoes",
+        "quantity": 1.5,
+        "unit": "cups",
+        "default_unit": "cups"
+      },
+      {
+        "name": "Asparagus Spears",
+        "quantity": 1.0,
+        "unit": "bunch",
+        "default_unit": "bunch"
+      },
+      {
+        "name": "Yellow Bell Pepper",
+        "quantity": 1.0,
+        "unit": "count",
+        "default_unit": "count"
+      },
+      {
+        "name": "Extra Virgin Olive Oil",
+        "quantity": 3.0,
+        "unit": "tbsp",
+        "default_unit": "tbsp"
+      },
+      {
+        "name": "Parmesan Shavings",
+        "quantity": 0.5,
+        "unit": "cups",
+        "default_unit": "cups"
+      }
+    ],
+    "instructions": [
+      {
+        "step": 1,
+        "text": "Boil penne pasta in heavily salted water according to package instructions (about 10 minutes). Reserve 1/2 cup pasta water."
+      },
+      {
+        "step": 2,
+        "text": "Meanwhile, saut\u00e9 chopped asparagus and diced bell peppers in olive oil over medium-high heat for 4 minutes."
+      },
+      {
+        "step": 3,
+        "text": "Add halved cherry tomatoes and garlic, cooking until tomatoes soften and release their juices."
+      },
+      {
+        "step": 4,
+        "text": "Toss drained pasta and reserved water with vegetables and parmesan cheese. Garnish with basil."
+      }
+    ]
+  },
+  {
+    "title": "Chickpea & Spinach Coconut Curry",
+    "description": "Fragrant Indian-inspired curry made with tender chickpeas and fresh spinach simmered in spiced coconut milk.",
+    "prep_time_minutes": 30,
+    "difficulty_level": "easy",
+    "dietary_tags": [
+      "vegan",
+      "vegetarian",
+      "gluten-free",
+      "dairy-free"
+    ],
+    "ingredients": [
+      {
+        "name": "Chickpeas (Canned)",
+        "quantity": 2.0,
+        "unit": "cans",
+        "default_unit": "cans"
+      },
+      {
+        "name": "Baby Spinach",
+        "quantity": 4.0,
+        "unit": "cups",
+        "default_unit": "cups"
+      },
+      {
+        "name": "Full-Fat Coconut Milk",
+        "quantity": 1.0,
+        "unit": "can",
+        "default_unit": "can"
+      },
+      {
+        "name": "Crushed Tomatoes",
+        "quantity": 1.0,
+        "unit": "can",
+        "default_unit": "can"
+      },
+      {
+        "name": "Yellow Onion",
+        "quantity": 1.0,
+        "unit": "count",
+        "default_unit": "count"
+      },
+      {
+        "name": "Garam Masala",
+        "quantity": 1.5,
+        "unit": "tbsp",
+        "default_unit": "tbsp"
+      }
+    ],
+    "instructions": [
+      {
+        "step": 1,
+        "text": "Saut\u00e9 finely diced onion, minced garlic, and ginger in olive oil until translucent (5 minutes)."
+      },
+      {
+        "step": 2,
+        "text": "Stir in garam masala, turmeric, and cumin; cook for 1 minute until highly fragrant."
+      },
+      {
+        "step": 3,
+        "text": "Add crushed tomatoes, rinsed chickpeas, and coconut milk. Simmer gently uncovered for 15 minutes."
+      },
+      {
+        "step": 4,
+        "text": "Fold in fresh spinach leaves until wilted. Serve hot with basmati rice or warm naan."
+      }
+    ]
+  },
+  {
+    "title": "Turkey Taco Bowls with Cauliflower Rice",
+    "description": "Seasoned lean ground turkey over spiced cauliflower rice topped with avocado, black beans, and fresh pico de gallo.",
+    "prep_time_minutes": 20,
+    "difficulty_level": "easy",
+    "dietary_tags": [
+      "gluten-free",
+      "dairy-free",
+      "low-carb",
+      "high-protein",
+      "quick"
+    ],
+    "ingredients": [
+      {
+        "name": "Lean Ground Turkey (93/7)",
+        "quantity": 1.0,
+        "unit": "lbs",
+        "default_unit": "lbs"
+      },
+      {
+        "name": "Riced Cauliflower",
+        "quantity": 3.0,
+        "unit": "cups",
+        "default_unit": "cups"
+      },
+      {
+        "name": "Avocado",
+        "quantity": 1.0,
+        "unit": "count",
+        "default_unit": "count"
+      },
+      {
+        "name": "Black Beans (Rinsed)",
+        "quantity": 1.0,
+        "unit": "cup",
+        "default_unit": "cup"
+      },
+      {
+        "name": "Taco Seasoning",
+        "quantity": 2.0,
+        "unit": "tbsp",
+        "default_unit": "tbsp"
+      },
+      {
+        "name": "Fresh Lime",
+        "quantity": 1.0,
+        "unit": "count",
+        "default_unit": "count"
+      }
+    ],
+    "instructions": [
+      {
+        "step": 1,
+        "text": "Brown ground turkey in a non-stick skillet over medium-high heat, breaking apart with a wooden spoon."
+      },
+      {
+        "step": 2,
+        "text": "Add taco seasoning and 1/4 cup water; simmer for 3 minutes until thickened."
+      },
+      {
+        "step": 3,
+        "text": "In a separate pan, saut\u00e9 riced cauliflower with olive oil, salt, and lime juice for 4 minutes."
+      },
+      {
+        "step": 4,
+        "text": "Assemble bowls with cauliflower rice, turkey, black beans, diced avocado, and fresh cilantro."
+      }
+    ]
+  },
+  {
+    "title": "Garlic Butter Shrimp Scampi with Zoodle Pasta",
+    "description": "Jumbo shrimp saut\u00e9ed in rich garlic herb butter served over tender spiralized zucchini noodles.",
+    "prep_time_minutes": 15,
+    "difficulty_level": "quick",
+    "dietary_tags": [
+      "gluten-free",
+      "keto",
+      "pescatarian",
+      "quick"
+    ],
+    "ingredients": [
+      {
+        "name": "Jumbo Shrimp (Peeled & Deveined)",
+        "quantity": 1.0,
+        "unit": "lbs",
+        "default_unit": "lbs"
+      },
+      {
+        "name": "Zucchini Noodles",
+        "quantity": 4.0,
+        "unit": "cups",
+        "default_unit": "cups"
+      },
+      {
+        "name": "Unsalted Butter",
+        "quantity": 3.0,
+        "unit": "tbsp",
+        "default_unit": "tbsp"
+      },
+      {
+        "name": "Garlic Cloves",
+        "quantity": 4.0,
+        "unit": "count",
+        "default_unit": "count"
+      },
+      {
+        "name": "Fresh Lemon Juice",
+        "quantity": 2.0,
+        "unit": "tbsp",
+        "default_unit": "tbsp"
+      },
+      {
+        "name": "Red Pepper Flakes",
+        "quantity": 0.5,
+        "unit": "tsp",
+        "default_unit": "tsp"
+      }
+    ],
+    "instructions": [
+      {
+        "step": 1,
+        "text": "Melt butter with 1 tbsp olive oil in a skillet over medium heat. Saut\u00e9 minced garlic and red pepper flakes for 1 minute."
+      },
+      {
+        "step": 2,
+        "text": "Add shrimp in a single layer and cook for 2 minutes per side until pink and opaque."
+      },
+      {
+        "step": 3,
+        "text": "Stir in lemon juice and chopped parsley, then remove shrimp from skillet."
+      },
+      {
+        "step": 4,
+        "text": "Toss zucchini noodles in pan juices for 90 seconds until warm but still crunchy. Serve shrimp over noodles."
+      }
+    ]
+  },
+  {
+    "title": "Black Bean & Sweet Potato Chili",
+    "description": "Hearty vegan chili loaded with roasted sweet potatoes, hearty black beans, sweet corn, and chipotle spices.",
+    "prep_time_minutes": 40,
+    "difficulty_level": "medium",
+    "dietary_tags": [
+      "vegan",
+      "vegetarian",
+      "gluten-free",
+      "dairy-free"
+    ],
+    "ingredients": [
+      {
+        "name": "Sweet Potatoes (Diced)",
+        "quantity": 2.0,
+        "unit": "count",
+        "default_unit": "count"
+      },
+      {
+        "name": "Black Beans (Canned)",
+        "quantity": 2.0,
+        "unit": "cans",
+        "default_unit": "cans"
+      },
+      {
+        "name": "Fire-Roasted Diced Tomatoes",
+        "quantity": 1.0,
+        "unit": "can",
+        "default_unit": "can"
+      },
+      {
+        "name": "Chili Powder",
+        "quantity": 2.0,
+        "unit": "tbsp",
+        "default_unit": "tbsp"
+      },
+      {
+        "name": "Cumin",
+        "quantity": 1.0,
+        "unit": "tbsp",
+        "default_unit": "tbsp"
+      },
+      {
+        "name": "Vegetable Broth",
+        "quantity": 2.0,
+        "unit": "cups",
+        "default_unit": "cups"
+      }
+    ],
+    "instructions": [
+      {
+        "step": 1,
+        "text": "Saut\u00e9 diced onion and bell pepper in olive oil in a large Dutch oven until tender."
+      },
+      {
+        "step": 2,
+        "text": "Add peeled diced sweet potatoes, chili powder, cumin, smoked paprika, and garlic."
+      },
+      {
+        "step": 3,
+        "text": "Pour in black beans, fire-roasted tomatoes, and vegetable broth; bring to a boil."
+      },
+      {
+        "step": 4,
+        "text": "Reduce heat and simmer covered for 25-30 minutes until sweet potatoes are fork-tender."
+      }
+    ]
+  },
+  {
+    "title": "Mediterranean Greek Salad with Grilled Chicken",
+    "description": "Crisp romaine, cucumber, kalamata olives, and feta cheese topped with grilled herb-marinated chicken breast.",
+    "prep_time_minutes": 25,
+    "difficulty_level": "easy",
+    "dietary_tags": [
+      "gluten-free",
+      "keto",
+      "high-protein"
+    ],
+    "ingredients": [
+      {
+        "name": "Chicken Breast",
+        "quantity": 1.0,
+        "unit": "lbs",
+        "default_unit": "lbs"
+      },
+      {
+        "name": "Romaine Lettuce",
+        "quantity": 1.0,
+        "unit": "head",
+        "default_unit": "head"
+      },
+      {
+        "name": "English Cucumber",
+        "quantity": 1.0,
+        "unit": "count",
+        "default_unit": "count"
+      },
+      {
+        "name": "Kalamata Olives",
+        "quantity": 0.5,
+        "unit": "cups",
+        "default_unit": "cups"
+      },
+      {
+        "name": "Feta Cheese",
+        "quantity": 0.5,
+        "unit": "cups",
+        "default_unit": "cups"
+      },
+      {
+        "name": "Red Wine Vinegar Dressing",
+        "quantity": 4.0,
+        "unit": "tbsp",
+        "default_unit": "tbsp"
+      }
+    ],
+    "instructions": [
+      {
+        "step": 1,
+        "text": "Season chicken breast with oregano, garlic powder, salt, and olive oil. Grill or pan-sear for 6 minutes per side."
+      },
+      {
+        "step": 2,
+        "text": "Chop romaine lettuce and dice cucumber and cherry tomatoes into bite-sized pieces."
+      },
+      {
+        "step": 3,
+        "text": "Toss salad ingredients in a large bowl with kalamata olives and red wine vinegar dressing."
+      },
+      {
+        "step": 4,
+        "text": "Slice rested grilled chicken and place atop the salad, finishing with crumbled Greek feta."
+      }
+    ]
+  },
+  {
+    "title": "Sheet Pan Chicken Fajitas",
+    "description": "Sizzling spiced chicken breast strips, rainbow bell peppers, and sweet onions baked together on a single sheet pan.",
+    "prep_time_minutes": 30,
+    "difficulty_level": "easy",
+    "dietary_tags": [
+      "gluten-free",
+      "dairy-free",
+      "high-protein"
+    ],
+    "ingredients": [
+      {
+        "name": "Chicken Breast",
+        "quantity": 1.25,
+        "unit": "lbs",
+        "default_unit": "lbs"
+      },
+      {
+        "name": "Bell Peppers (Assorted)",
+        "quantity": 3.0,
+        "unit": "count",
+        "default_unit": "count"
+      },
+      {
+        "name": "Red Onion",
+        "quantity": 1.0,
+        "unit": "count",
+        "default_unit": "count"
+      },
+      {
+        "name": "Fajita Seasoning",
+        "quantity": 2.0,
+        "unit": "tbsp",
+        "default_unit": "tbsp"
+      },
+      {
+        "name": "Olive Oil",
+        "quantity": 2.0,
+        "unit": "tbsp",
+        "default_unit": "tbsp"
+      },
+      {
+        "name": "Corn Tortillas (Gluten-Free)",
+        "quantity": 8.0,
+        "unit": "count",
+        "default_unit": "count"
+      }
+    ],
+    "instructions": [
+      {
+        "step": 1,
+        "text": "Preheat oven to 400\u00b0F (205\u00b0C). Slice chicken and bell peppers into even strips."
+      },
+      {
+        "step": 2,
+        "text": "Toss chicken, peppers, and sliced red onion with olive oil and fajita seasoning on a large baking sheet."
+      },
+      {
+        "step": 3,
+        "text": "Spread into a single layer and bake for 22-25 minutes until chicken is cooked through and vegetables are slightly charred."
+      },
+      {
+        "step": 4,
+        "text": "Squeeze fresh lime juice over pan and serve with warm corn tortillas and salsa."
+      }
+    ]
+  },
+  {
+    "title": "Creamy Wild Mushroom Risotto",
+    "description": "Slow-simmered arborio rice with caramelized cremini and shiitake mushrooms, white wine, and aged parmesan.",
+    "prep_time_minutes": 45,
+    "difficulty_level": "medium",
+    "dietary_tags": [
+      "vegetarian",
+      "gluten-free"
+    ],
+    "ingredients": [
+      {
+        "name": "Arborio Rice",
+        "quantity": 1.5,
+        "unit": "cups",
+        "default_unit": "cups"
+      },
+      {
+        "name": "Mixed Wild Mushrooms",
+        "quantity": 0.75,
+        "unit": "lbs",
+        "default_unit": "lbs"
+      },
+      {
+        "name": "Vegetable Stock",
+        "quantity": 4.5,
+        "unit": "cups",
+        "default_unit": "cups"
+      },
+      {
+        "name": "Dry White Wine",
+        "quantity": 0.5,
+        "unit": "cups",
+        "default_unit": "cups"
+      },
+      {
+        "name": "Shallots",
+        "quantity": 2.0,
+        "unit": "count",
+        "default_unit": "count"
+      },
+      {
+        "name": "Parmesan Cheese",
+        "quantity": 0.5,
+        "unit": "cups",
+        "default_unit": "cups"
+      }
+    ],
+    "instructions": [
+      {
+        "step": 1,
+        "text": "Saut\u00e9 sliced mushrooms in butter until golden brown and tender; transfer half to a small bowl for garnish."
+      },
+      {
+        "step": 2,
+        "text": "In the same pan, soften minced shallots and toast arborio rice for 2 minutes until translucent at edges."
+      },
+      {
+        "step": 3,
+        "text": "Deglaze with white wine, then add warm vegetable stock one ladle at a time, stirring continuously until absorbed."
+      },
+      {
+        "step": 4,
+        "text": "Once creamy and al dente (about 20 minutes), stir in butter, grated parmesan, and season with sea salt."
+      }
+    ]
+  },
+  {
+    "title": "Crispy Baked Tofu Buddha Bowl",
+    "description": "Golden crispy cornstarch-crusted tofu cubes over warm brown rice, roasted broccoli, edamame, and peanut dressing.",
+    "prep_time_minutes": 35,
+    "difficulty_level": "medium",
+    "dietary_tags": [
+      "vegan",
+      "vegetarian",
+      "gluten-free",
+      "dairy-free"
+    ],
+    "ingredients": [
+      {
+        "name": "Extra-Firm Tofu",
+        "quantity": 1.0,
+        "unit": "block",
+        "default_unit": "block"
+      },
+      {
+        "name": "Brown Rice",
+        "quantity": 1.5,
+        "unit": "cups",
+        "default_unit": "cups"
+      },
+      {
+        "name": "Shelled Edamame",
+        "quantity": 1.0,
+        "unit": "cup",
+        "default_unit": "cup"
+      },
+      {
+        "name": "Cornstarch",
+        "quantity": 2.0,
+        "unit": "tbsp",
+        "default_unit": "tbsp"
+      },
+      {
+        "name": "Peanut Butter",
+        "quantity": 3.0,
+        "unit": "tbsp",
+        "default_unit": "tbsp"
+      },
+      {
+        "name": "Soy Sauce (Gluten-Free)",
+        "quantity": 2.0,
+        "unit": "tbsp",
+        "default_unit": "tbsp"
+      }
+    ],
+    "instructions": [
+      {
+        "step": 1,
+        "text": "Press tofu block for 15 minutes, cut into 1-inch cubes, and toss with cornstarch, salt, and 1 tbsp oil."
+      },
+      {
+        "step": 2,
+        "text": "Bake tofu on a parchment-lined sheet at 400\u00b0F (205\u00b0C) for 25 minutes, flipping halfway until golden and crispy."
+      },
+      {
+        "step": 3,
+        "text": "Whisk peanut butter, warm water, tamari soy sauce, maple syrup, and lime juice into a smooth dressing."
+      },
+      {
+        "step": 4,
+        "text": "Divide brown rice into bowls, top with crispy tofu, steamed edamame, and drizzle generously with peanut sauce."
+      }
+    ]
+  },
+  {
+    "title": "Quick Korean Beef Bulgogi Bowls",
+    "description": "Sweet and savory ground beef glazed in soy, brown sugar, garlic, and sesame oil served over jasmine rice with scallions.",
+    "prep_time_minutes": 20,
+    "difficulty_level": "quick",
+    "dietary_tags": [
+      "dairy-free",
+      "high-protein",
+      "quick"
+    ],
+    "ingredients": [
+      {
+        "name": "Lean Ground Beef (90/10)",
+        "quantity": 1.0,
+        "unit": "lbs",
+        "default_unit": "lbs"
+      },
+      {
+        "name": "Jasmine Rice",
+        "quantity": 1.5,
+        "unit": "cups",
+        "default_unit": "cups"
+      },
+      {
+        "name": "Soy Sauce",
+        "quantity": 0.25,
+        "unit": "cups",
+        "default_unit": "cups"
+      },
+      {
+        "name": "Brown Sugar",
+        "quantity": 2.0,
+        "unit": "tbsp",
+        "default_unit": "tbsp"
+      },
+      {
+        "name": "Toasted Sesame Oil",
+        "quantity": 1.0,
+        "unit": "tbsp",
+        "default_unit": "tbsp"
+      },
+      {
+        "name": "Green Onions (Scallions)",
+        "quantity": 3.0,
+        "unit": "stalks",
+        "default_unit": "stalks"
+      }
+    ],
+    "instructions": [
+      {
+        "step": 1,
+        "text": "Whisk soy sauce, brown sugar, sesame oil, minced garlic, and grated ginger in a small prep bowl."
+      },
+      {
+        "step": 2,
+        "text": "Brown ground beef in a skillet over medium-high heat until no longer pink (6-8 minutes), draining excess fat."
+      },
+      {
+        "step": 3,
+        "text": "Pour the bulgogi sauce over the meat and simmer for 3 minutes until thickened and glistening."
+      },
+      {
+        "step": 4,
+        "text": "Spoon glazed beef over steamed jasmine rice and garnish with toasted sesame seeds and sliced scallions."
+      }
+    ]
+  },
+  {
+    "title": "Pan-Seared Cod with Lemon Caper Butter",
+    "description": "Delicate wild-caught Pacific cod fillets pan-seared with a bright white wine, caper, and garlic lemon butter sauce.",
+    "prep_time_minutes": 20,
+    "difficulty_level": "easy",
+    "dietary_tags": [
+      "gluten-free",
+      "keto",
+      "pescatarian",
+      "quick"
+    ],
+    "ingredients": [
+      {
+        "name": "Pacific Cod Fillets",
+        "quantity": 1.0,
+        "unit": "lbs",
+        "default_unit": "lbs"
+      },
+      {
+        "name": "Capers (Drained)",
+        "quantity": 2.0,
+        "unit": "tbsp",
+        "default_unit": "tbsp"
+      },
+      {
+        "name": "Unsalted Butter",
+        "quantity": 3.0,
+        "unit": "tbsp",
+        "default_unit": "tbsp"
+      },
+      {
+        "name": "Lemon Juice",
+        "quantity": 2.0,
+        "unit": "tbsp",
+        "default_unit": "tbsp"
+      },
+      {
+        "name": "Fresh Parsley",
+        "quantity": 2.0,
+        "unit": "tbsp",
+        "default_unit": "tbsp"
+      },
+      {
+        "name": "Garlic Cloves",
+        "quantity": 2.0,
+        "unit": "count",
+        "default_unit": "count"
+      }
+    ],
+    "instructions": [
+      {
+        "step": 1,
+        "text": "Pat cod fillets completely dry with paper towels and season with salt and white pepper."
+      },
+      {
+        "step": 2,
+        "text": "Heat 1 tbsp oil in a stainless or cast iron skillet over medium-high. Sear cod undisturbed for 3-4 minutes per side."
+      },
+      {
+        "step": 3,
+        "text": "Reduce heat to low, add butter, minced garlic, capers, and lemon juice around the fillets."
+      },
+      {
+        "step": 4,
+        "text": "Baste the fish with foaming lemon butter for 1 minute, sprinkle with parsley, and serve immediately."
+      }
+    ]
+  },
+  {
+    "title": "Buffalo Chicken Lettuce Wraps",
+    "description": "Zesty shredded chicken breast tossed in Frank's red hot buffalo sauce served in crunchy butter lettuce cups with blue cheese.",
+    "prep_time_minutes": 15,
+    "difficulty_level": "quick",
+    "dietary_tags": [
+      "gluten-free",
+      "keto",
+      "high-protein",
+      "quick"
+    ],
+    "ingredients": [
+      {
+        "name": "Cooked Shredded Chicken Breast",
+        "quantity": 1.0,
+        "unit": "lbs",
+        "default_unit": "lbs"
+      },
+      {
+        "name": "Buffalo Wing Sauce",
+        "quantity": 0.33,
+        "unit": "cups",
+        "default_unit": "cups"
+      },
+      {
+        "name": "Butter Lettuce",
+        "quantity": 1.0,
+        "unit": "head",
+        "default_unit": "head"
+      },
+      {
+        "name": "Celery Ribs (Finely Diced)",
+        "quantity": 2.0,
+        "unit": "count",
+        "default_unit": "count"
+      },
+      {
+        "name": "Crumbled Blue Cheese",
+        "quantity": 0.33,
+        "unit": "cups",
+        "default_unit": "cups"
+      },
+      {
+        "name": "Ranch Dressing",
+        "quantity": 3.0,
+        "unit": "tbsp",
+        "default_unit": "tbsp"
+      }
+    ],
+    "instructions": [
+      {
+        "step": 1,
+        "text": "Warm shredded chicken in a saucepan over medium-low heat with buffalo sauce until fully coated."
+      },
+      {
+        "step": 2,
+        "text": "Separate and wash large outer butter lettuce leaves, drying carefully on paper towels."
+      },
+      {
+        "step": 3,
+        "text": "Scoop warm buffalo chicken into each lettuce cup."
+      },
+      {
+        "step": 4,
+        "text": "Top with diced crisp celery, blue cheese crumbles, and a light drizzle of ranch dressing."
+      }
+    ]
+  },
+  {
+    "title": "Red Lentil Dahl with Basmati Rice",
+    "description": "Comforting yellow and red split lentils simmered with coconut milk, cumin, turmeric, and fresh cilantro.",
+    "prep_time_minutes": 35,
+    "difficulty_level": "easy",
+    "dietary_tags": [
+      "vegan",
+      "vegetarian",
+      "gluten-free",
+      "dairy-free"
+    ],
+    "ingredients": [
+      {
+        "name": "Dry Red Lentils",
+        "quantity": 1.5,
+        "unit": "cups",
+        "default_unit": "cups"
+      },
+      {
+        "name": "Coconut Milk",
+        "quantity": 1.0,
+        "unit": "can",
+        "default_unit": "can"
+      },
+      {
+        "name": "Ground Turmeric",
+        "quantity": 1.0,
+        "unit": "tsp",
+        "default_unit": "tsp"
+      },
+      {
+        "name": "Cumin Seeds",
+        "quantity": 1.0,
+        "unit": "tsp",
+        "default_unit": "tsp"
+      },
+      {
+        "name": "Ginger Paste",
+        "quantity": 1.0,
+        "unit": "tbsp",
+        "default_unit": "tbsp"
+      },
+      {
+        "name": "Vegetable Broth",
+        "quantity": 3.0,
+        "unit": "cups",
+        "default_unit": "cups"
+      }
+    ],
+    "instructions": [
+      {
+        "step": 1,
+        "text": "Rinse red lentils under cold water until water runs clear."
+      },
+      {
+        "step": 2,
+        "text": "Heat oil in a medium saucepan. Toast cumin seeds, mustard seeds, and ginger for 60 seconds until fragrant."
+      },
+      {
+        "step": 3,
+        "text": "Add rinsed lentils, vegetable broth, and turmeric. Bring to a gentle boil, then simmer covered for 20 minutes."
+      },
+      {
+        "step": 4,
+        "text": "Stir in coconut milk and season with salt. Simmer 5 more minutes until rich and creamy; serve with rice."
+      }
+    ]
+  },
+  {
+    "title": "Sheet Pan Pork Tenderloin with Roasted Apples",
+    "description": "Herb-rubbed pork tenderloin roasted alongside crisp tart Honeycrisp apples and sweet red onions.",
+    "prep_time_minutes": 35,
+    "difficulty_level": "medium",
+    "dietary_tags": [
+      "gluten-free",
+      "dairy-free",
+      "high-protein"
+    ],
+    "ingredients": [
+      {
+        "name": "Pork Tenderloin",
+        "quantity": 1.25,
+        "unit": "lbs",
+        "default_unit": "lbs"
+      },
+      {
+        "name": "Honeycrisp Apples",
+        "quantity": 2.0,
+        "unit": "count",
+        "default_unit": "count"
+      },
+      {
+        "name": "Red Onion",
+        "quantity": 1.0,
+        "unit": "count",
+        "default_unit": "count"
+      },
+      {
+        "name": "Fresh Thyme",
+        "quantity": 1.0,
+        "unit": "tbsp",
+        "default_unit": "tbsp"
+      },
+      {
+        "name": "Dijon Mustard",
+        "quantity": 1.0,
+        "unit": "tbsp",
+        "default_unit": "tbsp"
+      },
+      {
+        "name": "Olive Oil",
+        "quantity": 2.0,
+        "unit": "tbsp",
+        "default_unit": "tbsp"
+      }
+    ],
+    "instructions": [
+      {
+        "step": 1,
+        "text": "Preheat oven to 425\u00b0F (220\u00b0C). Rub pork tenderloin with Dijon mustard, fresh thyme, salt, and pepper."
+      },
+      {
+        "step": 2,
+        "text": "Cut apples and red onion into wedges and toss with olive oil, salt, and a pinch of cinnamon."
+      },
+      {
+        "step": 3,
+        "text": "Place seasoned pork in center of baking sheet surrounded by apple and onion wedges."
+      },
+      {
+        "step": 4,
+        "text": "Roast for 22-25 minutes until pork internal thermometer reaches 145\u00b0F. Rest 5 minutes before slicing."
+      }
+    ]
+  },
+  {
+    "title": "Spinach and Feta Shakshuka",
+    "description": "Poached eggs nestled in a spiced, slow-simmered tomato and bell pepper sauce topped with wilted spinach and feta.",
+    "prep_time_minutes": 25,
+    "difficulty_level": "easy",
+    "dietary_tags": [
+      "vegetarian",
+      "gluten-free",
+      "keto",
+      "quick"
+    ],
+    "ingredients": [
+      {
+        "name": "Whole Eggs",
+        "quantity": 4.0,
+        "unit": "count",
+        "default_unit": "count"
+      },
+      {
+        "name": "Whole Peeled Plum Tomatoes",
+        "quantity": 1.0,
+        "unit": "can",
+        "default_unit": "can"
+      },
+      {
+        "name": "Baby Spinach",
+        "quantity": 2.0,
+        "unit": "cups",
+        "default_unit": "cups"
+      },
+      {
+        "name": "Feta Cheese",
+        "quantity": 0.5,
+        "unit": "cups",
+        "default_unit": "cups"
+      },
+      {
+        "name": "Smoked Paprika",
+        "quantity": 1.0,
+        "unit": "tsp",
+        "default_unit": "tsp"
+      },
+      {
+        "name": "Ground Cumin",
+        "quantity": 1.0,
+        "unit": "tsp",
+        "default_unit": "tsp"
+      }
+    ],
+    "instructions": [
+      {
+        "step": 1,
+        "text": "Saut\u00e9 chopped onion and bell pepper in olive oil in a wide cast iron skillet for 5 minutes."
+      },
+      {
+        "step": 2,
+        "text": "Crush canned tomatoes into the skillet; stir in cumin, smoked paprika, and simmer for 10 minutes."
+      },
+      {
+        "step": 3,
+        "text": "Fold in spinach until wilted. Make 4 small wells in the sauce and crack an egg into each well."
+      },
+      {
+        "step": 4,
+        "text": "Cover and cook on low for 6-8 minutes until egg whites are set and yolks remain runny. Top with crumbled feta."
+      }
+    ]
+  },
+  {
+    "title": "Teriyaki Glazed Salmon Rice Bowl",
+    "description": "Sweet soy-glazed salmon fillet over steamed sticky rice with sliced Persian cucumbers, avocado, and pickled ginger.",
+    "prep_time_minutes": 25,
+    "difficulty_level": "easy",
+    "dietary_tags": [
+      "pescatarian",
+      "high-protein",
+      "dairy-free"
+    ],
+    "ingredients": [
+      {
+        "name": "Salmon Fillet",
+        "quantity": 1.0,
+        "unit": "lbs",
+        "default_unit": "lbs"
+      },
+      {
+        "name": "Sushi / Calrose Rice",
+        "quantity": 1.5,
+        "unit": "cups",
+        "default_unit": "cups"
+      },
+      {
+        "name": "Teriyaki Glaze",
+        "quantity": 0.33,
+        "unit": "cups",
+        "default_unit": "cups"
+      },
+      {
+        "name": "Persian Cucumbers",
+        "quantity": 2.0,
+        "unit": "count",
+        "default_unit": "count"
+      },
+      {
+        "name": "Avocado",
+        "quantity": 1.0,
+        "unit": "count",
+        "default_unit": "count"
+      },
+      {
+        "name": "Toasted Nori Strips",
+        "quantity": 2.0,
+        "unit": "sheets",
+        "default_unit": "sheets"
+      }
+    ],
+    "instructions": [
+      {
+        "step": 1,
+        "text": "Brush salmon generously with teriyaki glaze. Broil or pan-sear for 6-8 minutes until cooked through."
+      },
+      {
+        "step": 2,
+        "text": "Steam sushi rice and season lightly with rice vinegar and sea salt."
+      },
+      {
+        "step": 3,
+        "text": "Slice Persian cucumbers and avocado into thin slices."
+      },
+      {
+        "step": 4,
+        "text": "Assemble bowls with rice, flaked teriyaki salmon, avocado, cucumbers, and nori strips."
+      }
+    ]
+  },
+  {
+    "title": "Beef & Quinoa Stuffed Bell Peppers",
+    "description": "Vibrant bell pepper halves filled with seasoned lean ground beef, fluffy tri-color quinoa, black beans, and melted pepper jack.",
+    "prep_time_minutes": 40,
+    "difficulty_level": "medium",
+    "dietary_tags": [
+      "gluten-free",
+      "high-protein"
+    ],
+    "ingredients": [
+      {
+        "name": "Bell Peppers (Large)",
+        "quantity": 4.0,
+        "unit": "count",
+        "default_unit": "count"
+      },
+      {
+        "name": "Lean Ground Beef",
+        "quantity": 0.75,
+        "unit": "lbs",
+        "default_unit": "lbs"
+      },
+      {
+        "name": "Cooked Quinoa",
+        "quantity": 1.5,
+        "unit": "cups",
+        "default_unit": "cups"
+      },
+      {
+        "name": "Tomato Sauce",
+        "quantity": 1.0,
+        "unit": "cup",
+        "default_unit": "cup"
+      },
+      {
+        "name": "Pepper Jack Cheese",
+        "quantity": 0.75,
+        "unit": "cups",
+        "default_unit": "cups"
+      },
+      {
+        "name": "Cumin & Chili Powder",
+        "quantity": 1.0,
+        "unit": "tbsp",
+        "default_unit": "tbsp"
+      }
+    ],
+    "instructions": [
+      {
+        "step": 1,
+        "text": "Preheat oven to 375\u00b0F (190\u00b0C). Slice bell peppers lengthwise and scoop out seeds."
+      },
+      {
+        "step": 2,
+        "text": "Brown beef in a skillet with spices and onions; drain excess fat and stir in cooked quinoa and tomato sauce."
+      },
+      {
+        "step": 3,
+        "text": "Stuff peppers generously with beef-quinoa mixture and place upright in a baking dish with 1/4 cup water."
+      },
+      {
+        "step": 4,
+        "text": "Cover with foil and bake 25 minutes; uncover, top with pepper jack cheese, and bake 10 more minutes until bubbly."
+      }
+    ]
+  },
+  {
+    "title": "Caprese Chicken Bake",
+    "description": "Seared chicken breasts baked with basil pesto, ripe vine tomatoes, and melted fresh buffalo mozzarella.",
+    "prep_time_minutes": 30,
+    "difficulty_level": "easy",
+    "dietary_tags": [
+      "gluten-free",
+      "keto",
+      "high-protein"
+    ],
+    "ingredients": [
+      {
+        "name": "Chicken Breast",
+        "quantity": 1.25,
+        "unit": "lbs",
+        "default_unit": "lbs"
+      },
+      {
+        "name": "Fresh Mozzarella",
+        "quantity": 6.0,
+        "unit": "oz",
+        "default_unit": "oz"
+      },
+      {
+        "name": "Basil Pesto",
+        "quantity": 0.33,
+        "unit": "cups",
+        "default_unit": "cups"
+      },
+      {
+        "name": "Vine Ripe Tomatoes",
+        "quantity": 2.0,
+        "unit": "count",
+        "default_unit": "count"
+      },
+      {
+        "name": "Balsamic Glaze",
+        "quantity": 2.0,
+        "unit": "tbsp",
+        "default_unit": "tbsp"
+      },
+      {
+        "name": "Fresh Basil Leaves",
+        "quantity": 0.25,
+        "unit": "cups",
+        "default_unit": "cups"
+      }
+    ],
+    "instructions": [
+      {
+        "step": 1,
+        "text": "Preheat oven to 400\u00b0F (205\u00b0C). Season chicken breasts with salt, pepper, and Italian seasoning."
+      },
+      {
+        "step": 2,
+        "text": "Sear chicken in an ovenproof skillet for 3 minutes per side until lightly browned."
+      },
+      {
+        "step": 3,
+        "text": "Spread a tablespoon of pesto over each breast, top with thick tomato slices and fresh mozzarella."
+      },
+      {
+        "step": 4,
+        "text": "Bake for 15 minutes until cheese is golden and melted. Drizzle with balsamic glaze and fresh basil before serving."
+      }
+    ]
+  },
+  {
+    "title": "Sesame Ginger Soba Noodle Bowl",
+    "description": "Chilled Japanese buckwheat soba noodles tossed with matchstick carrots, purple cabbage, edamame, and sesame ginger vinaigrette.",
+    "prep_time_minutes": 20,
+    "difficulty_level": "quick",
+    "dietary_tags": [
+      "vegan",
+      "vegetarian",
+      "dairy-free",
+      "quick"
+    ],
+    "ingredients": [
+      {
+        "name": "Buckwheat Soba Noodles",
+        "quantity": 8.0,
+        "unit": "oz",
+        "default_unit": "oz"
+      },
+      {
+        "name": "Shredded Purple Cabbage",
+        "quantity": 1.5,
+        "unit": "cups",
+        "default_unit": "cups"
+      },
+      {
+        "name": "Matchstick Carrots",
+        "quantity": 1.0,
+        "unit": "cup",
+        "default_unit": "cup"
+      },
+      {
+        "name": "Shelled Edamame",
+        "quantity": 1.0,
+        "unit": "cup",
+        "default_unit": "cup"
+      },
+      {
+        "name": "Sesame Oil & Rice Vinegar",
+        "quantity": 3.0,
+        "unit": "tbsp",
+        "default_unit": "tbsp"
+      },
+      {
+        "name": "Toasted Sesame Seeds",
+        "quantity": 1.0,
+        "unit": "tbsp",
+        "default_unit": "tbsp"
+      }
+    ],
+    "instructions": [
+      {
+        "step": 1,
+        "text": "Cook soba noodles in boiling water for 4-5 minutes. Drain and rinse thoroughly under cold water to stop cooking."
+      },
+      {
+        "step": 2,
+        "text": "In a large bowl, whisk sesame oil, rice vinegar, grated ginger, soy sauce, and a touch of maple syrup."
+      },
+      {
+        "step": 3,
+        "text": "Add chilled noodles, purple cabbage, carrots, and edamame to the bowl."
+      },
+      {
+        "step": 4,
+        "text": "Toss well to coat in dressing and finish with toasted sesame seeds and fresh cilantro."
+      }
+    ]
+  },
+  {
+    "title": "Honey Dijon Glazed Pork Chops with Green Beans",
+    "description": "Seared thick-cut center boneless pork chops glazed in grainy Dijon mustard and pure honey served alongside saut\u00e9ed green beans.",
+    "prep_time_minutes": 25,
+    "difficulty_level": "easy",
+    "dietary_tags": [
+      "gluten-free",
+      "dairy-free",
+      "high-protein"
+    ],
+    "ingredients": [
+      {
+        "name": "Boneless Pork Chops",
+        "quantity": 1.25,
+        "unit": "lbs",
+        "default_unit": "lbs"
+      },
+      {
+        "name": "Fresh Green Beans",
+        "quantity": 0.75,
+        "unit": "lbs",
+        "default_unit": "lbs"
+      },
+      {
+        "name": "Grainy Dijon Mustard",
+        "quantity": 2.0,
+        "unit": "tbsp",
+        "default_unit": "tbsp"
+      },
+      {
+        "name": "Raw Honey",
+        "quantity": 2.0,
+        "unit": "tbsp",
+        "default_unit": "tbsp"
+      },
+      {
+        "name": "Apple Cider Vinegar",
+        "quantity": 1.0,
+        "unit": "tbsp",
+        "default_unit": "tbsp"
+      },
+      {
+        "name": "Olive Oil",
+        "quantity": 2.0,
+        "unit": "tbsp",
+        "default_unit": "tbsp"
+      }
+    ],
+    "instructions": [
+      {
+        "step": 1,
+        "text": "Whisk Dijon mustard, honey, apple cider vinegar, salt, and black pepper together in a small ramekin."
+      },
+      {
+        "step": 2,
+        "text": "Heat oil in a skillet over medium-high heat. Sear pork chops for 4 minutes per side until nicely browned."
+      },
+      {
+        "step": 3,
+        "text": "Pour honey Dijon glaze over pork chops, reduce heat, and baste for 2 minutes until internal temp reaches 145\u00b0F."
+      },
+      {
+        "step": 4,
+        "text": "Steam green beans with garlic and olive oil; serve alongside glazed chops."
+      }
+    ]
+  },
+  {
+    "title": "Mediterranean Baked White Fish with Cherry Tomatoes",
+    "description": "Flaky white fish baked in parchment with blistered cherry tomatoes, kalamata olives, capers, and aromatic oregano.",
+    "prep_time_minutes": 25,
+    "difficulty_level": "easy",
+    "dietary_tags": [
+      "gluten-free",
+      "dairy-free",
+      "pescatarian"
+    ],
+    "ingredients": [
+      {
+        "name": "White Fish Fillets (Halibut or Haddock)",
+        "quantity": 1.0,
+        "unit": "lbs",
+        "default_unit": "lbs"
+      },
+      {
+        "name": "Cherry Tomatoes",
+        "quantity": 1.5,
+        "unit": "cups",
+        "default_unit": "cups"
+      },
+      {
+        "name": "Kalamata Olives",
+        "quantity": 0.33,
+        "unit": "cups",
+        "default_unit": "cups"
+      },
+      {
+        "name": "Capers",
+        "quantity": 1.0,
+        "unit": "tbsp",
+        "default_unit": "tbsp"
+      },
+      {
+        "name": "Extra Virgin Olive Oil",
+        "quantity": 2.0,
+        "unit": "tbsp",
+        "default_unit": "tbsp"
+      },
+      {
+        "name": "Dried Oregano",
+        "quantity": 1.0,
+        "unit": "tsp",
+        "default_unit": "tsp"
+      }
+    ],
+    "instructions": [
+      {
+        "step": 1,
+        "text": "Preheat oven to 400\u00b0F (205\u00b0C). Place fish fillets in a ceramic baking dish."
+      },
+      {
+        "step": 2,
+        "text": "Scatter cherry tomatoes, pitted olives, minced garlic, and capers around and over the fish."
+      },
+      {
+        "step": 3,
+        "text": "Drizzle generously with olive oil and sprinkle with dried oregano, salt, and pepper."
+      },
+      {
+        "step": 4,
+        "text": "Bake for 15-18 minutes until fish flakes easily with a fork and tomatoes burst."
+      }
+    ]
+  },
+  {
+    "title": "Cauliflower Crust Margherita Pizza",
+    "description": "Crispy seasoned cauliflower pizza crust topped with crushed San Marzano tomato sauce, fresh mozzarella, and aromatic basil.",
+    "prep_time_minutes": 30,
+    "difficulty_level": "medium",
+    "dietary_tags": [
+      "gluten-free",
+      "vegetarian",
+      "keto"
+    ],
+    "ingredients": [
+      {
+        "name": "Cauliflower Pizza Crust",
+        "quantity": 1.0,
+        "unit": "count",
+        "default_unit": "count"
+      },
+      {
+        "name": "San Marzano Pizza Sauce",
+        "quantity": 0.5,
+        "unit": "cups",
+        "default_unit": "cups"
+      },
+      {
+        "name": "Fresh Mozzarella Cheese",
+        "quantity": 6.0,
+        "unit": "oz",
+        "default_unit": "oz"
+      },
+      {
+        "name": "Fresh Basil Leaves",
+        "quantity": 0.25,
+        "unit": "cups",
+        "default_unit": "cups"
+      },
+      {
+        "name": "Extra Virgin Olive Oil",
+        "quantity": 1.0,
+        "unit": "tbsp",
+        "default_unit": "tbsp"
+      }
+    ],
+    "instructions": [
+      {
+        "step": 1,
+        "text": "Preheat oven to 425\u00b0F (220\u00b0C). Pre-bake cauliflower crust for 10 minutes until lightly crisp."
+      },
+      {
+        "step": 2,
+        "text": "Spread pizza sauce evenly across the crust, leaving a 1/2-inch border."
+      },
+      {
+        "step": 3,
+        "text": "Distribute sliced fresh mozzarella and drizzle lightly with extra virgin olive oil."
+      },
+      {
+        "step": 4,
+        "text": "Bake for 8-10 minutes until cheese is bubbly and edges are golden brown. Top with torn fresh basil."
+      }
+    ]
+  },
+  {
+    "title": "Turkey & Sweet Potato Skillet Hash",
+    "description": "Savory skillet hash of lean ground turkey, diced caramelized sweet potatoes, baby spinach, and smoked paprika.",
+    "prep_time_minutes": 25,
+    "difficulty_level": "easy",
+    "dietary_tags": [
+      "gluten-free",
+      "dairy-free",
+      "high-protein",
+      "quick"
+    ],
+    "ingredients": [
+      {
+        "name": "Lean Ground Turkey",
+        "quantity": 1.0,
+        "unit": "lbs",
+        "default_unit": "lbs"
+      },
+      {
+        "name": "Sweet Potatoes (Finely Diced)",
+        "quantity": 2.0,
+        "unit": "cups",
+        "default_unit": "cups"
+      },
+      {
+        "name": "Baby Spinach",
+        "quantity": 2.0,
+        "unit": "cups",
+        "default_unit": "cups"
+      },
+      {
+        "name": "Yellow Onion",
+        "quantity": 1.0,
+        "unit": "count",
+        "default_unit": "count"
+      },
+      {
+        "name": "Smoked Paprika & Garlic Powder",
+        "quantity": 1.5,
+        "unit": "tbsp",
+        "default_unit": "tbsp"
+      },
+      {
+        "name": "Olive Oil",
+        "quantity": 2.0,
+        "unit": "tbsp",
+        "default_unit": "tbsp"
+      }
+    ],
+    "instructions": [
+      {
+        "step": 1,
+        "text": "Heat olive oil in a large cast iron skillet over medium. Saut\u00e9 diced sweet potatoes and onions for 10 minutes until softened."
+      },
+      {
+        "step": 2,
+        "text": "Push sweet potatoes to one side; add ground turkey and spices to the skillet and cook until browned."
+      },
+      {
+        "step": 3,
+        "text": "Stir turkey and sweet potatoes together, cooking for 3 minutes to allow flavors to meld."
+      },
+      {
+        "step": 4,
+        "text": "Fold in baby spinach until wilted, season with sea salt, and serve hot."
+      }
+    ]
+  },
+  {
+    "title": "Vegetable Fried Rice with Edamame",
+    "description": "Day-old jasmine rice stir-fried with shelled edamame, shredded carrots, green peas, scallions, and toasted sesame oil.",
+    "prep_time_minutes": 20,
+    "difficulty_level": "quick",
+    "dietary_tags": [
+      "vegan",
+      "vegetarian",
+      "dairy-free",
+      "quick"
+    ],
+    "ingredients": [
+      {
+        "name": "Cooked Jasmine Rice (Chilled)",
+        "quantity": 3.0,
+        "unit": "cups",
+        "default_unit": "cups"
+      },
+      {
+        "name": "Shelled Edamame",
+        "quantity": 1.0,
+        "unit": "cup",
+        "default_unit": "cup"
+      },
+      {
+        "name": "Frozen Peas and Carrots",
+        "quantity": 1.0,
+        "unit": "cup",
+        "default_unit": "cup"
+      },
+      {
+        "name": "Tamari Soy Sauce",
+        "quantity": 3.0,
+        "unit": "tbsp",
+        "default_unit": "tbsp"
+      },
+      {
+        "name": "Sesame Oil",
+        "quantity": 1.5,
+        "unit": "tbsp",
+        "default_unit": "tbsp"
+      },
+      {
+        "name": "Garlic Cloves",
+        "quantity": 2.0,
+        "unit": "count",
+        "default_unit": "count"
+      }
+    ],
+    "instructions": [
+      {
+        "step": 1,
+        "text": "Heat 1 tbsp sesame oil in a large wok over high heat. Add minced garlic, peas, carrots, and edamame for 2 minutes."
+      },
+      {
+        "step": 2,
+        "text": "Add cold cooked jasmine rice, breaking up clumps with a spatula."
+      },
+      {
+        "step": 3,
+        "text": "Drizzle tamari soy sauce and remaining sesame oil over the rice, tossing constantly for 4 minutes until toasted."
+      },
+      {
+        "step": 4,
+        "text": "Garnish with sliced green onions and serve immediately."
+      }
+    ]
+  },
+  {
+    "title": "Lemon Basil Grilled Shrimp Skewers",
+    "description": "Skewered jumbo shrimp marinated in fresh lemon zest, cracked black pepper, garlic, and fresh sweet basil.",
+    "prep_time_minutes": 20,
+    "difficulty_level": "easy",
+    "dietary_tags": [
+      "gluten-free",
+      "dairy-free",
+      "pescatarian",
+      "keto",
+      "quick"
+    ],
+    "ingredients": [
+      {
+        "name": "Jumbo Raw Shrimp",
+        "quantity": 1.0,
+        "unit": "lbs",
+        "default_unit": "lbs"
+      },
+      {
+        "name": "Lemon Zest & Juice",
+        "quantity": 2.0,
+        "unit": "lemons",
+        "default_unit": "lemons"
+      },
+      {
+        "name": "Fresh Basil Leaves",
+        "quantity": 0.5,
+        "unit": "cups",
+        "default_unit": "cups"
+      },
+      {
+        "name": "Olive Oil",
+        "quantity": 3.0,
+        "unit": "tbsp",
+        "default_unit": "tbsp"
+      },
+      {
+        "name": "Garlic Cloves",
+        "quantity": 3.0,
+        "unit": "count",
+        "default_unit": "count"
+      },
+      {
+        "name": "Cracked Black Pepper",
+        "quantity": 1.0,
+        "unit": "tsp",
+        "default_unit": "tsp"
+      }
+    ],
+    "instructions": [
+      {
+        "step": 1,
+        "text": "Thread shrimp onto bamboo skewers (soaked in water for 30 minutes)."
+      },
+      {
+        "step": 2,
+        "text": "Blend olive oil, lemon juice, lemon zest, garlic, basil, salt, and black pepper into a smooth marinade."
+      },
+      {
+        "step": 3,
+        "text": "Brush marinade liberally onto shrimp skewers and let rest for 10 minutes."
+      },
+      {
+        "step": 4,
+        "text": "Grill or sear on a grill pan over high heat for 2-3 minutes per side until charred and pink."
+      }
+    ]
+  },
+  {
+    "title": "Butternut Squash and Sage Penne",
+    "description": "Al dente penne pasta coated in a velvety roasted butternut squash puree with crispy browned butter sage leaves and nutmeg.",
+    "prep_time_minutes": 35,
+    "difficulty_level": "medium",
+    "dietary_tags": [
+      "vegetarian"
+    ],
+    "ingredients": [
+      {
+        "name": "Penne Pasta",
+        "quantity": 0.75,
+        "unit": "lbs",
+        "default_unit": "lbs"
+      },
+      {
+        "name": "Roasted Butternut Squash Puree",
+        "quantity": 2.0,
+        "unit": "cups",
+        "default_unit": "cups"
+      },
+      {
+        "name": "Unsalted Butter",
+        "quantity": 3.0,
+        "unit": "tbsp",
+        "default_unit": "tbsp"
+      },
+      {
+        "name": "Fresh Sage Leaves",
+        "quantity": 10.0,
+        "unit": "leaves",
+        "default_unit": "leaves"
+      },
+      {
+        "name": "Parmesan Cheese",
+        "quantity": 0.5,
+        "unit": "cups",
+        "default_unit": "cups"
+      },
+      {
+        "name": "Ground Nutmeg",
+        "quantity": 0.25,
+        "unit": "tsp",
+        "default_unit": "tsp"
+      }
+    ],
+    "instructions": [
+      {
+        "step": 1,
+        "text": "Cook penne in salted boiling water until al dente; reserve 1 cup of pasta water."
+      },
+      {
+        "step": 2,
+        "text": "Melt butter in a skillet over medium heat until foaming; fry sage leaves for 1 minute until crisp, then remove leaves."
+      },
+      {
+        "step": 3,
+        "text": "Add butternut squash puree, nutmeg, salt, and 1/2 cup pasta water to the browned butter, stirring until silky."
+      },
+      {
+        "step": 4,
+        "text": "Fold pasta and grated parmesan into the sauce, top with crispy sage leaves, and serve warm."
+      }
+    ]
+  }
+]
