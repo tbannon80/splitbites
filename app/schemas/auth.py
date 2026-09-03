@@ -6,6 +6,7 @@ class RegisterRequest(BaseModel):
     full_name: str
     email: str
     password: str
+    confirm_password: Optional[str] = None
     household_name: str
     dietary_preferences: Optional[List[str]] = []
     spouse_name: Optional[str] = None
@@ -22,6 +23,7 @@ class InviteMemberRequest(BaseModel):
 class RegisterInvitedRequest(BaseModel):
     token: str
     password: str
+    confirm_password: Optional[str] = None
     full_name: Optional[str] = None
 
 class ForgotPasswordRequest(BaseModel):

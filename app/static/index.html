@@ -98,14 +98,22 @@
         </div>
 
         <div>
-          <label class="block text-xs font-semibold text-slate-300 mb-1">Password * (min. 6 characters)</label>
-          <input id="regPassword" type="password" minlength="6" required placeholder="••••••••" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-emerald-500">
+          <label class="block text-xs font-semibold text-slate-300 mb-1">Desired Password * (min. 6 characters)</label>
+          <input id="regPassword" type="password" minlength="6" required placeholder="••••••••" oninput="checkPasswordMatch()" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-emerald-500">
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 mb-1">Confirm Password *</label>
+          <input id="regConfirmPassword" type="password" minlength="6" required placeholder="••••••••" oninput="checkPasswordMatch()" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-emerald-500">
+          <p id="regPasswordMismatchMsg" class="hidden text-xs text-rose-400 mt-1 flex items-center gap-1">
+            <span>⚠️ Passwords do not match</span>
+          </p>
         </div>
 
         <div>
           <label class="block text-xs font-semibold text-slate-300 mb-1">Family / Household Name *</label>
           <input id="regHouseholdName" type="text" required placeholder="e.g. The Bannon Family" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-emerald-500">
-          <span class="text-[11px] text-slate-400">Displayed at the top of your family meal planner.</span>
+          <span class="text-[11px] text-slate-400">The name of your family kitchen (e.g. The Bannon Family). NOT your password!</span>
         </div>
 
         <div>
@@ -136,7 +144,7 @@
         </div>
 
         <button id="btnRegisterSubmit" type="submit" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-semibold py-2.5 px-4 rounded-lg text-sm transition shadow-lg shadow-emerald-950 flex items-center justify-center gap-2 mt-2">
-          <span>Create Family Kitchen</span>
+          <span>Review & Confirm Registration</span>
         </button>
       </form>
 
@@ -159,6 +167,10 @@
           <div>
             <label class="block text-xs font-semibold text-slate-300 mb-1">Choose Password * (min. 6 chars)</label>
             <input id="invitePasswordInput" type="password" minlength="6" required placeholder="••••••••" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-emerald-500">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1">Confirm Password *</label>
+            <input id="inviteConfirmPasswordInput" type="password" minlength="6" required placeholder="••••••••" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-emerald-500">
           </div>
           <button id="btnInviteSubmit" type="submit" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-semibold py-2.5 px-4 rounded-lg text-sm transition shadow-lg shadow-emerald-950">
             Accept Invitation & Join Family
@@ -651,6 +663,66 @@
     </div>
   </div>
 
+  <!-- REGISTRATION CONFIRMATION REVIEW MODAL -->
+  <div id="regConfirmModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+    <div class="max-w-md w-full bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-2xl space-y-4">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-800">
+        <div class="flex items-center gap-2">
+          <span class="text-xl">📋</span>
+          <h3 class="text-base font-bold text-white">Confirm Registration Details</h3>
+        </div>
+        <button type="button" onclick="closeRegConfirmModal()" class="text-slate-400 hover:text-white transition text-lg">✕</button>
+      </div>
+
+      <p class="text-xs text-slate-400 leading-relaxed">
+        Please review what you entered below to make sure everything is correct before creating your account:
+      </p>
+
+      <div class="bg-slate-950/90 rounded-xl p-4 border border-slate-800 space-y-2.5 text-xs">
+        <div class="flex justify-between items-start pb-2 border-b border-slate-800/80">
+          <span class="text-slate-400 font-medium">Your Full Name:</span>
+          <span id="confirmReviewName" class="font-semibold text-white text-right"></span>
+        </div>
+        <div class="flex justify-between items-start pb-2 border-b border-slate-800/80">
+          <span class="text-slate-400 font-medium">Email Address:</span>
+          <span id="confirmReviewEmail" class="font-semibold text-white text-right break-all"></span>
+        </div>
+        <div class="flex justify-between items-start pb-2 border-b border-slate-800/80">
+          <span class="text-slate-400 font-medium">Desired Password:</span>
+          <span class="font-semibold text-emerald-400 text-right">•••••••• (Password Confirmed ✓)</span>
+        </div>
+
+        <div class="p-3 rounded-xl bg-emerald-950/40 border border-emerald-700/60 my-2 shadow-inner">
+          <div class="flex justify-between items-center mb-1">
+            <span class="text-xs font-bold text-emerald-300">Family / Household Name:</span>
+            <span id="confirmReviewHousehold" class="font-black text-white text-sm text-right"></span>
+          </div>
+          <p class="text-[11px] text-emerald-400/90">
+            ℹ️ This is your family kitchen title (not your password).
+          </p>
+        </div>
+
+        <div class="flex justify-between items-start pb-2 border-b border-slate-800/80">
+          <span class="text-slate-400 font-medium">Dietary Preferences:</span>
+          <span id="confirmReviewDietary" class="text-slate-200 text-right"></span>
+        </div>
+        <div class="flex justify-between items-start">
+          <span class="text-slate-400 font-medium">Spouse Invitation:</span>
+          <span id="confirmReviewSpouse" class="text-slate-200 text-right"></span>
+        </div>
+      </div>
+
+      <div class="pt-2 flex gap-3">
+        <button type="button" onclick="closeRegConfirmModal()" class="flex-1 py-2.5 px-4 rounded-lg text-xs font-semibold text-slate-300 hover:text-white bg-slate-800 hover:bg-slate-700 border border-slate-700 transition">
+          ← Edit Details
+        </button>
+        <button id="btnFinalConfirmRegister" type="button" onclick="executeRegistration()" class="flex-1 py-2.5 px-4 rounded-lg text-xs font-semibold text-white bg-emerald-600 hover:bg-emerald-500 transition shadow-lg shadow-emerald-950 flex items-center justify-center gap-1.5">
+          <span>✓ Confirm & Register</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
   <script>
     // Global Auth State
     let authToken = localStorage.getItem('splitbites_token') || null;
@@ -729,6 +801,7 @@
     }
 
     function switchAuthView(view) {
+      closeRegConfirmModal();
       const loginForm = document.getElementById('loginForm');
       const regForm = document.getElementById('registerForm');
       const forgotForm = document.getElementById('forgotForm');
@@ -816,16 +889,88 @@
       }
     }
 
-    async function handleRegister(e) {
+    function checkPasswordMatch() {
+      const pwd = document.getElementById('regPassword').value;
+      const confirm = document.getElementById('regConfirmPassword').value;
+      const msg = document.getElementById('regPasswordMismatchMsg');
+      const input = document.getElementById('regConfirmPassword');
+      if (!confirm) {
+        msg.classList.add('hidden');
+        input.classList.remove('border-rose-500', 'border-emerald-500');
+        input.classList.add('border-slate-700');
+        return true;
+      }
+      if (pwd !== confirm) {
+        msg.classList.remove('hidden');
+        input.classList.add('border-rose-500');
+        input.classList.remove('border-slate-700', 'border-emerald-500');
+        return false;
+      } else {
+        msg.classList.add('hidden');
+        input.classList.remove('border-rose-500');
+        input.classList.add('border-emerald-500');
+        return true;
+      }
+    }
+
+    function closeRegConfirmModal() {
+      const modal = document.getElementById('regConfirmModal');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    function handleRegister(e) {
       e.preventDefault();
       const full_name = document.getElementById('regName').value.trim();
       const email = document.getElementById('regEmail').value.trim();
       const password = document.getElementById('regPassword').value;
+      const confirm_password = document.getElementById('regConfirmPassword').value;
       const household_name = document.getElementById('regHouseholdName').value.trim();
       const spouse_name = document.getElementById('spouseName').value.trim();
       const spouse_email = document.getElementById('spouseEmail').value.trim();
 
-      const btn = document.getElementById('btnRegisterSubmit');
+      if (!full_name || !email || !password || !confirm_password || !household_name) {
+        alert("Please fill in all required fields.");
+        return;
+      }
+
+      if (password.length < 6) {
+        alert("Password must be at least 6 characters.");
+        document.getElementById('regPassword').focus();
+        return;
+      }
+
+      if (password !== confirm_password) {
+        checkPasswordMatch();
+        alert("Passwords do not match. Please verify and confirm your password.");
+        document.getElementById('regConfirmPassword').focus();
+        return;
+      }
+
+      // Populate review confirmation modal
+      document.getElementById('confirmReviewName').innerText = full_name;
+      document.getElementById('confirmReviewEmail').innerText = email;
+      document.getElementById('confirmReviewHousehold').innerText = household_name;
+      const tags = Array.from(regTags);
+      document.getElementById('confirmReviewDietary').innerText = tags.length > 0 ? tags.join(', ') : 'None selected';
+      if (spouse_email) {
+        document.getElementById('confirmReviewSpouse').innerText = spouse_name ? `${spouse_name} (${spouse_email})` : spouse_email;
+      } else {
+        document.getElementById('confirmReviewSpouse').innerText = 'None (can invite later)';
+      }
+
+      document.getElementById('regConfirmModal').classList.remove('hidden');
+    }
+
+    async function executeRegistration() {
+      const full_name = document.getElementById('regName').value.trim();
+      const email = document.getElementById('regEmail').value.trim();
+      const password = document.getElementById('regPassword').value;
+      const confirm_password = document.getElementById('regConfirmPassword').value;
+      const household_name = document.getElementById('regHouseholdName').value.trim();
+      const spouse_name = document.getElementById('spouseName').value.trim();
+      const spouse_email = document.getElementById('spouseEmail').value.trim();
+
+      const btn = document.getElementById('btnFinalConfirmRegister');
       btn.disabled = true;
       btn.innerText = "Creating Family Kitchen...";
 
@@ -834,6 +979,7 @@
           full_name,
           email,
           password,
+          confirm_password,
           household_name,
           dietary_preferences: Array.from(regTags),
           spouse_name: spouse_name || null,
@@ -847,6 +993,7 @@
         });
         const data = await res.json();
         if (!res.ok) throw new Error(data.detail || 'Registration failed');
+        closeRegConfirmModal();
         handleAuthSuccess(data);
         if (spouse_email) {
           showToast(`✓ Account created & welcome invitation sent to ${spouse_email}!`);
@@ -857,7 +1004,7 @@
         alert(err.message);
       } finally {
         btn.disabled = false;
-        btn.innerText = "Create Family Kitchen";
+        btn.innerText = "✓ Confirm & Register";
       }
     }
 
@@ -883,7 +1030,21 @@
     async function handleAcceptInvite(e) {
       e.preventDefault();
       const password = document.getElementById('invitePasswordInput').value;
+      const confirm_password = document.getElementById('inviteConfirmPasswordInput').value;
       const full_name = document.getElementById('inviteNameInput').value.trim();
+
+      if (password.length < 6) {
+        alert("Password must be at least 6 characters.");
+        document.getElementById('invitePasswordInput').focus();
+        return;
+      }
+
+      if (password !== confirm_password) {
+        alert("Passwords do not match. Please verify and confirm your password.");
+        document.getElementById('inviteConfirmPasswordInput').focus();
+        return;
+      }
+
       const btn = document.getElementById('btnInviteSubmit');
       btn.disabled = true;
       btn.innerText = "Joining Family...";
@@ -895,6 +1056,7 @@
           body: JSON.stringify({
             token: window.activeInviteToken,
             password,
+            confirm_password,
             full_name
           })
         });

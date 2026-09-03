@@ -80,6 +80,8 @@ async def register(payload: RegisterRequest, db: AsyncSession = Depends(get_db))
         raise HTTPException(status_code=400, detail="A valid email address is required.")
     if len(payload.password) < 6:
         raise HTTPException(status_code=400, detail="Password must be at least 6 characters.")
+    if payload.confirm_password is not None and payload.password != payload.confirm_password:
+        raise HTTPException(status_code=400, detail="Passwords do not match. Please re-enter your password.")
     if not payload.household_name.strip():
         raise HTTPException(status_code=400, detail="Family/Household name is required.")
 
@@ -381,6 +383,8 @@ async def validate_invitation(token: str, db: AsyncSession = Depends(get_db)):
 async def register_invited_member(payload: RegisterInvitedRequest, db: AsyncSession = Depends(get_db)):
     if len(payload.password) < 6:
         raise HTTPException(status_code=400, detail="Password must be at least 6 characters.")
+    if payload.confirm_password is not None and payload.password != payload.confirm_password:
+        raise HTTPException(status_code=400, detail="Passwords do not match. Please re-enter your password.")
 
     stmt = select(HouseholdInvitation).where(HouseholdInvitation.token == payload.token, HouseholdInvitation.status == "pending")
     res = await db.execute(stmt)
@@ -411,6 +415,11 @@ async def register_invited_member(payload: RegisterInvitedRequest, db: AsyncSess
     inv.status = "accepted"
     await db.commit()
 
+    # Fetch household
+    h_stmt = select(Household).options(selectinload(Household.dietary_preferences)).where(Household.household_id == inv.household_id)
+    h_res = await db.execute(h_stmt)
+    full_household = h_res.scalar_one()
+
     # Dispatch detailed onboarding instructions to the invited family member
     send_welcome_user_instructions(
         to_email=user.email,
@@ -418,11 +427,6 @@ async def register_invited_member(payload: RegisterInvitedRequest, db: AsyncSess
         household_name=full_household.household_name,
         is_originator=False
     )
-
-    # Fetch household
-    h_stmt = select(Household).options(selectinload(Household.dietary_preferences)).where(Household.household_id == inv.household_id)
-    h_res = await db.execute(h_stmt)
-    full_household = h_res.scalar_one()
 
     token = create_access_token({"sub": str(user.user_id), "email": user.email, "hid": str(full_household.household_id)})
 
