@@ -4,20 +4,24 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse, HTMLResponse
-from app.routers import meal_plans, households
+from app.routers import meal_plans, households, recipes
 
 app = FastAPI(title="SplitBites API", version="1.0.0")
 
-# CORS middleware for local frontend and network access
+# CORS middleware for local frontend, reverse proxy, and network access
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
+        "https://splitbites.tbannon80-hp-mini.stream",
+        "http://splitbites.tbannon80-hp-mini.stream",
+        "http://localhost:8001",
+        "http://127.0.0.1:8001",
         "http://localhost:3000",
         "http://127.0.0.1:3000",
         "http://localhost:5173",
         "http://127.0.0.1:5173",
+        "http://192.168.4.35:8001",
         "http://192.168.4.35:3000",
-        "http://192.168.4.35:5173",
         "*"
     ],
     allow_credentials=True,
@@ -31,6 +35,7 @@ if STATIC_DIR.is_dir():
 
 app.include_router(meal_plans.router)
 app.include_router(households.router)
+app.include_router(recipes.router)
 
 @app.get("/healthz")
 async def health_check():
