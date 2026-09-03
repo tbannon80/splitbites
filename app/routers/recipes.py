@@ -237,3 +237,24 @@ async def get_recipe(recipe_id: UUID, db: AsyncSession = Depends(get_db)):
         raise HTTPException(status_code=404, detail=f"Recipe {recipe_id} not found.")
 
     return format_recipe_response(recipe)
+
+from pydantic import BaseModel, HttpUrl
+from app.services.recipe_scraper import extract_recipe_from_url
+
+class ExtractRecipeUrlRequest(BaseModel):
+    url: str
+
+@router.post("/extract-url")
+async def extract_recipe_url(payload: ExtractRecipeUrlRequest):
+    """
+    Extracts structured recipe title, description, prep time, difficulty,
+    ingredients, instructions, and dietary tags from any online recipe URL.
+    """
+    clean_url = payload.url.strip()
+    if not clean_url.startswith("http://") and not clean_url.startswith("https://"):
+        raise HTTPException(status_code=400, detail="Invalid URL. Must start with http:// or https://")
+    try:
+        data = await extract_recipe_from_url(clean_url)
+        return data
+    except Exception as e:
+        raise HTTPException(status_code=422, detail=f"Failed to scrape recipe from URL: {str(e)}")
