@@ -127,3 +127,13 @@ CREATE TABLE IF NOT EXISTS retailer_pricing (
     package_size VARCHAR(100),
     last_updated TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
+
+CREATE TABLE IF NOT EXISTS pantry_items (
+    pantry_id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    household_id UUID REFERENCES households(household_id) ON DELETE CASCADE,
+    item_name VARCHAR(100) NOT NULL,
+    is_in_stock BOOLEAN NOT NULL DEFAULT TRUE,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE(household_id, item_name)
+);
+

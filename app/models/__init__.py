@@ -5,6 +5,7 @@ from app.models.household import Household, HouseholdMember, HouseholdDietaryRes
 from app.models.invitation import HouseholdInvitation
 from app.models.meal_plan import MealPlan, MealPlanItem
 from app.models.retailer import RetailerPricing
+from app.models.pantry import PantryItem, DEFAULT_PANTRY_STAPLES, seed_default_pantry_staples
 
 __all__ = [
     "Base",
@@ -22,4 +23,7 @@ __all__ = [
     "MealPlan",
     "MealPlanItem",
     "RetailerPricing",
+    "PantryItem",
+    "DEFAULT_PANTRY_STAPLES",
+    "seed_default_pantry_staples",
 ]

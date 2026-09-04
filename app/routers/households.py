@@ -7,7 +7,7 @@ from typing import List
 import secrets
 
 from app.database.session import AsyncSessionLocal
-from app.models import Household, HouseholdDietaryRestriction, DietaryPreference
+from app.models import Household, HouseholdDietaryRestriction, DietaryPreference, seed_default_pantry_staples
 from app.schemas.household import (
     HouseholdCreate,
     HouseholdResponse,
@@ -45,6 +45,7 @@ async def create_household(payload: HouseholdCreate, db: AsyncSession = Depends(
     )
     db.add(new_h)
     await db.flush()
+    await seed_default_pantry_staples(new_h.household_id, db)
 
     if payload.dietary_preferences:
         for pref_name in payload.dietary_preferences:

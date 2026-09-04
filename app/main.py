@@ -4,7 +4,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse, HTMLResponse
-from app.routers import meal_plans, households, recipes, auth, feedback
+from app.routers import meal_plans, households, recipes, auth, feedback, pantry
 
 app = FastAPI(title="SplitBites API", version="1.0.0")
 
@@ -38,6 +38,7 @@ app.include_router(meal_plans.router)
 app.include_router(households.router)
 app.include_router(recipes.router)
 app.include_router(feedback.router)
+app.include_router(pantry.router)
 
 @app.get("/healthz")
 @app.head("/healthz")

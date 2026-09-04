@@ -9,7 +9,7 @@ from sqlalchemy import select, text
 from sqlalchemy.orm import selectinload
 
 from app.database.session import AsyncSessionLocal
-from app.models import User, Household, HouseholdMember, HouseholdInvitation, DietaryPreference, HouseholdDietaryRestriction
+from app.models import User, Household, HouseholdMember, HouseholdInvitation, DietaryPreference, HouseholdDietaryRestriction, seed_default_pantry_staples
 from app.schemas.auth import (
     RegisterRequest,
     LoginRequest,
@@ -81,6 +81,7 @@ async def get_current_user_and_household(
         db.add(household)
         await db.flush()
         db.add(HouseholdMember(household_id=household.household_id, user_id=user.user_id, role="admin"))
+        await seed_default_pantry_staples(household.household_id, db)
         await db.commit()
         h_res = await db.execute(member_stmt)
         household = h_res.scalar_one_or_none()
@@ -120,6 +121,7 @@ async def register(payload: RegisterRequest, db: AsyncSession = Depends(get_db))
     )
     db.add(new_household)
     await db.flush()
+    await seed_default_pantry_staples(new_household.household_id, db)
 
     # Link dietary preferences if provided
     if payload.dietary_preferences:
@@ -254,6 +256,7 @@ async def login(payload: LoginRequest, db: AsyncSession = Depends(get_db)):
         db.add(household)
         await db.flush()
         db.add(HouseholdMember(household_id=household.household_id, user_id=user.user_id, role="admin"))
+        await seed_default_pantry_staples(household.household_id, db)
     user.last_login = datetime.now(timezone.utc)
     await db.commit()
 

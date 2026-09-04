@@ -372,10 +372,28 @@
             <button id="btnFetchGroceries" onclick="fetchGroceries()" disabled class="disabled:opacity-40 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold py-2 px-3.5 rounded-lg transition shadow flex items-center gap-1.5">
               <span>🛒</span> Analyze Grocery Pricing
             </button>
+            <button id="btnPantryModal" onclick="openPantryModal()" class="bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold py-2 px-3 rounded-lg transition border border-slate-700 flex items-center gap-1.5 shadow" title="Manage household pantry staples">
+              <span>🧂</span> Pantry Staples
+            </button>
             <button id="btnCopyMasterList" onclick="copyFullShoppingList()" class="hidden bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold py-2 px-3 rounded-lg transition border border-slate-700 flex items-center gap-1.5 shadow">
               <span>📋</span> Copy All (Notes Apps)
             </button>
           </div>
+        </div>
+
+        <!-- Pantry Staples Suppressed Notice -->
+        <div id="pantrySuppressedNotice" class="hidden mb-5 p-3 rounded-xl bg-amber-950/30 border border-amber-800/60 text-amber-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+          <div class="flex items-start sm:items-center gap-2.5">
+            <span class="text-base">🧂</span>
+            <div>
+              <span id="pantrySuppressedCountText" class="font-semibold text-amber-300"></span>
+              <span class="text-amber-200/80"> excluded from shopping list (in stock in pantry).</span>
+              <div id="pantrySuppressedList" class="text-[11px] text-amber-400/90 font-mono mt-0.5"></div>
+            </div>
+          </div>
+          <button onclick="openPantryModal()" class="px-2.5 py-1 text-xs font-medium rounded-lg bg-amber-900/50 hover:bg-amber-800/60 text-amber-200 border border-amber-700/60 shrink-0 transition self-start sm:self-auto">
+            Adjust Staples
+          </button>
         </div>
 
         <!-- Savings & Shopping Trip Metrics -->
@@ -808,6 +826,52 @@
         </button>
         <button id="btnConfirmAssignSlot" type="button" onclick="confirmAssignSlot()" class="px-4 py-1.5 rounded-lg text-xs font-semibold bg-emerald-600 hover:bg-emerald-500 text-white transition shadow flex items-center gap-1.5">
           <span>✓</span> Assign to Day
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- PANTRY STAPLES MODAL -->
+  <div id="pantryModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+    <div class="max-w-lg w-full bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-2xl space-y-4">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-800">
+        <div class="flex items-center gap-2">
+          <span class="text-xl">🧂</span>
+          <div>
+            <h3 class="text-base font-bold text-white">Household Pantry Staples</h3>
+            <p class="text-[11px] text-slate-400">In-stock staples are excluded from your grocery shopping list.</p>
+          </div>
+        </div>
+        <button type="button" onclick="closePantryModal()" class="text-slate-400 hover:text-white transition text-lg">✕</button>
+      </div>
+
+      <!-- Add New Staple Form -->
+      <form onsubmit="handleAddPantryItem(event)" class="flex gap-2">
+        <input
+          id="newPantryItemInput"
+          type="text"
+          placeholder="Add a staple (e.g., Soy Sauce, Oregano, Honey)..."
+          class="flex-1 bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500"
+          required
+        />
+        <button
+          type="submit"
+          id="btnAddPantryItem"
+          class="px-3.5 py-2 rounded-lg text-xs font-semibold bg-emerald-600 hover:bg-emerald-500 text-white transition flex items-center gap-1 shrink-0"
+        >
+          <span>+</span> Add Staple
+        </button>
+      </form>
+
+      <!-- Pantry Staples List -->
+      <div id="pantryItemsContainer" class="max-h-72 overflow-y-auto space-y-1.5 pr-1 divide-y divide-slate-800/40">
+        <div class="text-center py-6 text-xs text-slate-500">Loading pantry staples...</div>
+      </div>
+
+      <div class="pt-2 border-t border-slate-800 flex justify-between items-center text-xs">
+        <span class="text-slate-400 text-[11px]">Toggling updates your grocery baskets live.</span>
+        <button type="button" onclick="closePantryModal()" class="px-4 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-white transition border border-slate-700">
+          Done
         </button>
       </div>
     </div>
@@ -1514,6 +1578,7 @@
 
       // Reset grocery section
       document.getElementById('savingsHero').classList.add('hidden');
+      document.getElementById('pantrySuppressedNotice').classList.add('hidden');
       document.getElementById('retailerCards').innerHTML = '';
       document.getElementById('splitBreakdownContainer').classList.add('hidden');
       document.getElementById('splitBasketGrid').innerHTML = '';
@@ -2191,6 +2256,124 @@
       }
     }
 
+    // ==========================================
+    // Household Pantry Staples Logic
+    // ==========================================
+    async function openPantryModal() {
+      document.getElementById('pantryModal').classList.remove('hidden');
+      await loadPantryItems();
+    }
+
+    function closePantryModal() {
+      document.getElementById('pantryModal').classList.add('hidden');
+    }
+
+    async function loadPantryItems() {
+      const container = document.getElementById('pantryItemsContainer');
+      if (!container) return;
+      try {
+        const res = await apiFetch('/api/pantry/');
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const items = await res.json();
+        if (!items || items.length === 0) {
+          container.innerHTML = '<div class="text-center py-6 text-xs text-slate-500">No pantry staples yet. Add one above!</div>';
+          return;
+        }
+        let html = '';
+        items.forEach(it => {
+          const isStock = it.is_in_stock;
+          html += `
+            <div class="flex items-center justify-between py-2 px-1 gap-2">
+              <div class="flex items-center gap-2 min-w-0">
+                <span class="text-sm">${isStock ? '🧂' : '⚪'}</span>
+                <span class="text-xs font-medium ${isStock ? 'text-slate-200' : 'text-slate-500 line-through'} truncate">${it.item_name}</span>
+              </div>
+              <div class="flex items-center gap-2 shrink-0">
+                <button
+                  type="button"
+                  onclick="togglePantryItem('${it.pantry_id}', ${!isStock})"
+                  class="px-2.5 py-1 rounded-full text-[10px] font-semibold transition flex items-center gap-1 ${
+                    isStock
+                      ? 'bg-emerald-950/80 border border-emerald-700/80 text-emerald-300 hover:bg-emerald-900'
+                      : 'bg-amber-950/80 border border-amber-700/80 text-amber-300 hover:bg-amber-900'
+                  }"
+                  title="Click to toggle stock status"
+                >
+                  ${isStock ? '✓ In Stock' : '🛒 Need to Buy'}
+                </button>
+                <button
+                  type="button"
+                  onclick="deletePantryItem('${it.pantry_id}')"
+                  class="text-slate-500 hover:text-rose-400 p-1 text-xs transition"
+                  title="Remove staple"
+                >
+                  ✕
+                </button>
+              </div>
+            </div>
+          `;
+        });
+        container.innerHTML = html;
+      } catch (err) {
+        container.innerHTML = `<div class="text-center py-4 text-xs text-rose-400">Failed to load pantry items: ${err.message}</div>`;
+      }
+    }
+
+    async function togglePantryItem(pantryId, newStatus) {
+      try {
+        const res = await apiFetch(`/api/pantry/${pantryId}`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ is_in_stock: newStatus })
+        });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        await loadPantryItems();
+        if (activePlanId) {
+          fetchGroceries(false);
+        }
+      } catch (err) {
+        alert("Failed to update staple: " + err.message);
+      }
+    }
+
+    async function deletePantryItem(pantryId) {
+      try {
+        const res = await apiFetch(`/api/pantry/${pantryId}`, {
+          method: 'DELETE'
+        });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        await loadPantryItems();
+        if (activePlanId) {
+          fetchGroceries(false);
+        }
+      } catch (err) {
+        alert("Failed to delete staple: " + err.message);
+      }
+    }
+
+    async function handleAddPantryItem(e) {
+      e.preventDefault();
+      const input = document.getElementById('newPantryItemInput');
+      const name = input.value.trim();
+      if (!name) return;
+      try {
+        const res = await apiFetch('/api/pantry/', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ item_name: name, is_in_stock: true })
+        });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        input.value = '';
+        await loadPantryItems();
+        if (activePlanId) {
+          fetchGroceries(false);
+        }
+        showToast(`✓ Added "${name}" to pantry staples`);
+      } catch (err) {
+        alert("Failed to add staple: " + err.message);
+      }
+    }
+
     function syncDietaryTagsUI() {
       document.querySelectorAll('.tag-btn').forEach(btn => {
         const tag = btn.innerText.trim();
@@ -2409,6 +2592,20 @@
       document.getElementById('heroSingleStore').innerText = `Best 1-stop: ${data.recommended_single_store}`;
       document.getElementById('heroSavings').innerText = `$${data.potential_split_savings.toFixed(2)}`;
 
+      const suppressed = data.pantry_suppressed_items || [];
+      const notice = document.getElementById('pantrySuppressedNotice');
+      if (notice) {
+        if (suppressed.length > 0) {
+          notice.classList.remove('hidden');
+          const countSpan = document.getElementById('pantrySuppressedCountText');
+          if (countSpan) countSpan.innerText = `${suppressed.length} pantry staple${suppressed.length === 1 ? '' : 's'}`;
+          const listSpan = document.getElementById('pantrySuppressedList');
+          if (listSpan) listSpan.innerText = `Excluded: ${suppressed.join(', ')}`;
+        } else {
+          notice.classList.add('hidden');
+        }
+      }
+
       const retailerCards = document.getElementById('retailerCards');
       retailerCards.innerHTML = '';
 
@@ -2606,6 +2803,10 @@
         });
         text += `
 `;
+      }
+
+      if (currentGroceryData.pantry_suppressed_items && currentGroceryData.pantry_suppressed_items.length > 0) {
+        text += `🧂 Excluded Pantry Staples (in stock):\n  ${currentGroceryData.pantry_suppressed_items.join(', ')}\n\n`;
       }
 
       navigator.clipboard.writeText(text).then(() => {

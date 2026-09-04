@@ -1,4 +1,5 @@
 import math
+import re
 from typing import Dict, Any, List
 from uuid import UUID
 from decimal import Decimal
@@ -6,14 +7,69 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from fastapi import HTTPException
 
-from app.models import MealPlan, MealPlanItem, Recipe, Ingredient, RetailerPricing
+from app.models import MealPlan, MealPlanItem, Recipe, Ingredient, RetailerPricing, PantryItem
 
 TARGET_RETAILERS = ["Aldi", "Walmart", "Meijer", "Amazon"]
+
+def is_pantry_staple_match(ingredient_name: str, staple_name: str) -> bool:
+    """
+    Perform case-insensitive fuzzy containment matching on ingredient names
+    against a pantry staple name.
+    Avoids false positives like matching 'Salt' to 'Salted Butter' or 'Garlic Powder' to 'Garlic Cloves'.
+    """
+    ing = ingredient_name.lower().strip()
+    staple = staple_name.lower().strip()
+
+    if not ing or not staple:
+        return False
+
+    # 1. Exact match
+    if ing == staple:
+        return True
+
+    # 2. Direct whole-word containment of staple in ingredient
+    pattern = rf"\b{re.escape(staple)}\b"
+    if re.search(pattern, ing):
+        return True
+
+    # 3. Handle specific well-known equivalents / staples
+    # Granulated sugar / white sugar / sugar
+    if staple in ["granulated sugar", "white sugar", "sugar"]:
+        if ing in ["sugar", "granulated sugar", "white sugar"] or re.search(r"\b(granulated|white)\s+sugar\b", ing):
+            return True
+
+    # Black pepper / pepper
+    if staple in ["black pepper", "ground black pepper"]:
+        if ing in ["pepper", "black pepper", "ground black pepper", "cracked black pepper"]:
+            return True
+        if re.search(r"\b(black|cracked)\s+pepper\b", ing):
+            return True
+
+    # All-purpose flour / flour
+    if staple in ["all-purpose flour", "all purpose flour", "flour"]:
+        clean_ing = ing.replace("-", " ")
+        if clean_ing in ["flour", "all purpose flour"] or re.search(r"\ball\s+purpose\s+flour\b", clean_ing):
+            return True
+
+    # 4. Normalized punctuation containment
+    clean_ing_nopunc = re.sub(r"[^\w\s]", " ", ing)
+    clean_staple_nopunc = re.sub(r"[^\w\s]", " ", staple)
+    clean_ing_str = " ".join(clean_ing_nopunc.split())
+    clean_staple_str = " ".join(clean_staple_nopunc.split())
+
+    if clean_ing_str == clean_staple_str:
+        return True
+
+    if clean_staple_str and re.search(rf"\b{re.escape(clean_staple_str)}\b", clean_ing_str):
+        return True
+
+    return False
 
 async def aggregate_groceries_for_plan(plan_id: UUID, db: AsyncSession) -> Dict[str, Any]:
     """
     Extracts required ingredients from a meal plan and maps them against pricing
-    and availability metrics across targeted retailers (Aldi, Walmart, Meijer, Amazon).
+    and availability metrics across targeted retailers (Aldi, Walmart, Meijer, Amazon),
+    filtering out in-stock pantry staples for the plan's household.
     """
     # 1. Fetch Meal Plan with Items & Recipes
     stmt = select(MealPlan).where(MealPlan.plan_id == plan_id)
@@ -27,7 +83,7 @@ async def aggregate_groceries_for_plan(plan_id: UUID, db: AsyncSession) -> Dict[
         raise HTTPException(status_code=400, detail="Meal plan has no assigned meals.")
 
     # 2. Extract and consolidate ingredients across all scheduled meals
-    aggregated_ingredients: Dict[str, Dict[str, Any]] = {}
+    raw_ingredients: Dict[str, Dict[str, Any]] = {}
 
     for item in plan.items:
         if not item.recipe:
@@ -36,7 +92,6 @@ async def aggregate_groceries_for_plan(plan_id: UUID, db: AsyncSession) -> Dict[
         recipe = item.recipe
         ingredients_list = recipe.ingredients or []
 
-        # If ingredients JSONB is empty, fallback to recipe title as baseline
         if not ingredients_list:
             continue
 
@@ -49,24 +104,44 @@ async def aggregate_groceries_for_plan(plan_id: UUID, db: AsyncSession) -> Dict[
             qty = float(ing.get("quantity", 1.0))
             key = name.lower()
 
-            if key not in aggregated_ingredients:
-                aggregated_ingredients[key] = {
+            if key not in raw_ingredients:
+                raw_ingredients[key] = {
                     "name": name,
                     "unit": unit,
                     "total_quantity": qty,
                     "used_in_recipes": [recipe.title]
                 }
             else:
-                aggregated_ingredients[key]["total_quantity"] = round(
-                    aggregated_ingredients[key]["total_quantity"] + qty, 2
+                raw_ingredients[key]["total_quantity"] = round(
+                    raw_ingredients[key]["total_quantity"] + qty, 2
                 )
-                if recipe.title not in aggregated_ingredients[key]["used_in_recipes"]:
-                    aggregated_ingredients[key]["used_in_recipes"].append(recipe.title)
+                if recipe.title not in raw_ingredients[key]["used_in_recipes"]:
+                    raw_ingredients[key]["used_in_recipes"].append(recipe.title)
 
-    if not aggregated_ingredients:
+    if not raw_ingredients:
         raise HTTPException(status_code=400, detail="No ingredients could be extracted from the scheduled meals.")
 
-    # 3. Match ingredients to database Ingredient IDs and fetch pricing
+    # 3. Query in-stock household pantry staples & filter them out
+    pantry_suppressed_items: List[str] = []
+    in_stock_staples: List[str] = []
+    if plan.household_id:
+        pantry_stmt = select(PantryItem).where(
+            PantryItem.household_id == plan.household_id,
+            PantryItem.is_in_stock == True
+        )
+        p_res = await db.execute(pantry_stmt)
+        in_stock_staples = [p.item_name for p in p_res.scalars().all()]
+
+    aggregated_ingredients: Dict[str, Dict[str, Any]] = {}
+    for key, ing_data in raw_ingredients.items():
+        if any(is_pantry_staple_match(ing_data["name"], s) for s in in_stock_staples):
+            pantry_suppressed_items.append(ing_data["name"])
+        else:
+            aggregated_ingredients[key] = ing_data
+
+    pantry_suppressed_items = sorted(list(set(pantry_suppressed_items)))
+
+    # 4. Match ingredients to database Ingredient IDs and fetch pricing
     ing_names = list(aggregated_ingredients.keys())
     db_ing_stmt = select(Ingredient)
     db_ing_res = await db.execute(db_ing_stmt)
@@ -96,7 +171,7 @@ async def aggregate_groceries_for_plan(plan_id: UUID, db: AsyncSession) -> Dict[
             if key:
                 pricing_map[p.retailer_name][key] = float(p.price)
 
-    # 4. Calculate Single-Store Basket Totals & Availability
+    # 5. Calculate Single-Store Basket Totals & Availability
     total_needed_items = len(aggregated_ingredients)
     store_baskets: Dict[str, Dict[str, Any]] = {}
 
@@ -109,7 +184,6 @@ async def aggregate_groceries_for_plan(plan_id: UUID, db: AsyncSession) -> Dict[
         for key, ing_data in aggregated_ingredients.items():
             if key in retailer_prices:
                 unit_price = retailer_prices[key]
-                # Multiply unit price by package units needed (ceil of quantity or flat unit)
                 packs_needed = max(1, math.ceil(ing_data["total_quantity"]))
                 item_cost = round(unit_price * packs_needed, 2)
                 total_cost += item_cost
@@ -123,7 +197,7 @@ async def aggregate_groceries_for_plan(plan_id: UUID, db: AsyncSession) -> Dict[
             else:
                 missing_items.append(ing_data["name"])
 
-        fulfillment = round((len(available_items) / total_needed_items) * 100, 1)
+        fulfillment = round((len(available_items) / total_needed_items) * 100, 1) if total_needed_items > 0 else 100.0
 
         store_baskets[retailer] = {
             "retailer_name": retailer,
@@ -135,7 +209,7 @@ async def aggregate_groceries_for_plan(plan_id: UUID, db: AsyncSession) -> Dict[
             "available_items_sample": available_items[:5]
         }
 
-    # 5. Compute Optimal Multi-Store Split Basket
+    # 6. Compute Optimal Multi-Store Split Basket
     split_basket_by_store: Dict[str, List[Dict[str, Any]]] = {r: [] for r in TARGET_RETAILERS}
     split_total_cost = 0.0
     unpriced_items = []
@@ -165,14 +239,13 @@ async def aggregate_groceries_for_plan(plan_id: UUID, db: AsyncSession) -> Dict[
         else:
             unpriced_items.append(ing_data["name"])
 
-    # 6. Recommendation and Savings Analysis
-    # Compare against best single store with complete or highest fulfillment
+    # 7. Recommendation and Savings Analysis
     sorted_stores = sorted(
         store_baskets.values(),
         key=lambda s: (-s["fulfillment_percentage"], s["total_estimated_cost"])
     )
-    recommended_single = sorted_stores[0]["retailer_name"]
-    single_store_cost = sorted_stores[0]["total_estimated_cost"]
+    recommended_single = sorted_stores[0]["retailer_name"] if sorted_stores else TARGET_RETAILERS[0]
+    single_store_cost = sorted_stores[0]["total_estimated_cost"] if sorted_stores else 0.0
     split_total_cost = round(split_total_cost, 2)
     potential_savings = max(0.0, round(single_store_cost - split_total_cost, 2))
 
@@ -189,5 +262,6 @@ async def aggregate_groceries_for_plan(plan_id: UUID, db: AsyncSession) -> Dict[
         "optimal_split_basket": {
             store: items for store, items in split_basket_by_store.items() if items
         },
-        "unpriced_items": unpriced_items
+        "unpriced_items": unpriced_items,
+        "pantry_suppressed_items": pantry_suppressed_items,
     }
