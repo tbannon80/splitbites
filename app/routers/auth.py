@@ -29,6 +29,10 @@ from app.services.auth import (
     generate_random_token,
 )
 from app.services.email import send_spouse_invitation, send_password_reset, send_welcome_user_instructions
+from app.services.telegram import send_telegram_notification
+import logging
+
+logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/api/auth", tags=["auth"])
 
@@ -204,6 +208,25 @@ async def register(payload: RegisterRequest, db: AsyncSession = Depends(get_db))
         household_name=new_household.household_name,
         is_originator=True
     )
+
+    # Dispatch Homelab Telegram notification
+    try:
+        diet_str = ", ".join(payload.dietary_preferences) if payload.dietary_preferences else "None specified"
+        partner_str = f"\n💍 *Invited Partner:* {payload.spouse_name.strip() if payload.spouse_name else 'Partner'} (`{payload.spouse_email.strip()}`)" if payload.spouse_email and payload.spouse_email.strip() else ""
+        tg_text = (
+            f"━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
+            f"🎉 *New SplitBites Registration*\n"
+            f"━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
+            f"👤 *User:* {new_user.full_name}\n"
+            f"📧 *Email:* `{new_user.email}`\n"
+            f"🏠 *Household:* {new_household.household_name}\n"
+            f"🥗 *Dietary:* {diet_str}"
+            f"{partner_str}\n"
+            f"━━━━━━━━━━━━━━━━━━━━━━━━━━"
+        )
+        send_telegram_notification(tg_text)
+    except Exception as tg_err:
+        logger.error(f"Failed to dispatch Telegram signup notification: {tg_err}")
 
     # Fetch fresh household with preferences
     h_stmt = select(Household).options(selectinload(Household.dietary_preferences)).where(Household.household_id == new_household.household_id)
@@ -390,6 +413,21 @@ async def invite_family_member(
         invite_token=invite_token
     )
 
+    # Dispatch Homelab Telegram notification
+    try:
+        tg_text = (
+            f"━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
+            f"💌 *SplitBites Invitation Sent*\n"
+            f"━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
+            f"👤 *Invited by:* {user.full_name} (`{user.email}`)\n"
+            f"🏠 *Household:* {household.household_name}\n"
+            f"✉️ *Recipient:* {payload.name.strip() if payload.name else 'Family Member'} (`{spouse_clean}`)\n"
+            f"━━━━━━━━━━━━━━━━━━━━━━━━━━"
+        )
+        send_telegram_notification(tg_text)
+    except Exception as tg_err:
+        logger.error(f"Failed to dispatch Telegram invite notification: {tg_err}")
+
     return {
         "status": "success",
         "message": f"Invitation sent to {spouse_clean}",
@@ -470,6 +508,22 @@ async def register_invited_member(payload: RegisterInvitedRequest, db: AsyncSess
         household_name=full_household.household_name,
         is_originator=False
     )
+
+    # Dispatch Homelab Telegram notification
+    try:
+        tg_text = (
+            f"━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
+            f"👋 *SplitBites Invitation Accepted*\n"
+            f"━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
+            f"👤 *User:* {user.full_name}\n"
+            f"📧 *Email:* `{user.email}`\n"
+            f"🏠 *Household:* {full_household.household_name}\n"
+            f"🔑 *Status:* Joined Household as Member\n"
+            f"━━━━━━━━━━━━━━━━━━━━━━━━━━"
+        )
+        send_telegram_notification(tg_text)
+    except Exception as tg_err:
+        logger.error(f"Failed to dispatch Telegram member registration notification: {tg_err}")
 
     token = create_access_token({"sub": str(user.user_id), "email": user.email, "hid": str(full_household.household_id)})
 
