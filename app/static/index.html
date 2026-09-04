@@ -38,6 +38,43 @@
     html.is-authenticated #mainDashboard {
       display: block !important;
     }
+
+    /* Desktop Sidebar & Preferences Layout */
+    #tabMealPlan {
+      align-items: start;
+    }
+    .preferences-card,
+    #tabMealPlan > section:first-of-type {
+      align-self: start;
+      height: fit-content;
+    }
+
+    /* Dietary Restrictions Lock Styles */
+    #dietaryTags.dietary-locked .tag-btn {
+      cursor: default;
+      opacity: 0.85;
+      pointer-events: auto;
+    }
+    #dietaryTags.dietary-locked .tag-btn:hover {
+      opacity: 0.85;
+      filter: brightness(0.95);
+      border-color: #334155;
+    }
+    #dietaryTags:not(.dietary-locked) .tag-btn {
+      cursor: pointer;
+    }
+    #dietaryTags:not(.dietary-locked) .tag-btn:hover {
+      border-color: #10b981;
+      color: #e2e8f0;
+    }
+    .tag-lock-btn {
+      cursor: pointer;
+      user-select: none;
+      transition: all 0.2s ease;
+    }
+    .tag-lock-btn:hover {
+      transform: scale(1.08);
+    }
   </style>
   <script>
     // Fast synchronous authentication check before DOM construction to avoid login flash on refresh
@@ -288,10 +325,10 @@
     </div>
 
     <!-- TAB 1: MEAL PLANNER & LIVE GROCERIES -->
-    <div id="tabMealPlan" class="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8 mt-6">
+    <div id="tabMealPlan" class="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8 mt-6 items-start" style="align-items: start;">
       
       <!-- Step 1: Household Dietary Preferences -->
-      <section class="bg-slate-900/80 border border-slate-800 rounded-xl p-5 sm:p-6 shadow-xl flex flex-col justify-between">
+      <section class="preferences-card bg-slate-900/80 border border-slate-800 rounded-xl p-5 sm:p-6 shadow-xl flex flex-col self-start h-fit" style="align-self: start; height: fit-content;">
         <div>
           <div class="flex items-center justify-between mb-3">
             <h2 class="text-base font-bold text-white flex items-center gap-2">
@@ -305,7 +342,7 @@
           <input id="householdName" type="text" readonly class="w-full bg-slate-950/60 border border-slate-800 rounded-lg px-3 py-2 text-sm text-slate-300 font-semibold mb-4 focus:outline-none">
 
           <label class="block text-xs font-semibold text-slate-300 mb-2">Dietary Restrictions</label>
-          <div id="dietaryTags" class="flex flex-wrap gap-1.5 mb-4">
+          <div id="dietaryTags" class="flex flex-wrap items-center gap-1.5 mb-4">
             <button type="button" onclick="toggleTag(this, 'gluten-free')" class="tag-btn text-xs px-2.5 py-1 rounded-full border border-slate-700 bg-slate-950 text-slate-400 transition-colors">gluten-free</button>
             <button type="button" onclick="toggleTag(this, 'dairy-free')" class="tag-btn text-xs px-2.5 py-1 rounded-full border border-slate-700 bg-slate-950 text-slate-400 transition-colors">dairy-free</button>
             <button type="button" onclick="toggleTag(this, 'high-protein')" class="tag-btn text-xs px-2.5 py-1 rounded-full border border-slate-700 bg-slate-950 text-slate-400 transition-colors">high-protein</button>
@@ -313,6 +350,7 @@
             <button type="button" onclick="toggleTag(this, 'vegan')" class="tag-btn text-xs px-2.5 py-1 rounded-full border border-slate-700 bg-slate-950 text-slate-400 transition-colors">vegan</button>
             <button type="button" onclick="toggleTag(this, 'keto')" class="tag-btn text-xs px-2.5 py-1 rounded-full border border-slate-700 bg-slate-950 text-slate-400 transition-colors">keto</button>
             <button type="button" onclick="toggleTag(this, 'pescatarian')" class="tag-btn text-xs px-2.5 py-1 rounded-full border border-slate-700 bg-slate-950 text-slate-400 transition-colors">pescatarian</button>
+            <button type="button" id="dietaryLockBtn" onclick="toggleDietaryLock()" class="tag-lock-btn text-xs px-2.5 py-1 rounded-full border border-slate-700 bg-slate-950 text-slate-300 hover:text-white transition-all inline-flex items-center justify-center cursor-pointer shadow-sm" title="Unlock to edit dietary tags">🔒</button>
           </div>
         </div>
 
@@ -324,13 +362,13 @@
         </div>
       </section>
 
-      <!-- Step 2: Monday - Friday Schedule -->
+      <!-- Step 2: Weekly Meal Schedule -->
       <section class="lg:col-span-2 bg-slate-900/80 border border-slate-800 rounded-xl p-5 sm:p-6 shadow-xl flex flex-col justify-between">
         <div>
           <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-slate-800 mb-4 gap-3">
             <h2 class="text-base font-bold text-white flex items-center gap-2">
               <span class="bg-emerald-500/20 text-emerald-400 w-6 h-6 rounded-full flex items-center justify-center text-xs">2</span>
-              Monday - Friday Schedule
+              <span id="scheduleHeaderTitle">Weekly Meal Schedule</span>
             </h2>
             <div class="flex items-center gap-2 flex-wrap">
               <button id="btnGenerate" onclick="generatePlan()" class="bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold py-1.5 px-3 rounded-md transition flex items-center gap-1.5 shadow">
@@ -1310,6 +1348,9 @@
     let checkedItemsState = {};
     let hideCompleted = false;
     let selectedTags = new Set(["gluten-free", "dairy-free"]);
+    let isDietaryLocked = localStorage.getItem('splitbites_dietary_locked') !== null
+      ? localStorage.getItem('splitbites_dietary_locked') === 'true'
+      : true;
     let regTags = new Set(["gluten-free", "dairy-free"]);
     let recipeUploadTags = new Set(["gluten-free", "dairy-free"]);
 
@@ -1372,6 +1413,7 @@
     };
 
     window.addEventListener('DOMContentLoaded', async () => {
+      updateDietaryLockUI();
       const urlParams = new URLSearchParams(window.location.search);
       const inviteToken = urlParams.get('invite');
       const resetToken = urlParams.get('reset');
@@ -2937,9 +2979,58 @@
           btn.classList.remove('bg-emerald-900/60', 'text-emerald-300', 'border-emerald-600');
         }
       });
+      updateDietaryLockUI();
+    }
+
+    function toggleDietaryLock() {
+      isDietaryLocked = !isDietaryLocked;
+      localStorage.setItem('splitbites_dietary_locked', String(isDietaryLocked));
+      updateDietaryLockUI();
+      showToast(isDietaryLocked ? "🔒 Dietary tags locked" : "🔓 Dietary tags unlocked for editing");
+    }
+
+    function updateDietaryLockUI() {
+      const lockBtn = document.getElementById('dietaryLockBtn');
+      const dietaryContainer = document.getElementById('dietaryTags');
+      const tagBtns = document.querySelectorAll('#dietaryTags .tag-btn');
+
+      if (lockBtn) {
+        lockBtn.innerHTML = isDietaryLocked ? '🔒' : '🔓';
+        lockBtn.title = isDietaryLocked ? 'Unlock to edit dietary tags' : 'Lock dietary tags';
+        lockBtn.setAttribute('aria-label', isDietaryLocked ? 'Unlock dietary tags' : 'Lock dietary tags');
+        if (isDietaryLocked) {
+          lockBtn.className = "tag-lock-btn text-xs px-2.5 py-1 rounded-full border border-slate-700 bg-slate-950 text-slate-300 hover:text-white transition-all inline-flex items-center justify-center cursor-pointer shadow-sm";
+        } else {
+          lockBtn.className = "tag-lock-btn text-xs px-2.5 py-1 rounded-full border border-emerald-500 bg-emerald-950/60 text-emerald-300 hover:bg-emerald-900/70 transition-all inline-flex items-center justify-center cursor-pointer shadow-sm";
+        }
+      }
+
+      if (dietaryContainer) {
+        if (isDietaryLocked) {
+          dietaryContainer.classList.add('dietary-locked');
+        } else {
+          dietaryContainer.classList.remove('dietary-locked');
+        }
+      }
+
+      tagBtns.forEach(btn => {
+        if (isDietaryLocked) {
+          btn.title = "Unlock to edit";
+          btn.classList.add('cursor-default');
+          btn.classList.remove('cursor-pointer');
+        } else {
+          btn.title = "Click to toggle restriction";
+          btn.classList.add('cursor-pointer');
+          btn.classList.remove('cursor-default');
+        }
+      });
     }
 
     function toggleTag(el, tag) {
+      if (isDietaryLocked) {
+        showToast("🔒 Unlock to edit");
+        return;
+      }
       if (selectedTags.has(tag)) {
         selectedTags.delete(tag);
         el.classList.remove('bg-emerald-900/60', 'text-emerald-300', 'border-emerald-600');
@@ -2988,7 +3079,7 @@
         });
         const plan = await res.json();
         renderPlan(plan);
-        showToast("✓ 5-Day Plan Generated!");
+        showToast("✓ Meal Plan Generated!");
       } catch (err) {
         container.innerHTML = `<div class="text-rose-400 py-8 text-center">Failed to generate plan: ${err.message}</div>`;
       }
@@ -3029,6 +3120,16 @@
 
       const allDays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
       const days = allDays.filter(d => Boolean(plan.meals[d]));
+      const scheduleHeader = document.getElementById('scheduleHeaderTitle');
+      if (scheduleHeader) {
+        if (days.length === 7) {
+          scheduleHeader.innerText = "Weekly Meal Schedule";
+        } else if (days.length > 0 && days.length < 7) {
+          scheduleHeader.innerText = `${days[0]} – ${days[days.length - 1]} Schedule`;
+        } else {
+          scheduleHeader.innerText = "Weekly Meal Schedule";
+        }
+      }
       const container = document.getElementById('planContainer');
       container.innerHTML = '';
 
