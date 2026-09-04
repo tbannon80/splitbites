@@ -25,6 +25,7 @@ class HouseholdScheduleUpdateRequest(BaseModel):
 
 class HouseholdResponse(HouseholdBase):
     household_id: UUID
+    calendar_feed_token: Optional[str] = None
     dietary_preferences: List[str] = []
     created_at: datetime
 

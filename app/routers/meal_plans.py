@@ -6,7 +6,7 @@ from uuid import UUID
 
 logger = logging.getLogger(__name__)
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Response
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, text
 from sqlalchemy.orm import selectinload
@@ -27,6 +27,8 @@ from app.schemas.meal_plan import (
 )
 from app.services.embedding import get_embedding
 from app.services.grocery_aggregation import aggregate_groceries_for_plan
+from app.services.calendar import generate_ics_calendar
+from app.routers.auth import get_current_user_and_household
 
 router = APIRouter(prefix="/api/meal-plans", tags=["meal-plans"])
 
@@ -292,6 +294,73 @@ async def get_latest_household_meal_plan(household_id: UUID, db: AsyncSession = 
     if not plan:
         raise HTTPException(status_code=404, detail="No meal plan found for this household.")
     return format_plan_response(plan)
+
+@router.get("/feed/{feed_token}/calendar.ics")
+async def get_calendar_feed(feed_token: str, db: AsyncSession = Depends(get_db)):
+    """
+    Public RFC 5545 iCalendar feed endpoint for smart displays and calendar apps (Apple, Google, Outlook).
+    Validates household calendar_feed_token and returns live recurring dinner schedule.
+    """
+    stmt = select(Household).where(Household.calendar_feed_token == feed_token)
+    res = await db.execute(stmt)
+    household = res.scalar_one_or_none()
+    if not household:
+        raise HTTPException(status_code=404, detail="Invalid calendar feed token or feed not found.")
+
+    plan_stmt = (
+        select(MealPlan)
+        .options(selectinload(MealPlan.items).selectinload(MealPlanItem.recipe))
+        .where(MealPlan.household_id == household.household_id)
+        .order_by(MealPlan.created_at.desc())
+        .limit(1)
+    )
+    plan_res = await db.execute(plan_stmt)
+    plan = plan_res.scalar_one_or_none()
+    if not plan:
+        raise HTTPException(status_code=404, detail="No active meal plan found for this household.")
+
+    ics_data = generate_ics_calendar(plan, household_name=household.household_name)
+    return Response(
+        content=ics_data,
+        media_type="text/calendar; charset=utf-8",
+        headers={
+            "Content-Disposition": 'inline; filename="meal-plan.ics"',
+            "Cache-Control": "no-cache, no-store, must-revalidate",
+            "Pragma": "no-cache",
+            "Expires": "0",
+        }
+    )
+
+@router.get("/{plan_id}/export.ics")
+async def export_meal_plan_ics(
+    plan_id: UUID,
+    current_auth = Depends(get_current_user_and_household),
+    db: AsyncSession = Depends(get_db)
+):
+    """
+    JWT-authenticated endpoint for direct .ics calendar file download of a specific meal plan.
+    """
+    user, household = current_auth
+    stmt = (
+        select(MealPlan)
+        .options(selectinload(MealPlan.items).selectinload(MealPlanItem.recipe))
+        .where(MealPlan.plan_id == plan_id)
+    )
+    res = await db.execute(stmt)
+    plan = res.scalar_one_or_none()
+    if not plan:
+        raise HTTPException(status_code=404, detail=f"Meal plan {plan_id} not found.")
+
+    household_name = household.household_name if household else None
+    ics_data = generate_ics_calendar(plan, household_name=household_name)
+    return Response(
+        content=ics_data,
+        media_type="text/calendar; charset=utf-8",
+        headers={
+            "Content-Disposition": f'attachment; filename="splitbites-meal-plan-{plan_id}.ics"',
+            "Cache-Control": "no-cache",
+        }
+    )
 
 @router.get("/{plan_id}", response_model=WeeklyMealPlanResponse)
 async def get_meal_plan(plan_id: UUID, db: AsyncSession = Depends(get_db)):

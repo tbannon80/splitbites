@@ -4,6 +4,7 @@ from sqlalchemy import select, delete
 from sqlalchemy.orm import selectinload
 from uuid import UUID
 from typing import List
+import secrets
 
 from app.database.session import AsyncSessionLocal
 from app.models import Household, HouseholdDietaryRestriction, DietaryPreference
@@ -26,6 +27,7 @@ def format_household(h: Household) -> HouseholdResponse:
     return HouseholdResponse(
         household_id=h.household_id,
         household_name=h.household_name,
+        calendar_feed_token=h.calendar_feed_token,
         dietary_preferences=prefs,
         busy_days=h.busy_days if h.busy_days is not None else ["Tuesday", "Thursday"],
         busy_max_prep_minutes=h.busy_max_prep_minutes if h.busy_max_prep_minutes is not None else 20,
@@ -37,6 +39,7 @@ async def create_household(payload: HouseholdCreate, db: AsyncSession = Depends(
     """Create a household and associate dietary restrictions."""
     new_h = Household(
         household_name=payload.household_name,
+        calendar_feed_token=secrets.token_urlsafe(32),
         busy_days=payload.busy_days if payload.busy_days is not None else ["Tuesday", "Thursday"],
         busy_max_prep_minutes=payload.busy_max_prep_minutes if payload.busy_max_prep_minutes is not None else 20
     )
@@ -130,3 +133,17 @@ async def update_household_schedule(
     res = await db.execute(stmt)
     full_h = res.scalar_one()
     return format_household(full_h)
+
+@router.post("/{household_id}/regenerate-calendar-token", response_model=HouseholdResponse)
+async def regenerate_calendar_token(household_id: UUID, db: AsyncSession = Depends(get_db)):
+    """Regenerates the calendar subscription feed token for a household, invalidating previous feed links."""
+    stmt = select(Household).options(selectinload(Household.dietary_preferences)).where(Household.household_id == household_id)
+    res = await db.execute(stmt)
+    h = res.scalar_one_or_none()
+    if not h:
+        raise HTTPException(status_code=404, detail="Household not found")
+
+    h.calendar_feed_token = secrets.token_urlsafe(32)
+    await db.commit()
+    await db.refresh(h)
+    return format_household(h)

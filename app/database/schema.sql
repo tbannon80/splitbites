@@ -18,11 +18,13 @@ CREATE TABLE IF NOT EXISTS households (
     household_name VARCHAR(100) NOT NULL,
     busy_days JSONB DEFAULT '[]'::jsonb,
     busy_max_prep_minutes INT DEFAULT 20,
+    calendar_feed_token VARCHAR(64) UNIQUE,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
 ALTER TABLE households ADD COLUMN IF NOT EXISTS busy_days JSONB DEFAULT '[]'::jsonb;
 ALTER TABLE households ADD COLUMN IF NOT EXISTS busy_max_prep_minutes INT DEFAULT 20;
+ALTER TABLE households ADD COLUMN IF NOT EXISTS calendar_feed_token VARCHAR(64) UNIQUE;
 
 CREATE TABLE IF NOT EXISTS household_members (
     household_id UUID REFERENCES households(household_id) ON DELETE CASCADE,

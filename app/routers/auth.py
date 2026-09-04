@@ -1,8 +1,9 @@
 from datetime import datetime, timedelta, timezone
 from typing import List, Optional, Dict, Any
 from uuid import UUID
+import secrets
 
-from fastapi import APIRouter, Depends, HTTPException, status, Header
+from fastapi import APIRouter, Depends, HTTPException, status, Header, Query
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, text
 from sqlalchemy.orm import selectinload
@@ -38,18 +39,21 @@ async def get_db():
 async def get_current_user_and_household(
     authorization: Optional[str] = Header(None),
     x_auth_token: Optional[str] = Header(None),
+    token: Optional[str] = Query(None),
     db: AsyncSession = Depends(get_db)
 ):
-    token = None
+    tok = None
     if authorization and authorization.startswith("Bearer "):
-        token = authorization.split(" ")[1]
+        tok = authorization.split(" ")[1]
     elif x_auth_token:
-        token = x_auth_token
+        tok = x_auth_token
+    elif token:
+        tok = token
 
-    if not token:
+    if not tok:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Authentication token required.")
 
-    payload = decode_access_token(token)
+    payload = decode_access_token(tok)
     if not payload or "sub" not in payload:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid or expired session token.")
 
@@ -73,7 +77,7 @@ async def get_current_user_and_household(
 
     if not household:
         # Fallback create a household if missing
-        household = Household(household_name=f"{user.full_name or 'My'} Family")
+        household = Household(household_name=f"{user.full_name or 'My'} Family", calendar_feed_token=secrets.token_urlsafe(32))
         db.add(household)
         await db.flush()
         db.add(HouseholdMember(household_id=household.household_id, user_id=user.user_id, role="admin"))
@@ -110,6 +114,7 @@ async def register(payload: RegisterRequest, db: AsyncSession = Depends(get_db))
     # 1. Create Household
     new_household = Household(
         household_name=payload.household_name.strip(),
+        calendar_feed_token=secrets.token_urlsafe(32),
         busy_days=payload.busy_days if payload.busy_days is not None else ["Tuesday", "Thursday"],
         busy_max_prep_minutes=payload.busy_max_prep_minutes if payload.busy_max_prep_minutes is not None else 20
     )
@@ -216,6 +221,7 @@ async def register(payload: RegisterRequest, db: AsyncSession = Depends(get_db))
         "household": {
             "household_id": str(full_household.household_id),
             "household_name": full_household.household_name,
+            "calendar_feed_token": full_household.calendar_feed_token,
             "dietary_preferences": [p.preference_name for p in full_household.dietary_preferences],
             "busy_days": full_household.busy_days if full_household.busy_days is not None else ["Tuesday", "Thursday"],
             "busy_max_prep_minutes": full_household.busy_max_prep_minutes if full_household.busy_max_prep_minutes is not None else 20
@@ -244,7 +250,7 @@ async def login(payload: LoginRequest, db: AsyncSession = Depends(get_db)):
 
     if not household:
         # Fallback create a household if missing
-        household = Household(household_name=f"{user.full_name or 'My'} Family")
+        household = Household(household_name=f"{user.full_name or 'My'} Family", calendar_feed_token=secrets.token_urlsafe(32))
         db.add(household)
         await db.flush()
         db.add(HouseholdMember(household_id=household.household_id, user_id=user.user_id, role="admin"))
@@ -264,6 +270,7 @@ async def login(payload: LoginRequest, db: AsyncSession = Depends(get_db)):
         "household": {
             "household_id": str(household.household_id),
             "household_name": household.household_name,
+            "calendar_feed_token": household.calendar_feed_token,
             "dietary_preferences": [p.preference_name for p in household.dietary_preferences] if household.dietary_preferences else [],
             "busy_days": household.busy_days if household.busy_days is not None else ["Tuesday", "Thursday"],
             "busy_max_prep_minutes": household.busy_max_prep_minutes if household.busy_max_prep_minutes is not None else 20
@@ -285,6 +292,7 @@ async def get_me(current_auth = Depends(get_current_user_and_household)):
         "household": {
             "household_id": str(household.household_id),
             "household_name": household.household_name,
+            "calendar_feed_token": household.calendar_feed_token,
             "dietary_preferences": [p.preference_name for p in household.dietary_preferences] if household.dietary_preferences else [],
             "busy_days": household.busy_days if household.busy_days is not None else ["Tuesday", "Thursday"],
             "busy_max_prep_minutes": household.busy_max_prep_minutes if household.busy_max_prep_minutes is not None else 20
@@ -473,6 +481,7 @@ async def register_invited_member(payload: RegisterInvitedRequest, db: AsyncSess
         "household": {
             "household_id": str(full_household.household_id),
             "household_name": full_household.household_name,
+            "calendar_feed_token": full_household.calendar_feed_token,
             "dietary_preferences": [p.preference_name for p in full_household.dietary_preferences]
         }
     }

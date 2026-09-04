@@ -43,6 +43,7 @@ class UserProfileResponse(BaseModel):
 class HouseholdProfileResponse(BaseModel):
     household_id: str
     household_name: str
+    calendar_feed_token: Optional[str] = None
     dietary_preferences: List[str]
     busy_days: List[str] = ["Tuesday", "Thursday"]
     busy_max_prep_minutes: int = 20

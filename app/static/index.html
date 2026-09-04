@@ -329,9 +329,12 @@
               <span class="bg-emerald-500/20 text-emerald-400 w-6 h-6 rounded-full flex items-center justify-center text-xs">2</span>
               Monday - Friday Schedule
             </h2>
-            <div class="flex items-center gap-2">
+            <div class="flex items-center gap-2 flex-wrap">
               <button id="btnGenerate" onclick="generatePlan()" class="bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold py-1.5 px-3 rounded-md transition flex items-center gap-1.5 shadow">
                 <span>⚡</span> Generate Plan
+              </button>
+              <button id="btnSyncCalendar" onclick="openCalendarModal()" class="bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold py-1.5 px-3 rounded-md transition flex items-center gap-1.5 shadow" title="Sync live meals to Calendar or Smart Display">
+                <span>📅</span> Sync to Calendar
               </button>
               <button id="btnShuffle" onclick="shufflePlan()" disabled class="disabled:opacity-40 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-medium py-1.5 px-3 rounded-md transition">
                 🔀 Shuffle
@@ -689,6 +692,74 @@
           <button id="btnSendInviteModal" type="submit" class="px-4 py-1.5 rounded-lg text-xs font-semibold bg-emerald-600 hover:bg-emerald-500 text-white transition shadow">Send Invitation Email</button>
         </div>
       </form>
+    </div>
+  </div>
+
+  <!-- CALENDAR SYNC MODAL -->
+  <div id="calendarModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+    <div class="max-w-lg w-full bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-2xl space-y-4">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-800">
+        <div class="flex items-center gap-2">
+          <span class="text-xl">📅</span>
+          <h3 class="text-base font-bold text-white">Sync Meal Plan to Calendar</h3>
+        </div>
+        <button type="button" onclick="closeCalendarModal()" class="text-slate-400 hover:text-white transition text-lg">✕</button>
+      </div>
+
+      <p class="text-xs text-slate-400 leading-relaxed">
+        Subscribe to live dinner updates on your phone, Apple Calendar, Google Calendar, Outlook, or smart home display (e.g. Skylight, Dakboard). Dinners automatically sync whenever your plan changes.
+      </p>
+
+      <div class="space-y-3">
+        <!-- 1-Click Apple/Outlook webcal feed -->
+        <div class="bg-slate-950 border border-slate-800 rounded-xl p-3.5 space-y-1.5">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-semibold text-indigo-400 flex items-center gap-1.5">
+              <span>🍏</span> Apple Calendar / Outlook (webcal://)
+            </span>
+            <span class="text-[10px] text-slate-500 font-mono">1-Click Live Feed</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <input id="calendarWebcalUrl" type="text" readonly class="flex-1 bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-slate-200 font-mono select-all focus:outline-none focus:border-indigo-500" value="">
+            <button id="btnCopyWebcal" type="button" onclick="copyCalendarUrl('calendarWebcalUrl', 'btnCopyWebcal')" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-indigo-600 hover:bg-indigo-500 text-white transition shadow flex-shrink-0">
+              Copy
+            </button>
+          </div>
+          <p class="text-[10px] text-slate-500">Paste into Apple Calendar (File &gt; New Calendar Subscription) or open in browser.</p>
+        </div>
+
+        <!-- Google Calendar / Smart Displays HTTPS feed -->
+        <div class="bg-slate-950 border border-slate-800 rounded-xl p-3.5 space-y-1.5">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-semibold text-emerald-400 flex items-center gap-1.5">
+              <span>🌐</span> Google Calendar &amp; Smart Displays (https://)
+            </span>
+            <span class="text-[10px] text-slate-500 font-mono">Skylight / Dakboard</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <input id="calendarHttpsUrl" type="text" readonly class="flex-1 bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-slate-200 font-mono select-all focus:outline-none focus:border-emerald-500" value="">
+            <button id="btnCopyHttps" type="button" onclick="copyCalendarUrl('calendarHttpsUrl', 'btnCopyHttps')" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-emerald-600 hover:bg-emerald-500 text-white transition shadow flex-shrink-0">
+              Copy
+            </button>
+          </div>
+          <p class="text-[10px] text-slate-500">In Google Calendar: Other calendars (+) &gt; From URL. In Skylight / Dakboard: Add iCal feed.</p>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="pt-2 border-t border-slate-800 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2">
+        <button id="btnRegenerateToken" type="button" onclick="regenerateCalendarToken()" class="px-3 py-1.5 rounded-lg text-xs font-medium text-rose-400 hover:text-rose-300 hover:bg-rose-950/40 border border-rose-900/50 transition flex items-center justify-center gap-1">
+          <span>🔄</span> Regenerate Token
+        </button>
+        <div class="flex items-center gap-2 justify-end">
+          <button id="btnDownloadIcs" type="button" onclick="downloadPlanIcs()" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-white border border-slate-700 transition flex items-center gap-1.5 shadow">
+            <span>⬇️</span> Download .ics
+          </button>
+          <button type="button" onclick="closeCalendarModal()" class="px-3 py-1.5 rounded-lg text-xs font-medium text-slate-400 hover:text-white border border-slate-800">
+            Close
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -1319,6 +1390,7 @@
       loadFamilyRoster();
       switchDashboardTab('mealplan');
       loadActiveMealPlan();
+      updateCalendarModalUI();
     }
 
     async function loadActiveMealPlan() {
@@ -1787,6 +1859,132 @@
       }
     }
 
+    // ==========================================
+    // Calendar Subscription & Smart Display Sync
+    // ==========================================
+    function getCalendarFeedUrls() {
+      const token = currentHousehold && currentHousehold.calendar_feed_token;
+      if (!token) return { httpUrl: '', webcalUrl: '' };
+      const origin = window.location.origin;
+      const httpUrl = `${origin}/api/meal-plans/feed/${token}/calendar.ics`;
+      const webcalUrl = httpUrl.replace(/^https?:\/\//, 'webcal://');
+      return { httpUrl, webcalUrl };
+    }
+
+    function updateCalendarModalUI() {
+      const { httpUrl, webcalUrl } = getCalendarFeedUrls();
+      const webcalInput = document.getElementById('calendarWebcalUrl');
+      const httpsInput = document.getElementById('calendarHttpsUrl');
+      const downloadBtn = document.getElementById('btnDownloadIcs');
+
+      if (webcalInput) webcalInput.value = webcalUrl || 'No calendar token available';
+      if (httpsInput) httpsInput.value = httpUrl || 'No calendar token available';
+
+      if (downloadBtn) {
+        if (activePlanId) {
+          downloadBtn.disabled = false;
+          downloadBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+        } else {
+          downloadBtn.disabled = true;
+          downloadBtn.classList.add('opacity-50', 'cursor-not-allowed');
+        }
+      }
+    }
+
+    function openCalendarModal() {
+      updateCalendarModalUI();
+      document.getElementById('calendarModal').classList.remove('hidden');
+    }
+
+    function closeCalendarModal() {
+      document.getElementById('calendarModal').classList.add('hidden');
+    }
+
+    async function copyCalendarUrl(inputId, btnId) {
+      const input = document.getElementById(inputId);
+      if (!input || !input.value) return;
+      try {
+        await navigator.clipboard.writeText(input.value);
+        const btn = document.getElementById(btnId);
+        if (btn) {
+          const origText = btn.innerHTML;
+          btn.innerHTML = '✓ Copied!';
+          btn.classList.add('bg-emerald-600', 'text-white');
+          setTimeout(() => {
+            btn.innerHTML = origText;
+            btn.classList.remove('bg-emerald-600', 'text-white');
+          }, 2000);
+        }
+        showToast('✓ Feed URL copied to clipboard!');
+      } catch (err) {
+        input.select();
+        document.execCommand('copy');
+        showToast('✓ Feed URL copied to clipboard!');
+      }
+    }
+
+    async function regenerateCalendarToken() {
+      if (!activeHouseholdId) {
+        alert("No active household found.");
+        return;
+      }
+      if (!confirm("Are you sure you want to regenerate your calendar token? Any existing smart displays or synced calendar subscriptions will stop updating until you update them with the new link.")) {
+        return;
+      }
+      const btn = document.getElementById('btnRegenerateToken');
+      if (btn) btn.disabled = true;
+      try {
+        const res = await apiFetch(`/api/households/${activeHouseholdId}/regenerate-calendar-token`, {
+          method: 'POST'
+        });
+        if (!res.ok) {
+          const errData = await res.json().catch(() => ({}));
+          throw new Error(errData.detail || "Failed to regenerate calendar token.");
+        }
+        const updatedH = await res.json();
+        if (currentHousehold) {
+          currentHousehold.calendar_feed_token = updatedH.calendar_feed_token;
+        }
+        updateCalendarModalUI();
+        showToast("✓ Calendar token regenerated! New feed link active.");
+      } catch (err) {
+        alert(err.message);
+      } finally {
+        if (btn) btn.disabled = false;
+      }
+    }
+
+    async function downloadPlanIcs() {
+      if (!activePlanId) {
+        alert("Please generate or load an active meal plan first before downloading.");
+        return;
+      }
+      const btn = document.getElementById('btnDownloadIcs');
+      if (btn) btn.disabled = true;
+      try {
+        const res = await apiFetch(`/api/meal-plans/${activePlanId}/export.ics`);
+        if (!res.ok) {
+          const err = await res.json().catch(() => ({}));
+          throw new Error(err.detail || "Failed to export calendar file.");
+        }
+        const blob = await res.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.style.display = 'none';
+        a.href = url;
+        a.download = `splitbites-meal-plan-${activePlanId}.ics`;
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        a.remove();
+        showToast("✓ .ics calendar file downloaded!");
+      } catch (err) {
+        alert(err.message);
+      } finally {
+        if (btn) btn.disabled = false;
+      }
+    }
+
     function syncDietaryTagsUI() {
       document.querySelectorAll('.tag-btn').forEach(btn => {
         const tag = btn.innerText.trim();
@@ -1865,6 +2063,7 @@
       document.getElementById('btnFetchGroceries').disabled = false;
 
       updateLockUI(isPlanLocked);
+      updateCalendarModalUI();
 
       document.getElementById('planMeta').innerText = `Plan: ${plan.plan_id.slice(0, 8)}... | Week: ${plan.week_start_date}`;
 
