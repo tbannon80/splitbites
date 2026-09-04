@@ -23,6 +23,7 @@ class Recipe(Base):
     instructions = Column(JSONB, nullable=False)
     ingredients = Column(JSONB, nullable=True)
     default_servings = Column(Integer, default=4, nullable=False, server_default="4")
+    nutrition_per_serving = Column(JSONB, default=dict, nullable=False, server_default="'{}'::jsonb")
     is_public = Column(Boolean, default=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     embedding = Column(Vector(1536), nullable=True)

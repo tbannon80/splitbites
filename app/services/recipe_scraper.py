@@ -237,6 +237,60 @@ def parse_iso_duration(val: Any) -> int:
             return total
     return 30
 
+def parse_nutrition_dict(nutrition_data: Any) -> Dict[str, Any]:
+    """
+    Parses Schema.org nutrition information (calories, proteinContent, carbohydrateContent, fatContent)
+    into standard numeric fields:
+    - calories: float or int
+    - protein_g: float
+    - carbs_g: float
+    - fat_g: float
+    """
+    if not isinstance(nutrition_data, dict):
+        return {}
+
+    def extract_num(val: Any) -> Optional[float]:
+        if val is None:
+            return None
+        if isinstance(val, (int, float)):
+            return round(float(val), 1)
+        m = re.search(r'(\d+(?:\.\d+)?)', str(val))
+        if m:
+            try:
+                return round(float(m.group(1)), 1)
+            except ValueError:
+                return None
+        return None
+
+    calories = extract_num(nutrition_data.get("calories"))
+    protein = extract_num(
+        nutrition_data.get("proteinContent")
+        or nutrition_data.get("protein_g")
+        or nutrition_data.get("protein")
+    )
+    carbs = extract_num(
+        nutrition_data.get("carbohydrateContent")
+        or nutrition_data.get("carbs_g")
+        or nutrition_data.get("carbohydrates")
+    )
+    fat = extract_num(
+        nutrition_data.get("fatContent")
+        or nutrition_data.get("fat_g")
+        or nutrition_data.get("fat")
+    )
+
+    res = {}
+    if calories is not None:
+        res["calories"] = round(calories) if calories.is_integer() else calories
+    if protein is not None:
+        res["protein_g"] = protein
+    if carbs is not None:
+        res["carbs_g"] = carbs
+    if fat is not None:
+        res["fat_g"] = fat
+
+    return res
+
 def infer_dietary_tags(title: str, description: str, ingredients: List[Dict[str, Any]], raw_keywords: Optional[List[str]] = None) -> List[str]:
     """Infers dietary tags from title, description, keywords, and ingredient names."""
     full_text = f"{title} {description} {' '.join(k for k in (raw_keywords or []))} "
@@ -443,6 +497,20 @@ def parse_recipe_from_html_heuristics(soup: BeautifulSoup, url: str) -> Optional
         raw_instruction_lines = ["Prepare and cook ingredients according to standard recipe directions."]
 
     instructions = [{"step": i + 1, "text": t} for i, t in enumerate(raw_instruction_lines)]
+    # Nutrition Extraction in HTML heuristics
+    nutrition = {}
+    nutr_container = soup.select_one(".wprm-recipe-nutrition-container, .tasty-recipes-nutrition, .mv-create-nutrition, [itemprop='nutrition']")
+    if nutr_container:
+        txt = nutr_container.get_text(" ", strip=True)
+        m_cal = re.search(r'calories[:\s]*(\d+)', txt, re.IGNORECASE)
+        m_prot = re.search(r'protein[:\s]*(\d+(?:\.\d+)?)\s*g?', txt, re.IGNORECASE)
+        m_carb = re.search(r'(?:carbohydrates|carbs)[:\s]*(\d+(?:\.\d+)?)\s*g?', txt, re.IGNORECASE)
+        m_fat = re.search(r'fat[:\s]*(\d+(?:\.\d+)?)\s*g?', txt, re.IGNORECASE)
+        if m_cal: nutrition["calories"] = int(m_cal.group(1))
+        if m_prot: nutrition["protein_g"] = float(m_prot.group(1))
+        if m_carb: nutrition["carbs_g"] = float(m_carb.group(1))
+        if m_fat: nutrition["fat_g"] = float(m_fat.group(1))
+
     difficulty = "quick" if prep_time <= 20 else ("easy" if prep_time <= 35 else ("medium" if prep_time <= 60 else "hard"))
     tags = infer_dietary_tags(title, description, structured_ingredients)
 
@@ -453,6 +521,7 @@ def parse_recipe_from_html_heuristics(soup: BeautifulSoup, url: str) -> Optional
         "difficulty_level": difficulty,
         "ingredients": structured_ingredients,
         "instructions": instructions,
+        "nutrition_per_serving": nutrition,
         "dietary_tags": tags,
         "source_url": url
     }
@@ -511,6 +580,15 @@ async def extract_recipe_from_url(url: str) -> Dict[str, Any]:
                 difficulty = "quick" if total_time <= 20 else ("easy" if total_time <= 35 else ("medium" if total_time <= 60 else "hard"))
                 tags = infer_dietary_tags(title, description, structured_ingredients, keywords)
 
+                nutrition = {}
+                try:
+                    if hasattr(scraper, "nutrients"):
+                        raw_nutrients = scraper.nutrients()
+                        if raw_nutrients:
+                            nutrition = parse_nutrition_dict(raw_nutrients)
+                except Exception:
+                    nutrition = {}
+
                 return {
                     "title": title.strip(),
                     "description": description.strip(),
@@ -518,6 +596,7 @@ async def extract_recipe_from_url(url: str) -> Dict[str, Any]:
                     "difficulty_level": difficulty,
                     "ingredients": structured_ingredients,
                     "instructions": [{"step": i + 1, "text": t} for i, t in enumerate(raw_instructions)],
+                    "nutrition_per_serving": nutrition,
                     "dietary_tags": tags,
                     "source_url": clean_url
                 }
@@ -578,6 +657,9 @@ async def extract_recipe_from_url(url: str) -> Dict[str, Any]:
             tags = infer_dietary_tags(title, description, structured_ingredients)
             difficulty = "quick" if total_time <= 20 else ("easy" if total_time <= 35 else ("medium" if total_time <= 60 else "hard"))
 
+            raw_nutrition = recipe_obj.get("nutrition")
+            nutrition = parse_nutrition_dict(raw_nutrition)
+
             return {
                 "title": title.strip(),
                 "description": description.strip(),
@@ -585,6 +667,7 @@ async def extract_recipe_from_url(url: str) -> Dict[str, Any]:
                 "difficulty_level": difficulty,
                 "ingredients": structured_ingredients,
                 "instructions": [{"step": i + 1, "text": t} for i, t in enumerate(inst_steps)],
+                "nutrition_per_serving": nutrition,
                 "dietary_tags": tags,
                 "source_url": clean_url
             }

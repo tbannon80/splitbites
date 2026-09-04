@@ -39,10 +39,59 @@ async def get_db():
     async with AsyncSessionLocal() as session:
         yield session
 
+DEFAULT_NUTRITION_PER_SERVING = {
+    "calories": 520,
+    "protein_g": 38.0,
+    "carbs_g": 42.0,
+    "fat_g": 18.0,
+}
+
 def format_plan_response(plan: MealPlan) -> Dict:
     meals = {}
+    daily_nutrition = {}
+    total_cal = 0.0
+    total_protein = 0.0
+    total_carbs = 0.0
+    total_fat = 0.0
+    valid_days_count = 0
+
     for item in plan.items:
         if item.recipe:
+            servings = getattr(item, "servings", 4) or 4
+            default_servings = getattr(item.recipe, "default_servings", 4) or 4
+
+            raw_nutr = getattr(item.recipe, "nutrition_per_serving", {}) or {}
+            per_serving = {
+                "calories": float(raw_nutr.get("calories", DEFAULT_NUTRITION_PER_SERVING["calories"])),
+                "protein_g": float(raw_nutr.get("protein_g", DEFAULT_NUTRITION_PER_SERVING["protein_g"])),
+                "carbs_g": float(raw_nutr.get("carbs_g", DEFAULT_NUTRITION_PER_SERVING["carbs_g"])),
+                "fat_g": float(raw_nutr.get("fat_g", DEFAULT_NUTRITION_PER_SERVING["fat_g"])),
+            }
+
+            scaled_total = {
+                "calories": round(per_serving["calories"] * servings, 1),
+                "protein_g": round(per_serving["protein_g"] * servings, 1),
+                "carbs_g": round(per_serving["carbs_g"] * servings, 1),
+                "fat_g": round(per_serving["fat_g"] * servings, 1),
+            }
+
+            day_nutr = {
+                "servings": servings,
+                "per_serving": per_serving,
+                "total": scaled_total,
+                "calories": scaled_total["calories"],
+                "protein_g": scaled_total["protein_g"],
+                "carbs_g": scaled_total["carbs_g"],
+                "fat_g": scaled_total["fat_g"],
+            }
+            daily_nutrition[item.day_of_week] = day_nutr
+
+            total_cal += scaled_total["calories"]
+            total_protein += scaled_total["protein_g"]
+            total_carbs += scaled_total["carbs_g"]
+            total_fat += scaled_total["fat_g"]
+            valid_days_count += 1
+
             meals[item.day_of_week] = {
                 "item_id": str(item.item_id),
                 "recipe_id": str(item.recipe.recipe_id),
@@ -50,20 +99,40 @@ def format_plan_response(plan: MealPlan) -> Dict:
                 "description": item.recipe.description,
                 "prep_time_minutes": item.recipe.prep_time_minutes,
                 "difficulty_level": item.recipe.difficulty_level,
-                "servings": getattr(item, "servings", 4) or 4,
-                "default_servings": getattr(item.recipe, "default_servings", 4) or 4,
+                "servings": servings,
+                "default_servings": default_servings,
                 "is_modified": item.is_modified,
-                "fallback_applied": bool(getattr(item, "fallback_applied", False))
+                "fallback_applied": bool(getattr(item, "fallback_applied", False)),
+                "nutrition_per_serving": per_serving,
+                "daily_nutrition": day_nutr,
             }
+
     count = len(meals)
     plan_type = "Standard 7-Day Week" if count == 7 else f"{count}-Day Schedule"
+
+    weekly_avg_cal = round(total_cal / valid_days_count, 1) if valid_days_count > 0 else 0.0
+    weekly_avg_prot = round(total_protein / valid_days_count, 1) if valid_days_count > 0 else 0.0
+    weekly_avg_carb = round(total_carbs / valid_days_count, 1) if valid_days_count > 0 else 0.0
+    weekly_avg_fat = round(total_fat / valid_days_count, 1) if valid_days_count > 0 else 0.0
+
     return {
         "status": "success",
         "plan_id": str(plan.plan_id),
         "plan_type": plan_type,
         "week_start_date": str(plan.week_start_date),
         "is_locked": plan.is_locked,
-        "meals": meals
+        "meals": meals,
+        "daily_nutrition": daily_nutrition,
+        "weekly_avg_daily_calories": weekly_avg_cal,
+        "weekly_avg_protein_g": weekly_avg_prot,
+        "weekly_avg_carbs_g": weekly_avg_carb,
+        "weekly_avg_fat_g": weekly_avg_fat,
+        "weekly_macro_averages": {
+            "calories": weekly_avg_cal,
+            "protein_g": weekly_avg_prot,
+            "carbs_g": weekly_avg_carb,
+            "fat_g": weekly_avg_fat,
+        }
     }
 
 @router.get("/generate", response_model=WeeklyMealPlanResponse)

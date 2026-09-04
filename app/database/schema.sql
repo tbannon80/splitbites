@@ -54,12 +54,14 @@ CREATE TABLE IF NOT EXISTS recipes (
     difficulty_level VARCHAR(50),
     instructions JSONB NOT NULL,
     default_servings INT NOT NULL DEFAULT 4,
+    nutrition_per_serving JSONB DEFAULT '{}'::jsonb,
     is_public BOOLEAN DEFAULT TRUE,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     embedding vector(1536)
 );
 
 ALTER TABLE recipes ADD COLUMN IF NOT EXISTS default_servings INT NOT NULL DEFAULT 4;
+ALTER TABLE recipes ADD COLUMN IF NOT EXISTS nutrition_per_serving JSONB DEFAULT '{}'::jsonb;
 
 -- Ensure embedding column exists if table was pre-existing
 ALTER TABLE recipes ADD COLUMN IF NOT EXISTS embedding vector(1536);

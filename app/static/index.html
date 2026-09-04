@@ -348,6 +348,30 @@
             </div>
           </div>
 
+          <!-- Compact Weekly Macro Average Bar -->
+          <div id="weeklyMacroBar" class="hidden mb-4 p-3 rounded-lg bg-slate-950/80 border border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 text-xs">
+            <div class="flex items-center gap-2">
+              <span class="text-xs font-bold text-slate-200 uppercase tracking-wide font-mono flex items-center gap-1.5">
+                <span>📊</span> Weekly Macro Average
+              </span>
+              <span class="text-[10px] text-slate-500 font-mono">(Daily Totals)</span>
+            </div>
+            <div class="flex items-center gap-2 flex-wrap font-mono text-[11px]">
+              <span class="inline-flex items-center gap-1 text-amber-300 bg-amber-950/40 border border-amber-800/40 px-2 py-0.5 rounded font-semibold">
+                🔥 <span id="macroAvgCalories">0</span> kcal/day
+              </span>
+              <span class="inline-flex items-center gap-1 text-rose-300 bg-rose-950/40 border border-rose-800/40 px-2 py-0.5 rounded font-semibold">
+                🥩 <span id="macroAvgProtein">0</span>g P
+              </span>
+              <span class="inline-flex items-center gap-1 text-sky-300 bg-sky-950/40 border border-sky-800/40 px-2 py-0.5 rounded font-semibold">
+                🍞 <span id="macroAvgCarbs">0</span>g C
+              </span>
+              <span class="inline-flex items-center gap-1 text-emerald-300 bg-emerald-950/40 border border-emerald-800/40 px-2 py-0.5 rounded font-semibold">
+                🥑 <span id="macroAvgFat">0</span>g F
+              </span>
+            </div>
+          </div>
+
           <div id="planContainer" class="space-y-2.5 min-h-[260px] flex flex-col justify-center">
             <div class="text-center text-slate-500 text-sm py-12">
               Click <strong class="text-slate-400">Generate Plan</strong> to build a 5-day schedule respecting household profile.
@@ -2460,6 +2484,24 @@
 
       document.getElementById('planMeta').innerText = `Plan: ${plan.plan_id.slice(0, 8)}... | Week: ${plan.week_start_date}`;
 
+      // Weekly Macro Average Bar
+      const macroBar = document.getElementById('weeklyMacroBar');
+      if (macroBar) {
+        if (plan.weekly_avg_daily_calories !== undefined && plan.weekly_avg_daily_calories !== null) {
+          macroBar.classList.remove('hidden');
+          const elCal = document.getElementById('macroAvgCalories');
+          const elProt = document.getElementById('macroAvgProtein');
+          const elCarb = document.getElementById('macroAvgCarbs');
+          const elFat = document.getElementById('macroAvgFat');
+          if (elCal) elCal.innerText = Math.round(plan.weekly_avg_daily_calories);
+          if (elProt) elProt.innerText = Math.round(plan.weekly_avg_protein_g);
+          if (elCarb) elCarb.innerText = Math.round(plan.weekly_avg_carbs_g);
+          if (elFat) elFat.innerText = Math.round(plan.weekly_avg_fat_g);
+        } else {
+          macroBar.classList.add('hidden');
+        }
+      }
+
       const allDays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
       const days = allDays.filter(d => Boolean(plan.meals[d]));
       const container = document.getElementById('planContainer');
@@ -2470,6 +2512,12 @@
         if (!meal) return;
 
         const currentServings = meal.servings || 4;
+        const nutr = meal.daily_nutrition || (plan.daily_nutrition && plan.daily_nutrition[day]) || {};
+        const cal = nutr.calories !== undefined ? Math.round(nutr.calories) : Math.round(((meal.nutrition_per_serving && meal.nutrition_per_serving.calories) || 520) * currentServings);
+        const prot = nutr.protein_g !== undefined ? Math.round(nutr.protein_g) : Math.round(((meal.nutrition_per_serving && meal.nutrition_per_serving.protein_g) || 38) * currentServings);
+        const carb = nutr.carbs_g !== undefined ? Math.round(nutr.carbs_g) : Math.round(((meal.nutrition_per_serving && meal.nutrition_per_serving.carbs_g) || 42) * currentServings);
+        const fat = nutr.fat_g !== undefined ? Math.round(nutr.fat_g) : Math.round(((meal.nutrition_per_serving && meal.nutrition_per_serving.fat_g) || 18) * currentServings);
+
         const row = document.createElement('div');
         row.className = "flex flex-col sm:flex-row sm:items-center justify-between p-3 rounded-lg bg-slate-950/60 border border-slate-800 hover:border-slate-700 transition gap-2.5 sm:gap-3";
         row.innerHTML = `
@@ -2481,6 +2529,20 @@
                 ${meal.is_modified ? '<span class="text-[10px] px-1.5 py-0.5 rounded bg-amber-950 text-amber-400 border border-amber-800 font-mono">Modified</span>' : ''}
               </div>
               <p class="text-[11px] text-slate-400 mt-0.5 line-clamp-1">${meal.description || ''}</p>
+              <div class="flex items-center gap-1.5 mt-1.5 text-[10px] font-mono flex-wrap">
+                <span class="inline-flex items-center gap-1 bg-amber-950/40 border border-amber-800/40 text-amber-300 px-1.5 py-0.5 rounded font-semibold" title="Total Calories for ${currentServings} servings">
+                  🔥 ${cal} kcal
+                </span>
+                <span class="inline-flex items-center gap-1 bg-rose-950/40 border border-rose-800/40 text-rose-300 px-1.5 py-0.5 rounded font-semibold" title="Total Protein">
+                  🥩 ${prot}g P
+                </span>
+                <span class="inline-flex items-center gap-1 bg-sky-950/40 border border-sky-800/40 text-sky-300 px-1.5 py-0.5 rounded font-semibold" title="Total Carbohydrates">
+                  🍞 ${carb}g C
+                </span>
+                <span class="inline-flex items-center gap-1 bg-emerald-950/40 border border-emerald-800/40 text-emerald-300 px-1.5 py-0.5 rounded font-semibold" title="Total Fat">
+                  🥑 ${fat}g F
+                </span>
+              </div>
             </div>
           </div>
           <div class="flex items-center justify-between sm:justify-end gap-2.5 sm:gap-3 shrink-0 pt-1 sm:pt-0">

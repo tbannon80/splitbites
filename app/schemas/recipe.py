@@ -22,6 +22,7 @@ class RecipeCreateRequest(BaseModel):
     ingredients: List[RecipeIngredientItem] = []
     instructions: Union[List[RecipeInstructionItem], List[str], str] = []
     dietary_tags: Optional[List[str]] = []
+    nutrition_per_serving: Optional[Dict[str, Any]] = Field(default_factory=dict)
     is_public: bool = True
     creator_id: Optional[UUID] = None
 
@@ -34,6 +35,7 @@ class RecipeResponse(BaseModel):
     default_servings: int = 4
     instructions: List[Dict[str, Any]]
     ingredients: List[Dict[str, Any]]
+    nutrition_per_serving: Optional[Dict[str, Any]] = Field(default_factory=dict)
     dietary_tags: List[str] = []
     is_public: bool = True
     has_embedding: bool = True

@@ -26,8 +26,10 @@ class MealSlotResponse(BaseModel):
     default_servings: Optional[int] = 4
     is_modified: Optional[bool] = False
     fallback_applied: Optional[bool] = False
+    nutrition_per_serving: Optional[Dict[str, Any]] = Field(default_factory=dict)
+    daily_nutrition: Optional[Dict[str, Any]] = Field(default_factory=dict)
 
-    model_config = ConfigDict(from_attributes=True)
+    model_config = ConfigDict(from_attributes=True, extra="ignore")
 
 class WeeklyMealPlanResponse(BaseModel):
     status: str
@@ -36,6 +38,14 @@ class WeeklyMealPlanResponse(BaseModel):
     week_start_date: Optional[str] = None
     is_locked: bool = False
     meals: Dict[str, MealSlotResponse]
+    daily_nutrition: Optional[Dict[str, Any]] = Field(default_factory=dict)
+    weekly_avg_daily_calories: Optional[float] = None
+    weekly_avg_protein_g: Optional[float] = None
+    weekly_avg_carbs_g: Optional[float] = None
+    weekly_avg_fat_g: Optional[float] = None
+    weekly_macro_averages: Optional[Dict[str, Any]] = Field(default_factory=dict)
+
+    model_config = ConfigDict(from_attributes=True, extra="ignore")
 
 class MealPlanSwapRequest(BaseModel):
     day_of_week: str

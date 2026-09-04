@@ -64,12 +64,17 @@ async def seed_recipes(db_url: str = DEFAULT_DB_URL):
                 rec_res = await session.execute(rec_stmt)
                 recipe = rec_res.scalar_one_or_none()
 
+                nutrition = r_data.get("nutrition_per_serving") or {
+                    "calories": 520, "protein_g": 38.0, "carbs_g": 42.0, "fat_g": 18.0
+                }
+
                 if recipe:
                     recipe.description = r_data["description"]
                     recipe.prep_time_minutes = r_data["prep_time_minutes"]
                     recipe.difficulty_level = r_data["difficulty_level"]
                     recipe.instructions = r_data["instructions"]
                     recipe.ingredients = r_data["ingredients"]
+                    recipe.nutrition_per_serving = nutrition
                     recipe.embedding = embedding_vector
                 else:
                     recipe = Recipe(
@@ -79,6 +84,7 @@ async def seed_recipes(db_url: str = DEFAULT_DB_URL):
                         difficulty_level=r_data["difficulty_level"],
                         instructions=r_data["instructions"],
                         ingredients=r_data["ingredients"],
+                        nutrition_per_serving=nutrition,
                         is_public=True,
                         embedding=embedding_vector
                     )
