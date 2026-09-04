@@ -277,6 +277,22 @@ async def generate_weekly_plan(
 
     return format_plan_response(full_plan)
 
+@router.get("/household/{household_id}/latest", response_model=WeeklyMealPlanResponse)
+async def get_latest_household_meal_plan(household_id: UUID, db: AsyncSession = Depends(get_db)):
+    """Fetch the latest active meal plan for a household."""
+    stmt = (
+        select(MealPlan)
+        .options(selectinload(MealPlan.items).selectinload(MealPlanItem.recipe))
+        .where(MealPlan.household_id == household_id)
+        .order_by(MealPlan.created_at.desc())
+        .limit(1)
+    )
+    res = await db.execute(stmt)
+    plan = res.scalar_one_or_none()
+    if not plan:
+        raise HTTPException(status_code=404, detail="No meal plan found for this household.")
+    return format_plan_response(plan)
+
 @router.get("/{plan_id}", response_model=WeeklyMealPlanResponse)
 async def get_meal_plan(plan_id: UUID, db: AsyncSession = Depends(get_db)):
     """Fetch an existing meal plan by ID."""

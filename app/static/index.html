@@ -29,7 +29,33 @@
     .touch-target {
       min-height: 44px;
     }
+    html.is-authenticated #authScreen {
+      display: none !important;
+    }
+    html.is-authenticated #mainDashboard {
+      display: block !important;
+    }
   </style>
+  <script>
+    // Fast synchronous authentication check before DOM construction to avoid login flash on refresh
+    (function() {
+      try {
+        const params = new URLSearchParams(window.location.search);
+        if (params.has('invite') || params.has('reset')) return;
+        const token = localStorage.getItem('splitbites_token');
+        if (!token) return;
+        const parts = token.split('.');
+        if (parts.length !== 3) return;
+        const payload = JSON.parse(atob(parts[1].replace(/-/g, '+').replace(/_/g, '/')));
+        if (payload && payload.sub && (!payload.exp || (payload.exp * 1000 > Date.now()))) {
+          document.documentElement.classList.add('is-authenticated');
+        } else {
+          localStorage.removeItem('splitbites_token');
+          localStorage.removeItem('splitbites_active_plan_id');
+        }
+      } catch (e) {}
+    })();
+  </script>
 </head>
 <body class="bg-dark-950 text-slate-100 min-h-screen font-sans antialiased selection:bg-emerald-500 selection:text-white pb-16">
   
@@ -40,7 +66,7 @@
   </div>
 
   <!-- AUTH GATE SCREEN (Shown when not logged in) -->
-  <div id="authScreen" class="min-h-screen flex items-center justify-center px-4 py-12">
+  <div id="authScreen" class="hidden min-h-screen flex items-center justify-center px-4 py-12">
     <div class="max-w-md w-full bg-slate-900/90 border border-slate-800 rounded-2xl p-6 sm:p-8 shadow-2xl backdrop-blur">
       
       <!-- Brand Logo -->
@@ -811,7 +837,7 @@
 
     // Planner State
     let activeHouseholdId = null;
-    let activePlanId = null;
+    let activePlanId = localStorage.getItem('splitbites_active_plan_id') || null;
     let isPlanLocked = false;
     let currentGroceryData = null;
     let checkedItemsState = {};
@@ -819,6 +845,57 @@
     let selectedTags = new Set(["gluten-free", "dairy-free"]);
     let regTags = new Set(["gluten-free", "dairy-free"]);
     let recipeUploadTags = new Set(["gluten-free", "dairy-free"]);
+
+    // JWT Helper Functions
+    function parseJwt(token) {
+      if (!token || typeof token !== 'string') return null;
+      const parts = token.split('.');
+      if (parts.length !== 3) return null;
+      try {
+        const base64Url = parts[1];
+        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        const jsonPayload = decodeURIComponent(atob(base64).split('').map(c => {
+          return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+        }).join(''));
+        return JSON.parse(jsonPayload);
+      } catch (e) {
+        try {
+          return JSON.parse(atob(parts[1]));
+        } catch (err) {
+          return null;
+        }
+      }
+    }
+
+    function isTokenValid(token) {
+      if (!token) return false;
+      const payload = parseJwt(token);
+      if (!payload || !payload.sub) return false;
+      if (payload.exp && (payload.exp * 1000 <= Date.now())) {
+        return false;
+      }
+      return true;
+    }
+
+    // Centralized API Fetcher: ensures Authorization header is always attached to outgoing requests
+    function getAuthHeaders(extraHeaders = {}) {
+      const headers = { ...extraHeaders };
+      if (authToken) {
+        headers['Authorization'] = `Bearer ${authToken}`;
+      }
+      return headers;
+    }
+
+    async function apiFetch(url, options = {}) {
+      const opts = { ...options };
+      opts.headers = getAuthHeaders(opts.headers || {});
+      const res = await fetch(url, opts);
+      if (res.status === 401) {
+        // Expired or revoked session
+        handleLogout(false);
+      }
+      return res;
+    }
 
     const STORE_THEMES = {
       Aldi: { border: "border-blue-700/60", bg: "bg-blue-950/20", badge: "bg-blue-900/60 text-blue-300 border-blue-700", accent: "text-blue-400", icon: "🛒" },
@@ -842,11 +919,17 @@
         return;
       }
 
-      if (authToken) {
+      // Immediately read splitbites_token from localStorage before firing any API requests
+      authToken = localStorage.getItem('splitbites_token') || null;
+
+      if (authToken && isTokenValid(authToken)) {
+        // Token exists and is valid/unexpired: bypass login modal and load dashboard
+        document.documentElement.classList.add('is-authenticated');
+        document.getElementById('authScreen').classList.add('hidden');
+        document.getElementById('mainDashboard').classList.remove('hidden');
+
         try {
-          const res = await fetch('/api/auth/me', {
-            headers: { 'Authorization': `Bearer ${authToken}` }
-          });
+          const res = await apiFetch('/api/auth/me');
           if (res.ok) {
             const authData = await res.json();
             handleAuthSuccess(authData);
@@ -855,11 +938,16 @@
             handleLogout(false);
           }
         } catch (e) {
-          console.error("Auth check failed:", e);
+          console.error("Auth hydration check failed:", e);
+          handleLogout(false);
         }
+      } else {
+        // Token is missing or expired: clear localStorage and display login modal
+        localStorage.removeItem('splitbites_token');
+        localStorage.removeItem('splitbites_active_plan_id');
+        authToken = null;
+        showAuthScreen();
       }
-
-      showAuthScreen();
     });
 
     function showToast(msg) {
@@ -875,6 +963,7 @@
     }
 
     function showAuthScreen() {
+      document.documentElement.classList.remove('is-authenticated');
       document.getElementById('authScreen').classList.remove('hidden');
       document.getElementById('mainDashboard').classList.add('hidden');
       switchAuthView('login');
@@ -928,7 +1017,7 @@
       btn.innerText = "Signing In...";
 
       try {
-        const res = await fetch('/api/auth/login', {
+        const res = await apiFetch('/api/auth/login', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ email, password })
@@ -1066,9 +1155,9 @@
           spouse_email: spouse_email || null
         };
 
-        const res = await fetch('/api/auth/register', {
+        const res = await apiFetch('/api/auth/register', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${authToken}` },
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload)
         });
         const data = await res.json();
@@ -1091,7 +1180,7 @@
     async function setupInviteView(token) {
       switchAuthView('invite');
       try {
-        const res = await fetch(`/api/auth/invitation/${token}`);
+        const res = await apiFetch(`/api/auth/invitation/${token}`);
         if (!res.ok) {
           const err = await res.json();
           throw new Error(err.detail || 'Invalid invitation link');
@@ -1130,7 +1219,7 @@
       btn.innerText = "Joining Family...";
 
       try {
-        const res = await fetch('/api/auth/register-invited', {
+        const res = await apiFetch('/api/auth/register-invited', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -1166,7 +1255,7 @@
       btn.innerText = "Sending Link...";
 
       try {
-        const res = await fetch('/api/auth/forgot-password', {
+        const res = await apiFetch('/api/auth/forgot-password', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ email })
@@ -1189,7 +1278,7 @@
       btn.disabled = true;
 
       try {
-        const res = await fetch('/api/auth/reset-password', {
+        const res = await apiFetch('/api/auth/reset-password', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ token: window.activeResetToken, new_password })
@@ -1213,6 +1302,7 @@
       activeHouseholdId = currentHousehold.household_id;
 
       localStorage.setItem('splitbites_token', authToken);
+      document.documentElement.classList.add('is-authenticated');
 
       document.getElementById('authScreen').classList.add('hidden');
       document.getElementById('mainDashboard').classList.remove('hidden');
@@ -1228,6 +1318,43 @@
 
       loadFamilyRoster();
       switchDashboardTab('mealplan');
+      loadActiveMealPlan();
+    }
+
+    async function loadActiveMealPlan() {
+      if (!authToken) return;
+      const savedPlanId = localStorage.getItem('splitbites_active_plan_id');
+      let loaded = false;
+
+      // 1. Try to load saved plan ID from localStorage if present
+      if (savedPlanId) {
+        try {
+          const res = await apiFetch(`/api/meal-plans/${savedPlanId}`);
+          if (res.ok) {
+            const plan = await res.json();
+            renderPlan(plan);
+            loaded = true;
+            fetchGroceries(false);
+          }
+        } catch (e) {
+          console.warn("Could not load saved plan ID:", e);
+        }
+      }
+
+      // 2. If no saved plan ID or fetch failed, retrieve latest household meal plan
+      if (!loaded && activeHouseholdId) {
+        try {
+          const res = await apiFetch(`/api/meal-plans/household/${activeHouseholdId}/latest`);
+          if (res.ok) {
+            const plan = await res.json();
+            renderPlan(plan);
+            loaded = true;
+            fetchGroceries(false);
+          }
+        } catch (e) {
+          console.warn("No existing active meal plan found for household:", e);
+        }
+      }
     }
 
     function handleLogout(notify = true) {
@@ -1236,7 +1363,58 @@
       currentHousehold = null;
       activeHouseholdId = null;
       activePlanId = null;
+      currentGroceryData = null;
+      checkedItemsState = {};
       localStorage.removeItem('splitbites_token');
+      localStorage.removeItem('splitbites_active_plan_id');
+      document.documentElement.classList.remove('is-authenticated');
+
+      // Reset dashboard state in UI
+      document.getElementById('dashboardFamilyBadge').innerText = 'The Family';
+      document.getElementById('familyTabTitle').innerText = 'Family Roster';
+      document.getElementById('userDisplayName').innerText = 'User Name';
+      document.getElementById('userEmailDisplay').innerText = 'user@example.com';
+      document.getElementById('householdName').value = '';
+
+      // Reset schedule container
+      document.getElementById('planContainer').innerHTML = `
+        <div class="text-center text-slate-500 text-sm py-12">
+          Click <strong class="text-slate-400">Generate Plan</strong> to build a 5-day schedule respecting household profile.
+        </div>`;
+      document.getElementById('planMeta').innerText = 'No plan loaded';
+      document.getElementById('planStatusBadge').innerText = 'Draft';
+      document.getElementById('planStatusBadge').className = 'px-2 py-0.5 rounded bg-slate-800 text-slate-400';
+      document.getElementById('btnShuffle').disabled = true;
+      document.getElementById('btnLock').disabled = true;
+      document.getElementById('btnFetchGroceries').disabled = true;
+      updateLockUI(false);
+
+      // Reset grocery section
+      document.getElementById('savingsHero').classList.add('hidden');
+      document.getElementById('retailerCards').innerHTML = '';
+      document.getElementById('splitBreakdownContainer').classList.add('hidden');
+      document.getElementById('splitBasketGrid').innerHTML = '';
+      document.getElementById('btnCopyMasterList').classList.add('hidden');
+
+      // Reset recipe tab
+      document.getElementById('myRecipesGrid').innerHTML = '';
+      document.getElementById('communityRecipesGrid').innerHTML = '';
+      document.getElementById('myRecipesEmpty').classList.add('hidden');
+      document.getElementById('communityEmpty').classList.add('hidden');
+      document.getElementById('myRecipesCountBadge').innerText = '0';
+      myRecipesList = [];
+
+      // Reset family roster
+      document.getElementById('familyMembersList').innerHTML = '';
+      document.getElementById('pendingInvitesSection').classList.add('hidden');
+      document.getElementById('pendingInvitesList').innerHTML = '';
+
+      // Reset forms
+      const loginForm = document.getElementById('loginForm');
+      if (loginForm) loginForm.reset();
+      const regForm = document.getElementById('registerForm');
+      if (regForm) regForm.reset();
+
       if (notify) showToast("Logged out successfully");
       showAuthScreen();
     }
@@ -1288,9 +1466,7 @@
       grid.innerHTML = '';
 
       try {
-        const res = await fetch('/api/recipes/my-recipes', {
-          headers: { 'Authorization': `Bearer ${authToken}` }
-        });
+        const res = await apiFetch('/api/recipes/my-recipes');
         if (!res.ok) throw new Error("Failed to load your recipes");
         const recipes = await res.json();
         myRecipesList = recipes;
@@ -1380,9 +1556,8 @@
       }
 
       try {
-        const res = await fetch(`/api/recipes/my-recipes/${recipeId}`, {
-          method: 'DELETE',
-          headers: { 'Authorization': `Bearer ${authToken}` }
+        const res = await apiFetch(`/api/recipes/my-recipes/${recipeId}`, {
+          method: 'DELETE'
         });
         if (!res.ok) {
           const err = await res.json();
@@ -1406,9 +1581,7 @@
       grid.innerHTML = '';
 
       try {
-        const res = await fetch('/api/recipes/community', {
-          headers: { 'Authorization': `Bearer ${authToken}` }
-        });
+        const res = await apiFetch('/api/recipes/community');
         if (!res.ok) throw new Error("Failed to load community recipes");
         const recipes = await res.json();
         renderCommunityRecipes(recipes);
@@ -1476,9 +1649,8 @@
 
     async function addCommunityRecipe(recipeId, recipeTitle) {
       try {
-        const res = await fetch(`/api/recipes/community/${recipeId}/add`, {
-          method: 'POST',
-          headers: { 'Authorization': `Bearer ${authToken}` }
+        const res = await apiFetch(`/api/recipes/community/${recipeId}/add`, {
+          method: 'POST'
         });
         if (!res.ok) {
           const err = await res.json();
@@ -1524,9 +1696,7 @@
     async function loadFamilyRoster() {
       if (!authToken) return;
       try {
-        const res = await fetch('/api/auth/family', {
-          headers: { 'Authorization': `Bearer ${authToken}` }
-        });
+        const res = await apiFetch('/api/auth/family');
         if (!res.ok) return;
         const data = await res.json();
 
@@ -1595,11 +1765,10 @@
       btn.innerText = "Dispatching Email...";
 
       try {
-        const res = await fetch('/api/auth/invite', {
+        const res = await apiFetch('/api/auth/invite', {
           method: 'POST',
           headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${authToken}`
+            'Content-Type': 'application/json'
           },
           body: JSON.stringify({ name, email })
         });
@@ -1649,7 +1818,7 @@
       statusEl.innerText = "Saving...";
 
       try {
-        const res = await fetch(`/api/households/${activeHouseholdId}/dietary-preferences`, {
+        const res = await apiFetch(`/api/households/${activeHouseholdId}/dietary-preferences`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ dietary_preferences: Array.from(selectedTags) })
@@ -1673,9 +1842,9 @@
           days_count: 5
         };
 
-        const res = await fetch('/api/meal-plans/generate', {
+        const res = await apiFetch('/api/meal-plans/generate', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${authToken}` },
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload)
         });
         const plan = await res.json();
@@ -1689,6 +1858,7 @@
     function renderPlan(plan) {
       activePlanId = plan.plan_id;
       isPlanLocked = plan.is_locked;
+      localStorage.setItem('splitbites_active_plan_id', plan.plan_id);
 
       document.getElementById('btnShuffle').disabled = isPlanLocked;
       document.getElementById('btnLock').disabled = false;
@@ -1733,7 +1903,7 @@
     async function swapMeal(day) {
       if (!activePlanId || isPlanLocked) return;
       try {
-        const res = await fetch(`/api/meal-plans/${activePlanId}/swap`, {
+        const res = await apiFetch(`/api/meal-plans/${activePlanId}/swap`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ day_of_week: day, use_vector_similarity: true })
@@ -1749,7 +1919,7 @@
     async function shufflePlan() {
       if (!activePlanId || isPlanLocked) return;
       try {
-        const res = await fetch(`/api/meal-plans/${activePlanId}/shuffle`, {
+        const res = await apiFetch(`/api/meal-plans/${activePlanId}/shuffle`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ preserve_modified: true })
@@ -1766,7 +1936,7 @@
       if (!activePlanId) return;
       const targetState = !isPlanLocked;
       try {
-        const res = await fetch(`/api/meal-plans/${activePlanId}/lock`, {
+        const res = await apiFetch(`/api/meal-plans/${activePlanId}/lock`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ lock: targetState })
@@ -1797,23 +1967,29 @@
       }
     }
 
-    async function fetchGroceries() {
+    async function fetchGroceries(showNotification = true) {
       if (!activePlanId) return;
       const btn = document.getElementById('btnFetchGroceries');
-      btn.innerHTML = 'Analyzing...';
-      btn.disabled = true;
+      if (btn && showNotification) {
+        btn.innerHTML = 'Analyzing...';
+        btn.disabled = true;
+      }
 
       try {
-        const res = await fetch(`/api/meal-plans/${activePlanId}/grocery-list`);
+        const res = await apiFetch(`/api/meal-plans/${activePlanId}/grocery-list`);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
         const data = await res.json();
         currentGroceryData = data;
         renderGroceries(data);
-        showToast("✓ Multi-store groceries analyzed!");
+        if (showNotification) showToast("✓ Multi-store groceries analyzed!");
       } catch (err) {
-        alert("Failed to fetch groceries: " + err.message);
+        if (showNotification) alert("Failed to fetch groceries: " + err.message);
+        else console.warn("Background grocery fetch error:", err);
       } finally {
-        btn.innerHTML = '<span>🛒</span> Analyze Grocery Pricing';
-        btn.disabled = false;
+        if (btn && showNotification) {
+          btn.innerHTML = '<span>🛒</span> Analyze Grocery Pricing';
+          btn.disabled = false;
+        }
       }
     }
 
@@ -2110,7 +2286,7 @@
       feedback.innerHTML = '<span class="text-emerald-400">Reading recipe microdata & parsing ingredients...</span>';
 
       try {
-        const res = await fetch('/api/recipes/extract-url', {
+        const res = await apiFetch('/api/recipes/extract-url', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ url })
@@ -2210,9 +2386,9 @@
       };
 
       try {
-        const res = await fetch('/api/recipes/', {
+        const res = await apiFetch('/api/recipes/', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${authToken}` },
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload)
         });
         if (!res.ok) {
@@ -2293,12 +2469,9 @@
       };
 
       try {
-        const headers = { 'Content-Type': 'application/json' };
-        if (authToken) headers['Authorization'] = `Bearer ${authToken}`;
-
-        const res = await fetch('/api/feedback/', {
+        const res = await apiFetch('/api/feedback/', {
           method: 'POST',
-          headers,
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload)
         });
 

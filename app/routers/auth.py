@@ -68,7 +68,19 @@ async def get_current_user_and_household(
         .options(selectinload(Household.dietary_preferences))
         .where(HouseholdMember.user_id == user.user_id)
     )
+    h_res = await db.execute(member_stmt)
     household = h_res.scalar_one_or_none()
+
+    if not household:
+        # Fallback create a household if missing
+        household = Household(household_name=f"{user.full_name or 'My'} Family")
+        db.add(household)
+        await db.flush()
+        db.add(HouseholdMember(household_id=household.household_id, user_id=user.user_id, role="admin"))
+        await db.commit()
+        h_res = await db.execute(member_stmt)
+        household = h_res.scalar_one_or_none()
+
     # Update last_login if missing or older than 15 minutes
     now = datetime.now(timezone.utc)
     if user.last_login is None or (now - user.last_login).total_seconds() > 900:
