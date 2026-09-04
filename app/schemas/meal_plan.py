@@ -54,3 +54,8 @@ class MealPlanSubtractDayRequest(BaseModel):
 
 class MealPlanDaysUpdateRequest(BaseModel):
     target_days: List[str]
+
+class SlotAssignment(BaseModel):
+    day_of_week: str
+    recipe_id: UUID
+    force: bool = False

@@ -1,12 +1,12 @@
 import logging
 import random
 from datetime import date
-from typing import Optional, List, Dict, Set
+from typing import Optional, List, Dict, Set, Union
 from uuid import UUID
 
 logger = logging.getLogger(__name__)
 
-from fastapi import APIRouter, Depends, HTTPException, Response
+from fastapi import APIRouter, Depends, HTTPException, Response, Header, Query
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, text
 from sqlalchemy.orm import selectinload
@@ -22,12 +22,14 @@ from app.schemas.meal_plan import (
     MealPlanAddDayRequest,
     MealPlanSubtractDayRequest,
     MealPlanDaysUpdateRequest,
+    SlotAssignment,
     MealSlotResponse,
     WeeklyMealPlanResponse,
 )
 from app.services.embedding import get_embedding
 from app.services.grocery_aggregation import aggregate_groceries_for_plan
 from app.services.calendar import generate_ics_calendar
+from app.services.auth import decode_access_token
 from app.routers.auth import get_current_user_and_household
 
 router = APIRouter(prefix="/api/meal-plans", tags=["meal-plans"])
@@ -377,6 +379,141 @@ async def get_meal_plan(plan_id: UUID, db: AsyncSession = Depends(get_db)):
         raise HTTPException(status_code=404, detail=f"Meal plan {plan_id} not found.")
 
     return format_plan_response(plan)
+
+@router.post("/{plan_id}/assign-slots", response_model=WeeklyMealPlanResponse)
+async def assign_slots(
+    plan_id: UUID,
+    payload: Union[List[SlotAssignment], SlotAssignment],
+    authorization: Optional[str] = Header(None),
+    x_auth_token: Optional[str] = Header(None),
+    token: Optional[str] = Query(None),
+    db: AsyncSession = Depends(get_db)
+):
+    """
+    Manually assigns recipe book recipes to scheduled meal plan slots.
+    Preserves slots against future shuffles (is_modified=True).
+    Validates:
+      1. Meal plan lock state (HTTP 400 if locked).
+      2. Recipe book membership (must belong to household_recipes).
+      3. Active scheduled day presence (HTTP 400 if not in plan).
+      4. Busy day prep time ceiling (HTTP 422 if prep_time > busy_max_prep unless force=True).
+      5. Slot update with is_modified=True.
+    """
+    stmt = (
+        select(MealPlan)
+        .options(selectinload(MealPlan.items).selectinload(MealPlanItem.recipe))
+        .where(MealPlan.plan_id == plan_id)
+    )
+    res = await db.execute(stmt)
+    plan = res.scalar_one_or_none()
+
+    if not plan:
+        raise HTTPException(status_code=404, detail=f"Meal plan {plan_id} not found.")
+
+    # Invariant 1: If meal_plan.is_locked == True, immediately return HTTP 400 Bad Request.
+    if plan.is_locked:
+        raise HTTPException(status_code=400, detail="Cannot assign slots to a locked meal plan. Unlock first.")
+
+    assignments = payload if isinstance(payload, list) else [payload]
+    if not assignments:
+        raise HTTPException(status_code=400, detail="No slot assignments provided.")
+
+    # Resolve authenticated household
+    household_id: Optional[UUID] = None
+    tok = None
+    if authorization and authorization.startswith("Bearer "):
+        tok = authorization.split(" ")[1]
+    elif x_auth_token:
+        tok = x_auth_token
+    elif token:
+        tok = token
+
+    if tok:
+        auth_data = decode_access_token(tok)
+        if auth_data and "hid" in auth_data:
+            household_id = UUID(auth_data["hid"])
+
+    # Fallback to meal plan's own household_id if not explicitly provided via auth token
+    if not household_id and plan.household_id:
+        household_id = plan.household_id
+
+    # Load household preferences (busy days & max prep)
+    household: Optional[Household] = None
+    busy_days_set: Set[str] = set()
+    busy_max_prep: int = 20
+
+    if household_id:
+        h_stmt = select(Household).where(Household.household_id == household_id)
+        h_res = await db.execute(h_stmt)
+        household = h_res.scalar_one_or_none()
+        if household:
+            if household.busy_days:
+                busy_days_set = {d.strip().capitalize() for d in household.busy_days}
+            if household.busy_max_prep_minutes is not None:
+                busy_max_prep = household.busy_max_prep_minutes
+
+    active_days_map = {it.day_of_week.capitalize(): it for it in plan.items}
+
+    for item_assign in assignments:
+        target_day = item_assign.day_of_week.strip().capitalize()
+
+        # Invariant 3: Verify target day exists in the plan's active scheduled days.
+        if target_day not in active_days_map:
+            raise HTTPException(
+                status_code=400,
+                detail=f"Day '{item_assign.day_of_week}' is not an active scheduled day in this meal plan."
+            )
+
+        # Invariant 2: Verify recipe_id belongs to the authenticated household's recipe book (household_recipes)
+        if household_id:
+            hr_stmt = select(HouseholdRecipe).where(
+                HouseholdRecipe.household_id == household_id,
+                HouseholdRecipe.recipe_id == item_assign.recipe_id
+            )
+            hr_res = await db.execute(hr_stmt)
+            if not hr_res.scalar_one_or_none():
+                raise HTTPException(
+                    status_code=404,
+                    detail=f"Recipe {item_assign.recipe_id} not found in household recipe book."
+                )
+
+        # Fetch recipe for prep time validation
+        rec_stmt = select(Recipe).where(Recipe.recipe_id == item_assign.recipe_id)
+        rec_res = await db.execute(rec_stmt)
+        recipe = rec_res.scalar_one_or_none()
+        if not recipe:
+            raise HTTPException(status_code=404, detail=f"Recipe {item_assign.recipe_id} not found.")
+
+        # Invariant 4: If target day is in household's busy_days and recipe prep_time_minutes > busy_max_prep_minutes and force == False, return HTTP 422 Unprocessable Entity
+        if target_day in busy_days_set:
+            prep_time = recipe.prep_time_minutes if recipe.prep_time_minutes is not None else 0
+            if prep_time > busy_max_prep and not item_assign.force:
+                raise HTTPException(
+                    status_code=422,
+                    detail={
+                        "error": "prep_ceiling_exceeded",
+                        "message": f"Recipe '{recipe.title}' requires {prep_time} mins prep, exceeding the {busy_max_prep} min limit for busy {target_day}.",
+                        "day": target_day,
+                        "recipe_id": str(recipe.recipe_id),
+                        "recipe_title": recipe.title,
+                        "prep_time_minutes": prep_time,
+                        "busy_max_prep_minutes": busy_max_prep,
+                        "force_required": True
+                    }
+                )
+
+        # Invariant 5: Update the corresponding meal_plan_items record, set is_modified = True, and preserve it against subsequent shuffles
+        target_item = active_days_map[target_day]
+        target_item.recipe_id = item_assign.recipe_id
+        target_item.is_modified = True
+        target_item.fallback_applied = False
+
+    await db.commit()
+    db.expire_all()
+
+    res = await db.execute(stmt)
+    full_plan = res.scalar_one()
+    return format_plan_response(full_plan)
 
 @router.post("/{plan_id}/swap", response_model=WeeklyMealPlanResponse)
 async def swap_meal(

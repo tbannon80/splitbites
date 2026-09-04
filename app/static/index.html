@@ -763,6 +763,56 @@
     </div>
   </div>
 
+  <!-- ASSIGN RECIPE TO SLOT MODAL -->
+  <div id="assignSlotModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+    <div class="max-w-md w-full bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-2xl space-y-4">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-800">
+        <div class="flex items-center gap-2">
+          <span class="text-xl">📅</span>
+          <h3 class="text-base font-bold text-white">Add Recipe to Meal Plan</h3>
+        </div>
+        <button type="button" onclick="closeAssignSlotModal()" class="text-slate-400 hover:text-white transition text-lg">✕</button>
+      </div>
+
+      <div>
+        <h4 id="assignModalRecipeTitle" class="text-sm font-bold text-emerald-400">Recipe Title</h4>
+        <div class="flex items-center gap-2 text-xs text-slate-400 font-mono mt-1">
+          <span id="assignModalRecipePrep">⏱ 20m prep</span>
+          <span>•</span>
+          <span id="assignModalRecipeDiff" class="capitalize">📊 easy</span>
+        </div>
+      </div>
+
+      <div class="space-y-2">
+        <label for="assignModalDaySelect" class="block text-xs font-semibold text-slate-300">
+          Select Target Schedule Day:
+        </label>
+        <select id="assignModalDaySelect" onchange="onAssignDayChanged()" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500 font-mono">
+          <!-- Populated dynamically -->
+        </select>
+      </div>
+
+      <!-- Warning banner if prep ceiling exceeded on busy day -->
+      <div id="assignModalBusyWarning" class="hidden bg-amber-950/40 border border-amber-800/80 rounded-xl p-3 text-xs text-amber-300 space-y-1">
+        <div class="flex items-center gap-1.5 font-semibold text-amber-200">
+          <span>⚠️</span> Busy Night Prep Warning
+        </div>
+        <p id="assignModalBusyWarningText" class="text-[11px] text-amber-300/90 leading-relaxed">
+          This recipe prep time exceeds your household limit for this busy night. You can force-assign it anyway.
+        </p>
+      </div>
+
+      <div class="pt-2 border-t border-slate-800 flex items-center justify-end gap-2">
+        <button type="button" onclick="closeAssignSlotModal()" class="px-3 py-1.5 rounded-lg text-xs font-medium text-slate-400 hover:text-white border border-slate-800">
+          Cancel
+        </button>
+        <button id="btnConfirmAssignSlot" type="button" onclick="confirmAssignSlot()" class="px-4 py-1.5 rounded-lg text-xs font-semibold bg-emerald-600 hover:bg-emerald-500 text-white transition shadow flex items-center gap-1.5">
+          <span>✓</span> Assign to Day
+        </button>
+      </div>
+    </div>
+  </div>
+
   <!-- REGISTRATION CONFIRMATION REVIEW MODAL -->
   <div id="regConfirmModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 hidden">
     <div class="max-w-md w-full bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-2xl space-y-4">
@@ -909,6 +959,7 @@
     // Planner State
     let activeHouseholdId = null;
     let activePlanId = localStorage.getItem('splitbites_active_plan_id') || null;
+    let activePlanData = null;
     let isPlanLocked = false;
     let currentGroceryData = null;
     let checkedItemsState = {};
@@ -1596,9 +1647,11 @@
               ${tagBadges}
             </div>
           </div>
-          <div class="pt-3 border-t border-slate-800/80 flex items-center justify-between">
-            <span class="text-[10px] text-slate-400 font-mono">In your meal rotation</span>
-            <button onclick="deleteMyRecipe('${r.recipe_id}', '${r.title.replace(/'/g, "\\'")}')" class="text-xs bg-rose-950/40 hover:bg-rose-900/60 text-rose-300 border border-rose-900/60 hover:border-rose-700 px-2.5 py-1 rounded-lg transition flex items-center gap-1 shadow">
+          <div class="pt-3 border-t border-slate-800/80 flex items-center justify-between gap-2">
+            <button onclick="openAssignRecipeModal('${r.recipe_id}', '${r.title.replace(/'/g, "\\'")}', ${r.prep_time_minutes || 0}, '${r.difficulty_level || 'medium'}')" class="text-xs bg-emerald-600 hover:bg-emerald-500 text-white font-semibold px-2.5 py-1.5 rounded-lg transition flex items-center gap-1 shadow">
+              <span>📅</span> Add to Active Plan
+            </button>
+            <button onclick="deleteMyRecipe('${r.recipe_id}', '${r.title.replace(/'/g, "\\'")}')" class="text-xs bg-rose-950/40 hover:bg-rose-900/60 text-rose-300 border border-rose-900/60 hover:border-rose-700 px-2.5 py-1.5 rounded-lg transition flex items-center gap-1 shadow">
               <span>🗑️</span> Delete
             </button>
           </div>
@@ -1985,6 +2038,159 @@
       }
     }
 
+    // ==========================================
+    // Manual Slot Assignment Logic
+    // ==========================================
+    let currentAssignRecipe = null;
+
+    function openAssignRecipeModal(recipeId, recipeTitle, prepTime, difficulty) {
+      if (!activePlanId || !activePlanData) {
+        alert("No active meal plan loaded. Please generate a meal plan first in the Schedule tab.");
+        switchDashboardTab('mealplan');
+        return;
+      }
+
+      if (activePlanData.is_locked) {
+        alert("Your current meal plan is locked. Please unlock it in the Schedule tab before assigning recipes.");
+        return;
+      }
+
+      currentAssignRecipe = {
+        recipeId,
+        recipeTitle,
+        prepTime: Number(prepTime) || 0,
+        difficulty: difficulty || 'medium'
+      };
+
+      document.getElementById('assignModalRecipeTitle').innerText = recipeTitle;
+      document.getElementById('assignModalRecipePrep').innerText = `⏱ ${prepTime || 30}m prep`;
+      document.getElementById('assignModalRecipeDiff').innerText = `📊 ${difficulty || 'medium'}`;
+
+      const select = document.getElementById('assignModalDaySelect');
+      select.innerHTML = '';
+
+      const scheduledDays = Object.keys(activePlanData.meals || {});
+      if (scheduledDays.length === 0) {
+        alert("No active days found in current meal plan. Please generate or add days to your plan.");
+        return;
+      }
+
+      const busyDaysList = (currentHousehold && currentHousehold.busy_days) || ["Tuesday", "Thursday"];
+      const busyMaxPrep = (currentHousehold && currentHousehold.busy_max_prep_minutes) || 20;
+      const busySet = new Set(busyDaysList.map(d => d.toLowerCase()));
+
+      scheduledDays.forEach(day => {
+        const opt = document.createElement('option');
+        opt.value = day;
+        const isBusy = busySet.has(day.toLowerCase());
+        if (isBusy) {
+          opt.innerText = `${day} (Busy - max ${busyMaxPrep}m)`;
+        } else {
+          opt.innerText = day;
+        }
+        select.appendChild(opt);
+      });
+
+      onAssignDayChanged();
+      document.getElementById('assignSlotModal').classList.remove('hidden');
+    }
+
+    function closeAssignSlotModal() {
+      document.getElementById('assignSlotModal').classList.add('hidden');
+      currentAssignRecipe = null;
+    }
+
+    function onAssignDayChanged() {
+      if (!currentAssignRecipe) return;
+      const select = document.getElementById('assignModalDaySelect');
+      const selectedDay = select.value;
+      const busyDaysList = (currentHousehold && currentHousehold.busy_days) || ["Tuesday", "Thursday"];
+      const busyMaxPrep = (currentHousehold && currentHousehold.busy_max_prep_minutes) || 20;
+      const isBusy = busyDaysList.map(d => d.toLowerCase()).includes(selectedDay.toLowerCase());
+      const warningDiv = document.getElementById('assignModalBusyWarning');
+      const warningText = document.getElementById('assignModalBusyWarningText');
+
+      if (isBusy && currentAssignRecipe.prepTime > busyMaxPrep) {
+        warningText.innerText = `"${currentAssignRecipe.recipeTitle}" takes ${currentAssignRecipe.prepTime} minutes, exceeding your household's ${busyMaxPrep}m ceiling for ${selectedDay}. It will be forced upon confirmation.`;
+        warningDiv.classList.remove('hidden');
+      } else {
+        warningDiv.classList.add('hidden');
+      }
+    }
+
+    async function confirmAssignSlot() {
+      if (!currentAssignRecipe || !activePlanId) return;
+      const select = document.getElementById('assignModalDaySelect');
+      const selectedDay = select.value;
+      if (!selectedDay) return;
+
+      const busyDaysList = (currentHousehold && currentHousehold.busy_days) || ["Tuesday", "Thursday"];
+      const busyMaxPrep = (currentHousehold && currentHousehold.busy_max_prep_minutes) || 20;
+      const isBusy = busyDaysList.map(d => d.toLowerCase()).includes(selectedDay.toLowerCase());
+      const prepExceeded = isBusy && currentAssignRecipe.prepTime > busyMaxPrep;
+
+      let force = false;
+      if (prepExceeded) {
+        const userConfirmed = confirm(
+          `⚠️ Busy Night Warning:\n\n"${currentAssignRecipe.recipeTitle}" takes ${currentAssignRecipe.prepTime} minutes prep, exceeding your household's ${busyMaxPrep} min ceiling for ${selectedDay}.\n\nDo you want to force-assign it to ${selectedDay} anyway?`
+        );
+        if (!userConfirmed) return;
+        force = true;
+      }
+
+      const btn = document.getElementById('btnConfirmAssignSlot');
+      btn.disabled = true;
+      btn.innerHTML = '<span>⏳</span> Assigning...';
+
+      try {
+        const res = await apiFetch(`/api/meal-plans/${activePlanId}/assign-slots`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify([{
+            day_of_week: selectedDay,
+            recipe_id: currentAssignRecipe.recipeId,
+            force: force
+          }])
+        });
+
+        const data = await res.json();
+        if (!res.ok) {
+          if (res.status === 422 && data.detail && data.detail.force_required) {
+            const retry = confirm(`${data.detail.message}\n\nWould you like to force-assign this recipe?`);
+            if (retry) {
+              const retryRes = await apiFetch(`/api/meal-plans/${activePlanId}/assign-slots`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify([{
+                  day_of_week: selectedDay,
+                  recipe_id: currentAssignRecipe.recipeId,
+                  force: true
+                }])
+              });
+              const retryData = await retryRes.json();
+              if (!retryRes.ok) throw new Error(retryData.detail || "Failed to force assign recipe.");
+              renderPlan(retryData);
+              closeAssignSlotModal();
+              showToast(`✓ "${currentAssignRecipe.recipeTitle}" assigned to ${selectedDay}!`);
+              switchDashboardTab('mealplan');
+              return;
+            }
+          }
+          throw new Error(typeof data.detail === 'string' ? data.detail : (data.detail && data.detail.message) || "Failed to assign recipe");
+        }
+
+        renderPlan(data);
+        closeAssignSlotModal();
+        showToast(`✓ "${currentAssignRecipe.recipeTitle}" assigned to ${selectedDay}!`);
+        switchDashboardTab('mealplan');
+      } catch (err) {
+        alert(err.message);
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<span>✓</span> Assign to Day';
+      }
+    }
+
     function syncDietaryTagsUI() {
       document.querySelectorAll('.tag-btn').forEach(btn => {
         const tag = btn.innerText.trim();
@@ -2055,6 +2261,7 @@
 
     function renderPlan(plan) {
       activePlanId = plan.plan_id;
+      activePlanData = plan;
       isPlanLocked = plan.is_locked;
       localStorage.setItem('splitbites_active_plan_id', plan.plan_id);
 
