@@ -144,3 +144,13 @@ CREATE TABLE IF NOT EXISTS pantry_items (
     UNIQUE(household_id, item_name)
 );
 
+CREATE TABLE IF NOT EXISTS household_recipe_notes (
+    note_id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    household_id UUID REFERENCES households(household_id) ON DELETE CASCADE,
+    recipe_id UUID REFERENCES recipes(recipe_id) ON DELETE CASCADE,
+    note_text TEXT NOT NULL DEFAULT '',
+    rating INT DEFAULT NULL CHECK (rating IS NULL OR (rating >= 1 AND rating <= 5)),
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE(household_id, recipe_id)
+);
+

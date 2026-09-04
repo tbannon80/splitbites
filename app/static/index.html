@@ -808,6 +808,104 @@
     </div>
   </div>
 
+  <!-- RECIPE DETAIL MODAL (WITH RATING & KITCHEN NOTES) -->
+  <div id="recipeDetailModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+    <div class="max-w-xl w-full bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-2xl space-y-4 max-h-[90vh] flex flex-col">
+      <!-- Header -->
+      <div class="flex items-start justify-between pb-3 border-b border-slate-800 shrink-0">
+        <div class="min-w-0 pr-2">
+          <h3 id="recipeDetailTitle" class="text-base sm:text-lg font-bold text-white truncate">Recipe Title</h3>
+          <div class="flex items-center gap-2 text-xs text-slate-400 font-mono mt-1 flex-wrap">
+            <span id="recipeDetailPrepTime">⏱ 30m</span>
+            <span>•</span>
+            <span id="recipeDetailDifficulty" class="capitalize">📊 Medium</span>
+            <span>•</span>
+            <span id="recipeDetailServings">🍽️ 4 Servings</span>
+          </div>
+        </div>
+        <button type="button" onclick="closeRecipeDetailModal()" class="text-slate-400 hover:text-white transition text-lg shrink-0">✕</button>
+      </div>
+
+      <div class="flex-1 overflow-y-auto space-y-4 pr-1">
+        <!-- Description -->
+        <p id="recipeDetailDescription" class="text-xs text-slate-300 leading-relaxed"></p>
+
+        <!-- Star Rating and Kitchen Notes Section -->
+        <div class="bg-slate-950/80 border border-slate-800 rounded-xl p-4 space-y-3">
+          <div class="flex items-center justify-between flex-wrap gap-2">
+            <div class="flex items-center gap-2">
+              <span class="text-xs font-bold text-amber-400 uppercase tracking-wider">Household Rating:</span>
+              <div id="recipeDetailStarRating" class="flex items-center text-lg">
+                <!-- Stars rendered dynamically -->
+              </div>
+            </div>
+            <span id="recipeDetailRatingText" class="text-xs font-mono text-slate-400">Not rated yet</span>
+          </div>
+
+          <div>
+            <div class="flex items-center justify-between mb-1.5">
+              <label for="recipeDetailNoteInput" class="text-xs font-semibold text-slate-300 flex items-center gap-1.5">
+                <span>📝</span> Kitchen Notes & Tips
+              </label>
+              <span id="recipeDetailNoteSavedBadge" class="text-[11px] font-mono text-emerald-400 hidden">✓ Saved!</span>
+            </div>
+            <textarea
+              id="recipeDetailNoteInput"
+              rows="3"
+              placeholder="Add your private family notes (e.g. 'Tim prefers with extra garlic', 'Cook at 425 instead of 400')..."
+              class="w-full bg-slate-900 border border-slate-700/80 rounded-lg p-2.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-amber-500 resize-none leading-relaxed"
+            ></textarea>
+            <div class="flex justify-end pt-1.5">
+              <button
+                type="button"
+                id="btnSaveRecipeDetailNote"
+                onclick="saveRecipeDetailModalNote()"
+                class="px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-amber-600 hover:bg-amber-500 text-white transition shadow flex items-center gap-1"
+              >
+                <span>💾</span> Save Notes
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Ingredients Preview -->
+        <div>
+          <h4 class="text-xs font-bold text-slate-300 uppercase tracking-wider mb-2">🥕 Ingredients</h4>
+          <ul id="recipeDetailIngredientsList" class="text-xs text-slate-400 space-y-1 bg-slate-950/50 p-3 rounded-xl border border-slate-800/80 max-h-40 overflow-y-auto">
+            <!-- Injected dynamically -->
+          </ul>
+        </div>
+
+        <!-- Instructions Preview -->
+        <div>
+          <h4 class="text-xs font-bold text-slate-300 uppercase tracking-wider mb-2">📋 Instructions</h4>
+          <div id="recipeDetailInstructionsList" class="text-xs text-slate-400 space-y-2 bg-slate-950/50 p-3 rounded-xl border border-slate-800/80 max-h-48 overflow-y-auto">
+            <!-- Injected dynamically -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer Buttons -->
+      <div class="pt-3 border-t border-slate-800 flex items-center justify-between gap-2 shrink-0">
+        <button
+          type="button"
+          id="btnRecipeDetailCookMode"
+          onclick="openCookModeFromDetailModal()"
+          class="px-4 py-2 rounded-xl text-xs font-semibold bg-amber-600 hover:bg-amber-500 text-white transition shadow flex items-center gap-1.5"
+        >
+          <span>👨‍🍳</span> Open Cook Mode
+        </button>
+        <button
+          type="button"
+          onclick="closeRecipeDetailModal()"
+          class="px-4 py-2 rounded-xl text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-white transition border border-slate-700"
+        >
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+
   <!-- ASSIGN RECIPE TO SLOT MODAL -->
   <div id="assignSlotModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 hidden">
     <div class="max-w-md w-full bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-2xl space-y-4">
@@ -1124,6 +1222,22 @@
             </div>
           </div>
 
+          <!-- Personal Kitchen Notes Callout Banner (Step 1 only) -->
+          <div id="cookModeNotesBanner" class="hidden mb-4 sm:mb-6 p-4 rounded-2xl bg-amber-500/15 border-2 border-amber-500/80 text-amber-200 shadow-xl backdrop-blur">
+            <div class="flex items-start gap-3">
+              <span class="text-2xl shrink-0">📌</span>
+              <div class="min-w-0 flex-1">
+                <div class="flex items-center justify-between gap-2 mb-1">
+                  <div class="flex items-center gap-2">
+                    <span class="text-xs font-bold uppercase tracking-wider text-amber-300">Personal Kitchen Notes</span>
+                    <span id="cookModeNotesRating" class="text-xs text-amber-400 font-mono"></span>
+                  </div>
+                </div>
+                <p id="cookModeNotesText" class="text-sm sm:text-base font-medium text-amber-100 whitespace-pre-line leading-relaxed"></p>
+              </div>
+            </div>
+          </div>
+
           <!-- Step Instruction Big Text -->
           <div class="bg-slate-900/80 border border-slate-800/90 rounded-2xl p-6 sm:p-8 shadow-2xl backdrop-blur">
             <p id="cookStepText" class="text-lg sm:text-2xl md:text-3xl font-medium text-slate-100 leading-relaxed sm:leading-relaxed">
@@ -1313,6 +1427,16 @@
         toast.classList.add('translate-y-20', 'opacity-0');
         toast.classList.remove('translate-y-0', 'opacity-100');
       }, 3000);
+    }
+
+    function escapeHtml(str) {
+      if (!str) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
     }
 
     function showAuthScreen() {
@@ -1861,7 +1985,7 @@
         card.innerHTML = `
           <div>
             <div class="flex items-start justify-between gap-2 mb-1.5">
-              <h4 class="font-bold text-sm text-white leading-tight">${r.title}</h4>
+              <button type="button" onclick="openRecipeDetailModal('${r.recipe_id}')" class="font-bold text-sm text-white hover:text-amber-300 transition text-left cursor-pointer leading-tight">${r.title}</button>
               <span class="text-[10px] font-mono uppercase px-2 py-0.5 rounded-full shrink-0 ${r.is_created_by_family ? 'bg-emerald-950 text-emerald-300 border border-emerald-800' : 'bg-slate-800 text-slate-400'}">
                 ${r.is_created_by_family ? 'Family Recipe' : 'Catalog / Added'}
               </span>
@@ -1877,6 +2001,19 @@
             ${ingCount > 0 ? `<div class="text-[11px] text-slate-400 bg-slate-900/60 p-2 rounded-lg border border-slate-800/80 mb-3 font-mono truncate"><strong class="text-slate-300">Items:</strong> ${ingPreview}${ingMore}</div>` : ''}
             <div class="flex flex-wrap gap-1 mb-3">
               ${tagBadges}
+            </div>
+            <!-- Star Rating and Kitchen Notes Row -->
+            <div class="pt-2 border-t border-slate-800/60 flex items-center justify-between text-xs gap-2 mb-1">
+              <div class="flex items-center gap-1">
+                <span class="text-[10px] text-slate-400">Rating:</span>
+                <div class="flex items-center text-sm">
+                  ${renderStarRatingHtml(r.recipe_id, r.user_rating, 'setRecipeRatingForCatalog')}
+                </div>
+              </div>
+              <button type="button" onclick="openRecipeDetailModal('${r.recipe_id}')" class="text-[11px] font-mono text-slate-400 hover:text-amber-300 underline flex items-center gap-1 truncate" title="${r.personal_note ? escapeHtml(r.personal_note) : 'Add kitchen notes'}">
+                <span>📝</span>
+                <span class="truncate max-w-[130px]">${r.personal_note ? escapeHtml(r.personal_note) : 'Notes'}</span>
+              </button>
             </div>
           </div>
           <div class="pt-3 border-t border-slate-800/80 flex items-center justify-between gap-2 flex-wrap">
@@ -2429,6 +2566,249 @@
     }
 
     // ==========================================
+    // Recipe Notes, 5-Star Ratings & Detail Modal
+    // ==========================================
+    let currentDetailRecipe = null;
+
+    function renderStarRatingHtml(recipeId, rating, fnName, extraArg = null) {
+      const currentRating = Number(rating) || 0;
+      let html = '<div class="inline-flex items-center gap-0.5 cursor-pointer select-none" title="Rate recipe 1-5 stars">';
+      for (let i = 1; i <= 5; i++) {
+        const isFilled = i <= currentRating;
+        const starChar = isFilled ? '★' : '☆';
+        const colorClass = isFilled ? 'text-amber-400 hover:text-amber-300' : 'text-slate-600 hover:text-amber-400';
+        const argStr = extraArg !== null ? `'${recipeId}', ${i}, '${extraArg}'` : `'${recipeId}', ${i}`;
+        html += `<button type="button" onclick="${fnName}(${argStr}); event.stopPropagation();" class="${colorClass} transition-colors px-0.5 text-base leading-none" title="${i} Star${i > 1 ? 's' : ''}">${starChar}</button>`;
+      }
+      html += '</div>';
+      return html;
+    }
+
+    async function saveRecipeNoteAndRating(recipeId, noteText, rating) {
+      if (!authToken) return null;
+      try {
+        const payload = {};
+        if (noteText !== undefined) payload.note_text = noteText;
+        if (rating !== undefined) payload.rating = rating;
+        const res = await apiFetch(`/api/recipes/${recipeId}/note`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        if (!res.ok) {
+          const err = await res.json().catch(() => ({}));
+          throw new Error(err.detail || 'Failed to update recipe note/rating');
+        }
+        const updated = await res.json();
+
+        // Sync in-memory state in myRecipesList
+        if (myRecipesList && myRecipesList.length) {
+          const r = myRecipesList.find(x => x.recipe_id === recipeId);
+          if (r) {
+            r.personal_note = updated.note_text;
+            r.user_rating = updated.rating;
+          }
+        }
+
+        // Sync in-memory state in activePlanData
+        if (activePlanData && activePlanData.meals) {
+          Object.values(activePlanData.meals).forEach(m => {
+            if (m.recipe_id === recipeId) {
+              m.personal_note = updated.note_text;
+              m.user_rating = updated.rating;
+            }
+          });
+        }
+
+        return updated;
+      } catch (err) {
+        console.error("Error saving recipe note/rating:", err);
+        showToast(`⚠️ ${err.message}`);
+        return null;
+      }
+    }
+
+    async function setRecipeRatingForDay(recipeId, rating, day) {
+      const meal = activePlanData && activePlanData.meals && activePlanData.meals[day];
+      const currentRating = meal ? meal.user_rating : null;
+      const targetRating = (currentRating === rating) ? null : rating;
+      const noteInput = document.getElementById(`noteInput_${recipeId}_${day}`);
+      const noteText = noteInput ? noteInput.value : (meal ? meal.personal_note : "");
+
+      const updated = await saveRecipeNoteAndRating(recipeId, noteText, targetRating);
+      if (updated) {
+        const container = document.getElementById(`ratingContainer_${recipeId}_${day}`);
+        if (container) {
+          container.innerHTML = renderStarRatingHtml(recipeId, updated.rating, 'setRecipeRatingForDay', day);
+        }
+        showToast(targetRating ? `⭐ Rated ${targetRating} / 5 stars!` : `⭐ Rating removed`);
+      }
+    }
+
+    async function saveRecipeNoteForDay(recipeId, day) {
+      const noteInput = document.getElementById(`noteInput_${recipeId}_${day}`);
+      if (!noteInput) return;
+      const noteText = noteInput.value;
+      const meal = activePlanData && activePlanData.meals && activePlanData.meals[day];
+      const rating = meal ? meal.user_rating : null;
+
+      const updated = await saveRecipeNoteAndRating(recipeId, noteText, rating);
+      if (updated) {
+        const badge = document.getElementById(`noteSavedStatus_${recipeId}_${day}`);
+        if (badge) {
+          badge.classList.remove('hidden');
+          setTimeout(() => badge.classList.add('hidden'), 2000);
+        }
+        showToast("📝 Kitchen notes saved!");
+      }
+    }
+
+    async function setRecipeRatingForCatalog(recipeId, rating) {
+      const r = myRecipesList ? myRecipesList.find(x => x.recipe_id === recipeId) : null;
+      const currentRating = r ? r.user_rating : null;
+      const targetRating = (currentRating === rating) ? null : rating;
+      const noteText = r ? (r.personal_note || "") : "";
+
+      const updated = await saveRecipeNoteAndRating(recipeId, noteText, targetRating);
+      if (updated) {
+        renderMyRecipes(myRecipesList);
+        showToast(targetRating ? `⭐ Rated ${targetRating} / 5 stars!` : `⭐ Rating removed`);
+      }
+    }
+
+    async function openRecipeDetailModal(recipeId) {
+      const modal = document.getElementById('recipeDetailModal');
+      if (!modal) return;
+
+      let recipe = null;
+      if (myRecipesList) {
+        recipe = myRecipesList.find(r => r.recipe_id === recipeId);
+      }
+      if (!recipe && activePlanData && activePlanData.meals) {
+        recipe = Object.values(activePlanData.meals).find(m => m.recipe_id === recipeId);
+      }
+
+      try {
+        const res = await apiFetch(`/api/recipes/${recipeId}`);
+        if (res.ok) {
+          const fresh = await res.json();
+          recipe = { ...(recipe || {}), ...fresh };
+        }
+      } catch (err) {
+        console.warn("Could not fetch recipe details from API:", err);
+      }
+
+      if (!recipe) {
+        showToast("⚠️ Recipe details not found");
+        return;
+      }
+
+      currentDetailRecipe = recipe;
+
+      document.getElementById('recipeDetailTitle').innerText = recipe.title || 'Recipe Details';
+      document.getElementById('recipeDetailPrepTime').innerText = `⏱ ${recipe.prep_time_minutes || 30}m prep`;
+      document.getElementById('recipeDetailDifficulty').innerText = `📊 ${recipe.difficulty_level || 'medium'}`;
+      document.getElementById('recipeDetailServings').innerText = `🍽️ ${recipe.servings || recipe.default_servings || 4} Servings`;
+      document.getElementById('recipeDetailDescription').innerText = recipe.description || 'No description provided.';
+
+      document.getElementById('recipeDetailNoteInput').value = recipe.personal_note || '';
+      document.getElementById('recipeDetailNoteSavedBadge').classList.add('hidden');
+
+      renderDetailModalRating(recipe.user_rating);
+
+      const ingList = document.getElementById('recipeDetailIngredientsList');
+      ingList.innerHTML = '';
+      if (recipe.ingredients && recipe.ingredients.length > 0) {
+        recipe.ingredients.forEach(ing => {
+          const li = document.createElement('li');
+          const qty = ing.quantity ? `${ing.quantity} ` : '';
+          const unit = ing.unit ? `${ing.unit} ` : '';
+          li.innerText = `• ${qty}${unit}${ing.name}`.trim();
+          ingList.appendChild(li);
+        });
+      } else {
+        ingList.innerHTML = '<li class="text-slate-500 italic">No ingredient details listed.</li>';
+      }
+
+      const instList = document.getElementById('recipeDetailInstructionsList');
+      instList.innerHTML = '';
+      const steps = normalizeCookSteps(recipe.instructions);
+      if (steps.length > 0) {
+        steps.forEach(s => {
+          const p = document.createElement('p');
+          p.className = "flex items-start gap-2";
+          p.innerHTML = `<span class="font-bold text-amber-400 shrink-0 font-mono">${s.step}.</span> <span>${escapeHtml(s.text)}</span>`;
+          instList.appendChild(p);
+        });
+      } else {
+        instList.innerHTML = '<p class="text-slate-500 italic">No instruction steps available.</p>';
+      }
+
+      modal.classList.remove('hidden');
+    }
+
+    function renderDetailModalRating(rating) {
+      const container = document.getElementById('recipeDetailStarRating');
+      const text = document.getElementById('recipeDetailRatingText');
+      if (!container || !text || !currentDetailRecipe) return;
+
+      container.innerHTML = renderStarRatingHtml(currentDetailRecipe.recipe_id, rating, 'setRecipeRatingInDetailModal');
+      if (rating) {
+        text.innerText = `${rating} of 5 stars`;
+      } else {
+        text.innerText = 'Not rated yet';
+      }
+    }
+
+    async function setRecipeRatingInDetailModal(recipeId, rating) {
+      if (!currentDetailRecipe) return;
+      const currentRating = currentDetailRecipe.user_rating;
+      const targetRating = (currentRating === rating) ? null : rating;
+      const noteInput = document.getElementById('recipeDetailNoteInput');
+      const noteText = noteInput ? noteInput.value : (currentDetailRecipe.personal_note || '');
+
+      const updated = await saveRecipeNoteAndRating(recipeId, noteText, targetRating);
+      if (updated) {
+        currentDetailRecipe.user_rating = updated.rating;
+        renderDetailModalRating(updated.rating);
+        showToast(targetRating ? `⭐ Rated ${targetRating} / 5 stars!` : `⭐ Rating removed`);
+        if (myRecipesList && myRecipesList.length) renderMyRecipes(myRecipesList);
+        if (activePlanData && activePlanData.meals) renderPlan(activePlanData);
+      }
+    }
+
+    async function saveRecipeDetailModalNote() {
+      if (!currentDetailRecipe) return;
+      const noteInput = document.getElementById('recipeDetailNoteInput');
+      const noteText = noteInput ? noteInput.value : '';
+      const rating = currentDetailRecipe.user_rating;
+
+      const updated = await saveRecipeNoteAndRating(currentDetailRecipe.recipe_id, noteText, rating);
+      if (updated) {
+        currentDetailRecipe.personal_note = updated.note_text;
+        const badge = document.getElementById('recipeDetailNoteSavedBadge');
+        if (badge) {
+          badge.classList.remove('hidden');
+          setTimeout(() => badge.classList.add('hidden'), 2000);
+        }
+        showToast("📝 Kitchen notes saved!");
+        if (myRecipesList && myRecipesList.length) renderMyRecipes(myRecipesList);
+        if (activePlanData && activePlanData.meals) renderPlan(activePlanData);
+      }
+    }
+
+    function closeRecipeDetailModal() {
+      const modal = document.getElementById('recipeDetailModal');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    function openCookModeFromDetailModal() {
+      if (!currentDetailRecipe) return;
+      closeRecipeDetailModal();
+      openCookMode(currentDetailRecipe);
+    }
+
+    // ==========================================
     // Household Pantry Staples Logic
     // ==========================================
     async function openPantryModal() {
@@ -2664,64 +3044,93 @@
         const fat = nutr.fat_g !== undefined ? Math.round(nutr.fat_g) : Math.round(((meal.nutrition_per_serving && meal.nutrition_per_serving.fat_g) || 18) * currentServings);
 
         const row = document.createElement('div');
-        row.className = "flex flex-col sm:flex-row sm:items-center justify-between p-3 rounded-lg bg-slate-950/60 border border-slate-800 hover:border-slate-700 transition gap-2.5 sm:gap-3";
+        row.className = "flex flex-col p-3 rounded-xl bg-slate-950/70 border border-slate-800 hover:border-slate-700 transition gap-2.5 shadow-sm";
         row.innerHTML = `
-          <div class="flex items-start sm:items-center gap-2.5 sm:gap-3">
-            <span class="text-xs font-bold font-mono px-2.5 py-1 rounded bg-slate-800 text-slate-300 w-24 text-center shrink-0">${day}</span>
-            <div>
-              <div class="flex items-center gap-2">
-                <span class="font-semibold text-xs sm:text-sm text-white">${meal.title}</span>
-                ${meal.is_modified ? '<span class="text-[10px] px-1.5 py-0.5 rounded bg-amber-950 text-amber-400 border border-amber-800 font-mono">Modified</span>' : ''}
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 sm:gap-3">
+            <div class="flex items-start sm:items-center gap-2.5 sm:gap-3">
+              <span class="text-xs font-bold font-mono px-2.5 py-1 rounded bg-slate-800 text-slate-300 w-24 text-center shrink-0">${day}</span>
+              <div>
+                <div class="flex items-center gap-2">
+                  <button type="button" onclick="openRecipeDetailModal('${meal.recipe_id}')" class="font-semibold text-xs sm:text-sm text-white hover:text-amber-300 transition text-left cursor-pointer" title="Click to view full recipe, ingredients & tips">${meal.title}</button>
+                  ${meal.is_modified ? '<span class="text-[10px] px-1.5 py-0.5 rounded bg-amber-950 text-amber-400 border border-amber-800 font-mono">Modified</span>' : ''}
+                </div>
+                <p class="text-[11px] text-slate-400 mt-0.5 line-clamp-1">${meal.description || ''}</p>
+                <div class="flex items-center gap-1.5 mt-1.5 text-[10px] font-mono flex-wrap">
+                  <span class="inline-flex items-center gap-1 bg-amber-950/40 border border-amber-800/40 text-amber-300 px-1.5 py-0.5 rounded font-semibold" title="Total Calories for ${currentServings} servings">
+                    🔥 ${cal} kcal
+                  </span>
+                  <span class="inline-flex items-center gap-1 bg-rose-950/40 border border-rose-800/40 text-rose-300 px-1.5 py-0.5 rounded font-semibold" title="Total Protein">
+                    🥩 ${prot}g P
+                  </span>
+                  <span class="inline-flex items-center gap-1 bg-sky-950/40 border border-sky-800/40 text-sky-300 px-1.5 py-0.5 rounded font-semibold" title="Total Carbohydrates">
+                    🍞 ${carb}g C
+                  </span>
+                  <span class="inline-flex items-center gap-1 bg-emerald-950/40 border border-emerald-800/40 text-emerald-300 px-1.5 py-0.5 rounded font-semibold" title="Total Fat">
+                    🥑 ${fat}g F
+                  </span>
+                </div>
               </div>
-              <p class="text-[11px] text-slate-400 mt-0.5 line-clamp-1">${meal.description || ''}</p>
-              <div class="flex items-center gap-1.5 mt-1.5 text-[10px] font-mono flex-wrap">
-                <span class="inline-flex items-center gap-1 bg-amber-950/40 border border-amber-800/40 text-amber-300 px-1.5 py-0.5 rounded font-semibold" title="Total Calories for ${currentServings} servings">
-                  🔥 ${cal} kcal
+            </div>
+            <div class="flex items-center justify-between sm:justify-end gap-2.5 sm:gap-3 shrink-0 pt-1 sm:pt-0">
+              <!-- Serving Stepper -->
+              <div class="flex items-center gap-1 bg-slate-900/90 border border-slate-700/80 rounded-lg p-0.5 ${isPlanLocked ? 'opacity-50' : ''}">
+                <button
+                  type="button"
+                  onclick="adjustSlotServings('${meal.item_id}', ${currentServings - 1})"
+                  ${isPlanLocked || currentServings <= 1 ? 'disabled' : ''}
+                  class="w-6 h-6 flex items-center justify-center rounded text-xs font-bold text-slate-300 hover:text-white hover:bg-slate-800 disabled:opacity-30 disabled:hover:bg-transparent transition"
+                  title="Decrease servings"
+                >
+                  -
+                </button>
+                <span class="text-[11px] font-mono font-semibold text-slate-200 px-1 min-w-[65px] text-center" title="Portion size">
+                  ${currentServings} serving${currentServings === 1 ? '' : 's'}
                 </span>
-                <span class="inline-flex items-center gap-1 bg-rose-950/40 border border-rose-800/40 text-rose-300 px-1.5 py-0.5 rounded font-semibold" title="Total Protein">
-                  🥩 ${prot}g P
-                </span>
-                <span class="inline-flex items-center gap-1 bg-sky-950/40 border border-sky-800/40 text-sky-300 px-1.5 py-0.5 rounded font-semibold" title="Total Carbohydrates">
-                  🍞 ${carb}g C
-                </span>
-                <span class="inline-flex items-center gap-1 bg-emerald-950/40 border border-emerald-800/40 text-emerald-300 px-1.5 py-0.5 rounded font-semibold" title="Total Fat">
-                  🥑 ${fat}g F
-                </span>
+                <button
+                  type="button"
+                  onclick="adjustSlotServings('${meal.item_id}', ${currentServings + 1})"
+                  ${isPlanLocked || currentServings >= 20 ? 'disabled' : ''}
+                  class="w-6 h-6 flex items-center justify-center rounded text-xs font-bold text-slate-300 hover:text-white hover:bg-slate-800 disabled:opacity-30 disabled:hover:bg-transparent transition"
+                  title="Increase servings"
+                >
+                  +
+                </button>
               </div>
+              <span class="text-xs text-slate-500 font-mono hidden md:inline">${meal.prep_time_minutes}m • ${meal.difficulty_level}</span>
+              <button onclick="openCookModeForScheduledMeal('${day}')" class="bg-amber-600 hover:bg-amber-500 text-white text-xs px-2.5 py-1 rounded transition flex items-center gap-1 shadow font-medium" title="Launch In-Kitchen Cook Mode">
+                <span>👨‍🍳</span> Cook
+              </button>
+              <button onclick="swapMeal('${day}')" ${isPlanLocked ? 'disabled' : ''} class="disabled:opacity-30 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs px-2.5 py-1 rounded transition flex items-center gap-1 border border-slate-700">
+                <span>🔄</span> Swap
+              </button>
             </div>
           </div>
-          <div class="flex items-center justify-between sm:justify-end gap-2.5 sm:gap-3 shrink-0 pt-1 sm:pt-0">
-            <!-- Serving Stepper -->
-            <div class="flex items-center gap-1 bg-slate-900/90 border border-slate-700/80 rounded-lg p-0.5 ${isPlanLocked ? 'opacity-50' : ''}">
-              <button
-                type="button"
-                onclick="adjustSlotServings('${meal.item_id}', ${currentServings - 1})"
-                ${isPlanLocked || currentServings <= 1 ? 'disabled' : ''}
-                class="w-6 h-6 flex items-center justify-center rounded text-xs font-bold text-slate-300 hover:text-white hover:bg-slate-800 disabled:opacity-30 disabled:hover:bg-transparent transition"
-                title="Decrease servings"
-              >
-                -
-              </button>
-              <span class="text-[11px] font-mono font-semibold text-slate-200 px-1 min-w-[65px] text-center" title="Portion size">
-                ${currentServings} serving${currentServings === 1 ? '' : 's'}
-              </span>
-              <button
-                type="button"
-                onclick="adjustSlotServings('${meal.item_id}', ${currentServings + 1})"
-                ${isPlanLocked || currentServings >= 20 ? 'disabled' : ''}
-                class="w-6 h-6 flex items-center justify-center rounded text-xs font-bold text-slate-300 hover:text-white hover:bg-slate-800 disabled:opacity-30 disabled:hover:bg-transparent transition"
-                title="Increase servings"
-              >
-                +
-              </button>
+          <!-- Kitchen Notes and 5-Star Rating Row -->
+          <div class="pt-2 border-t border-slate-800/80 flex flex-col md:flex-row md:items-center justify-between gap-2 text-xs">
+            <div class="flex items-center gap-2 shrink-0">
+              <span class="text-[11px] font-semibold text-slate-400">Rating:</span>
+              <div id="ratingContainer_${meal.recipe_id}_${day}" class="flex items-center gap-0.5">
+                ${renderStarRatingHtml(meal.recipe_id, meal.user_rating, 'setRecipeRatingForDay', day)}
+              </div>
             </div>
-            <span class="text-xs text-slate-500 font-mono hidden md:inline">${meal.prep_time_minutes}m • ${meal.difficulty_level}</span>
-            <button onclick="openCookModeForScheduledMeal('${day}')" class="bg-amber-600 hover:bg-amber-500 text-white text-xs px-2.5 py-1 rounded transition flex items-center gap-1 shadow font-medium" title="Launch In-Kitchen Cook Mode">
-              <span>👨‍🍳</span> Cook
-            </button>
-            <button onclick="swapMeal('${day}')" ${isPlanLocked ? 'disabled' : ''} class="disabled:opacity-30 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs px-2.5 py-1 rounded transition flex items-center gap-1 border border-slate-700">
-              <span>🔄</span> Swap
-            </button>
+            <div class="flex items-center gap-2 flex-1 max-w-xl">
+              <input
+                id="noteInput_${meal.recipe_id}_${day}"
+                type="text"
+                placeholder="📝 Kitchen notes (e.g. 'Use 1/2 salt', 'Double onions')..."
+                value="${escapeHtml(meal.personal_note || '')}"
+                class="flex-1 bg-slate-900 border border-slate-800 focus:border-amber-500 rounded-lg px-2.5 py-1 text-xs text-white placeholder-slate-500 focus:outline-none transition"
+                onkeydown="if(event.key==='Enter'){ saveRecipeNoteForDay('${meal.recipe_id}', '${day}'); }"
+              />
+              <button
+                type="button"
+                onclick="saveRecipeNoteForDay('${meal.recipe_id}', '${day}')"
+                class="px-2.5 py-1 rounded-lg text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition shrink-0"
+              >
+                Save
+              </button>
+              <span id="noteSavedStatus_${meal.recipe_id}_${day}" class="text-[11px] text-emerald-400 font-mono hidden shrink-0">✓</span>
+            </div>
           </div>
         `;
         container.appendChild(row);
@@ -3845,6 +4254,8 @@
           timersPills.innerHTML = '';
         }
       }
+
+      updateCookNotesBanner();
     }
 
     function prevCookStep() {
@@ -3859,6 +4270,26 @@
       } else {
         showToast("🎉 Recipe finished! Bon appétit!");
         closeCookMode();
+      }
+    }
+
+    function updateCookNotesBanner() {
+      const banner = document.getElementById('cookModeNotesBanner');
+      if (!banner) return;
+      if (currentCookStepIndex === 0 && activeCookRecipe && activeCookRecipe.personal_note && activeCookRecipe.personal_note.trim()) {
+        banner.classList.remove('hidden');
+        const textEl = document.getElementById('cookModeNotesText');
+        if (textEl) textEl.innerText = activeCookRecipe.personal_note.trim();
+        const ratingEl = document.getElementById('cookModeNotesRating');
+        if (ratingEl) {
+          if (activeCookRecipe.user_rating) {
+            ratingEl.innerText = '★'.repeat(activeCookRecipe.user_rating) + '☆'.repeat(5 - activeCookRecipe.user_rating);
+          } else {
+            ratingEl.innerText = '';
+          }
+        }
+      } else {
+        banner.classList.add('hidden');
       }
     }
 
@@ -3889,6 +4320,20 @@
       renderCookIngredients(recipe.ingredients || []);
       setCookStep(0);
 
+      // If notes are not yet present on recipe object, fetch them
+      if (recipe.personal_note === undefined && recipe.recipe_id && authToken) {
+        apiFetch(`/api/recipes/${recipe.recipe_id}/note`).then(async res => {
+          if (res.ok) {
+            const noteData = await res.json();
+            recipe.personal_note = noteData.note_text;
+            recipe.user_rating = noteData.rating;
+            if (activeCookRecipe && activeCookRecipe.recipe_id === recipe.recipe_id && currentCookStepIndex === 0) {
+              updateCookNotesBanner();
+            }
+          }
+        }).catch(err => console.warn("Could not fetch recipe note for cook mode:", err));
+      }
+
       modal.classList.remove('hidden');
       document.body.classList.add('overflow-hidden');
 
@@ -3901,6 +4346,8 @@
       if (modal) {
         modal.classList.add('hidden');
       }
+      const banner = document.getElementById('cookModeNotesBanner');
+      if (banner) banner.classList.add('hidden');
       document.body.classList.remove('overflow-hidden');
       releaseCookWakeLock();
     }
@@ -3918,6 +4365,12 @@
             const fullRecipe = await res.json();
             meal.instructions = fullRecipe.instructions;
             meal.ingredients = fullRecipe.ingredients || meal.ingredients;
+            if (meal.personal_note === undefined && fullRecipe.personal_note !== undefined) {
+              meal.personal_note = fullRecipe.personal_note;
+            }
+            if (meal.user_rating === undefined && fullRecipe.user_rating !== undefined) {
+              meal.user_rating = fullRecipe.user_rating;
+            }
           }
         } catch (e) {
           console.warn("Could not fetch full recipe details:", e);

@@ -12,7 +12,7 @@ from sqlalchemy import select, text
 from sqlalchemy.orm import selectinload
 
 from app.database.session import AsyncSessionLocal
-from app.models import MealPlan, MealPlanItem, Recipe, Household, DietaryPreference, HouseholdRecipe
+from app.models import MealPlan, MealPlanItem, Recipe, Household, DietaryPreference, HouseholdRecipe, HouseholdRecipeNote
 from app.schemas.meal_plan import (
     DEFAULT_7_DAYS,
     MealPlanGenerateRequest,
@@ -46,7 +46,7 @@ DEFAULT_NUTRITION_PER_SERVING = {
     "fat_g": 18.0,
 }
 
-def format_plan_response(plan: MealPlan) -> Dict:
+async def format_plan_response(plan: MealPlan, db: Optional[AsyncSession] = None) -> Dict:
     meals = {}
     daily_nutrition = {}
     total_cal = 0.0
@@ -54,6 +54,21 @@ def format_plan_response(plan: MealPlan) -> Dict:
     total_carbs = 0.0
     total_fat = 0.0
     valid_days_count = 0
+
+    notes_map = {}
+    if db and getattr(plan, "household_id", None) and plan.items:
+        r_ids = [item.recipe_id for item in plan.items if item.recipe_id]
+        if r_ids:
+            try:
+                note_stmt = select(HouseholdRecipeNote).where(
+                    HouseholdRecipeNote.household_id == plan.household_id,
+                    HouseholdRecipeNote.recipe_id.in_(r_ids)
+                )
+                note_res = await db.execute(note_stmt)
+                for n in note_res.scalars().all():
+                    notes_map[n.recipe_id] = n
+            except Exception:
+                pass
 
     for item in plan.items:
         if item.recipe:
@@ -92,6 +107,8 @@ def format_plan_response(plan: MealPlan) -> Dict:
             total_fat += scaled_total["fat_g"]
             valid_days_count += 1
 
+            note_obj = notes_map.get(item.recipe.recipe_id)
+
             meals[item.day_of_week] = {
                 "item_id": str(item.item_id),
                 "recipe_id": str(item.recipe.recipe_id),
@@ -107,6 +124,8 @@ def format_plan_response(plan: MealPlan) -> Dict:
                 "ingredients": item.recipe.ingredients or [],
                 "nutrition_per_serving": per_serving,
                 "daily_nutrition": day_nutr,
+                "personal_note": note_obj.note_text if note_obj else None,
+                "user_rating": note_obj.rating if note_obj else None,
             }
 
     count = len(meals)
@@ -355,7 +374,7 @@ async def generate_weekly_plan(
     res = await db.execute(stmt)
     full_plan = res.scalar_one()
 
-    return format_plan_response(full_plan)
+    return await format_plan_response(full_plan, db=db)
 
 @router.get("/household/{household_id}/latest", response_model=WeeklyMealPlanResponse)
 async def get_latest_household_meal_plan(household_id: UUID, db: AsyncSession = Depends(get_db)):
@@ -371,7 +390,7 @@ async def get_latest_household_meal_plan(household_id: UUID, db: AsyncSession = 
     plan = res.scalar_one_or_none()
     if not plan:
         raise HTTPException(status_code=404, detail="No meal plan found for this household.")
-    return format_plan_response(plan)
+    return await format_plan_response(plan, db=db)
 
 @router.get("/feed/{feed_token}/calendar.ics")
 async def get_calendar_feed(feed_token: str, db: AsyncSession = Depends(get_db)):
@@ -454,7 +473,7 @@ async def get_meal_plan(plan_id: UUID, db: AsyncSession = Depends(get_db)):
     if not plan:
         raise HTTPException(status_code=404, detail=f"Meal plan {plan_id} not found.")
 
-    return format_plan_response(plan)
+    return await format_plan_response(plan, db=db)
 
 @router.post("/{plan_id}/assign-slots", response_model=WeeklyMealPlanResponse)
 async def assign_slots(
@@ -590,7 +609,7 @@ async def assign_slots(
 
     res = await db.execute(stmt)
     full_plan = res.scalar_one()
-    return format_plan_response(full_plan)
+    return await format_plan_response(full_plan, db=db)
 
 @router.post("/{plan_id}/swap", response_model=WeeklyMealPlanResponse)
 async def swap_meal(
@@ -782,7 +801,7 @@ async def swap_meal(
 
     res = await db.execute(stmt)
     full_plan = res.scalar_one()
-    return format_plan_response(full_plan)
+    return await format_plan_response(full_plan, db=db)
 
 @router.post("/{plan_id}/lock", response_model=WeeklyMealPlanResponse)
 async def lock_meal_plan(
@@ -811,7 +830,7 @@ async def lock_meal_plan(
 
     res = await db.execute(stmt)
     full_plan = res.scalar_one()
-    return format_plan_response(full_plan)
+    return await format_plan_response(full_plan, db=db)
 
 @router.post("/{plan_id}/shuffle", response_model=WeeklyMealPlanResponse)
 async def shuffle_meal_plan(
@@ -906,7 +925,7 @@ async def shuffle_meal_plan(
 
     res = await db.execute(stmt)
     full_plan = res.scalar_one()
-    return format_plan_response(full_plan)
+    return await format_plan_response(full_plan, db=db)
 
 @router.post("/{plan_id}/add-day", response_model=WeeklyMealPlanResponse)
 async def add_day_to_meal_plan(
@@ -1045,7 +1064,7 @@ async def add_day_to_meal_plan(
 
     res = await db.execute(stmt)
     full_plan = res.scalar_one()
-    return format_plan_response(full_plan)
+    return await format_plan_response(full_plan, db=db)
 
 @router.post("/{plan_id}/subtract-day", response_model=WeeklyMealPlanResponse)
 @router.post("/{plan_id}/remove-day", response_model=WeeklyMealPlanResponse)
@@ -1087,7 +1106,7 @@ async def subtract_day_from_meal_plan(
 
     res = await db.execute(stmt)
     full_plan = res.scalar_one()
-    return format_plan_response(full_plan)
+    return await format_plan_response(full_plan, db=db)
 
 @router.delete("/{plan_id}/days/{day_of_week}", response_model=WeeklyMealPlanResponse)
 async def delete_day_from_meal_plan(
@@ -1214,7 +1233,7 @@ async def update_meal_plan_days(
     db.expire_all()
     res = await db.execute(stmt)
     full_plan = res.scalar_one()
-    return format_plan_response(full_plan)
+    return await format_plan_response(full_plan, db=db)
 
 @router.patch("/{plan_id}/slots/{item_id}/servings", response_model=WeeklyMealPlanResponse)
 async def update_slot_servings(
@@ -1278,7 +1297,7 @@ async def update_slot_servings(
 
     res = await db.execute(stmt)
     full_plan = res.scalar_one()
-    return format_plan_response(full_plan)
+    return await format_plan_response(full_plan, db=db)
 
 @router.get("/{plan_id}/grocery-list")
 async def get_plan_grocery_list(plan_id: UUID, db: AsyncSession = Depends(get_db)):

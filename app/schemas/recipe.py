@@ -40,5 +40,22 @@ class RecipeResponse(BaseModel):
     is_public: bool = True
     has_embedding: bool = True
     created_at: Optional[datetime] = None
+    personal_note: Optional[str] = None
+    user_rating: Optional[int] = None
 
     model_config = ConfigDict(from_attributes=True)
+
+class RecipeNoteUpsertRequest(BaseModel):
+    note_text: Optional[str] = ""
+    rating: Optional[int] = Field(default=None, ge=1, le=5)
+
+class RecipeNoteResponse(BaseModel):
+    note_id: Optional[UUID] = None
+    household_id: UUID
+    recipe_id: UUID
+    note_text: str = ""
+    rating: Optional[int] = None
+    updated_at: Optional[datetime] = None
+
+    model_config = ConfigDict(from_attributes=True)
+

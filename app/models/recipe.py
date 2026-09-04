@@ -1,4 +1,4 @@
-from sqlalchemy import Column, String, Integer, Text, Boolean, DECIMAL, ForeignKey, DateTime
+from sqlalchemy import Column, String, Integer, Text, Boolean, DECIMAL, ForeignKey, DateTime, CheckConstraint, UniqueConstraint
 from sqlalchemy.dialects.postgresql import UUID, JSONB
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
@@ -51,3 +51,19 @@ class RecipeIngredient(Base):
     ingredient_id = Column(UUID(as_uuid=True), ForeignKey("ingredients.ingredient_id", ondelete="CASCADE"), primary_key=True)
     quantity = Column(DECIMAL(10, 2), nullable=False)
     unit = Column(String(50), nullable=False)
+
+class HouseholdRecipeNote(Base):
+    __tablename__ = "household_recipe_notes"
+
+    note_id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    household_id = Column(UUID(as_uuid=True), ForeignKey("households.household_id", ondelete="CASCADE"), nullable=False)
+    recipe_id = Column(UUID(as_uuid=True), ForeignKey("recipes.recipe_id", ondelete="CASCADE"), nullable=False)
+    note_text = Column(Text, nullable=False, default="", server_default="''")
+    rating = Column(Integer, nullable=True)
+    updated_at = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())
+
+    __table_args__ = (
+        CheckConstraint("rating IS NULL OR (rating >= 1 AND rating <= 5)", name="check_rating_range"),
+        UniqueConstraint("household_id", "recipe_id", name="uq_household_recipe_notes"),
+    )
+

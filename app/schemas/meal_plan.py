@@ -30,6 +30,8 @@ class MealSlotResponse(BaseModel):
     ingredients: Optional[List[Dict[str, Any]]] = Field(default_factory=list)
     nutrition_per_serving: Optional[Dict[str, Any]] = Field(default_factory=dict)
     daily_nutrition: Optional[Dict[str, Any]] = Field(default_factory=dict)
+    personal_note: Optional[str] = None
+    user_rating: Optional[int] = None
 
     model_config = ConfigDict(from_attributes=True, extra="ignore")
 

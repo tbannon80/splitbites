@@ -19,8 +19,16 @@ from app.models import (
     HouseholdRecipe,
     Household,
     User,
+    HouseholdRecipeNote,
 )
-from app.schemas.recipe import RecipeCreateRequest, RecipeResponse, RecipeIngredientItem, RecipeInstructionItem
+from app.schemas.recipe import (
+    RecipeCreateRequest,
+    RecipeResponse,
+    RecipeIngredientItem,
+    RecipeInstructionItem,
+    RecipeNoteUpsertRequest,
+    RecipeNoteResponse,
+)
 from app.services.embedding import get_embedding
 from app.services.auth import decode_access_token
 
@@ -44,7 +52,11 @@ def require_auth_token_payload(credentials: Optional[HTTPAuthorizationCredential
         raise HTTPException(status_code=401, detail="Invalid or expired session token")
     return payload
 
-def format_recipe_response(recipe: Recipe) -> Dict[str, Any]:
+def format_recipe_response(
+    recipe: Recipe,
+    personal_note: Optional[str] = None,
+    user_rating: Optional[int] = None
+) -> Dict[str, Any]:
     tags = [p.preference_name for p in recipe.dietary_preferences] if recipe.dietary_preferences else []
     return {
         "recipe_id": str(recipe.recipe_id),
@@ -59,7 +71,9 @@ def format_recipe_response(recipe: Recipe) -> Dict[str, Any]:
         "dietary_tags": tags,
         "is_public": recipe.is_public,
         "has_embedding": recipe.embedding is not None,
-        "created_at": recipe.created_at
+        "created_at": recipe.created_at,
+        "personal_note": personal_note,
+        "user_rating": user_rating,
     }
 
 def normalize_instructions(raw_inst: Union[List[Any], str]) -> List[Dict[str, Any]]:
@@ -256,6 +270,7 @@ async def create_recipe(
 async def list_recipes(
     tag: Optional[str] = None,
     limit: int = 50,
+    auth_data: Optional[Dict[str, Any]] = Depends(get_auth_token_payload),
     db: AsyncSession = Depends(get_db)
 ):
     """List available recipes with optional dietary tag filtering."""
@@ -270,7 +285,30 @@ async def list_recipes(
             if clean_tag in [p.preference_name.lower() for p in r.dietary_preferences]
         ]
 
-    return [format_recipe_response(r) for r in recipes]
+    notes_map = {}
+    if auth_data and "hid" in auth_data:
+        try:
+            hid = UUID(auth_data["hid"])
+            r_ids = [r.recipe_id for r in recipes]
+            if r_ids:
+                note_stmt = select(HouseholdRecipeNote).where(
+                    HouseholdRecipeNote.household_id == hid,
+                    HouseholdRecipeNote.recipe_id.in_(r_ids)
+                )
+                note_res = await db.execute(note_stmt)
+                for n in note_res.scalars().all():
+                    notes_map[n.recipe_id] = n
+        except Exception:
+            pass
+
+    return [
+        format_recipe_response(
+            r,
+            personal_note=notes_map[r.recipe_id].note_text if r.recipe_id in notes_map else None,
+            user_rating=notes_map[r.recipe_id].rating if r.recipe_id in notes_map else None
+        )
+        for r in recipes
+    ]
 
 @router.get("/my-recipes")
 async def list_my_recipes(
@@ -291,9 +329,21 @@ async def list_my_recipes(
     res = await db.execute(stmt)
     rows = res.all()
 
+    notes_map = {}
+    if rows:
+        r_ids = [r.recipe_id for r, _ in rows]
+        note_stmt = select(HouseholdRecipeNote).where(
+            HouseholdRecipeNote.household_id == hid,
+            HouseholdRecipeNote.recipe_id.in_(r_ids)
+        )
+        note_res = await db.execute(note_stmt)
+        for n in note_res.scalars().all():
+            notes_map[n.recipe_id] = n
+
     items = []
     for r, added_at in rows:
         tags = [p.preference_name for p in r.dietary_preferences] if r.dietary_preferences else []
+        note_obj = notes_map.get(r.recipe_id)
         items.append({
             "recipe_id": str(r.recipe_id),
             "title": r.title,
@@ -305,7 +355,9 @@ async def list_my_recipes(
             "dietary_tags": tags,
             "is_public": r.is_public,
             "is_created_by_family": r.household_id == hid,
-            "added_at": added_at.isoformat() if added_at else None
+            "added_at": added_at.isoformat() if added_at else None,
+            "personal_note": note_obj.note_text if note_obj else None,
+            "user_rating": note_obj.rating if note_obj else None,
         })
     return items
 
@@ -415,7 +467,11 @@ async def add_community_recipe_to_book(
     }
 
 @router.get("/{recipe_id}", response_model=RecipeResponse)
-async def get_recipe(recipe_id: UUID, db: AsyncSession = Depends(get_db)):
+async def get_recipe(
+    recipe_id: UUID,
+    auth_data: Optional[Dict[str, Any]] = Depends(get_auth_token_payload),
+    db: AsyncSession = Depends(get_db)
+):
     """Fetch recipe details by ID."""
     stmt = (
         select(Recipe)
@@ -427,7 +483,113 @@ async def get_recipe(recipe_id: UUID, db: AsyncSession = Depends(get_db)):
     if not recipe:
         raise HTTPException(status_code=404, detail=f"Recipe {recipe_id} not found.")
 
-    return format_recipe_response(recipe)
+    personal_note = None
+    user_rating = None
+    if auth_data and "hid" in auth_data:
+        try:
+            hid = UUID(auth_data["hid"])
+            note_stmt = select(HouseholdRecipeNote).where(
+                HouseholdRecipeNote.household_id == hid,
+                HouseholdRecipeNote.recipe_id == recipe_id
+            )
+            note_res = await db.execute(note_stmt)
+            note = note_res.scalar_one_or_none()
+            if note:
+                personal_note = note.note_text
+                user_rating = note.rating
+        except Exception:
+            pass
+
+    return format_recipe_response(recipe, personal_note=personal_note, user_rating=user_rating)
+
+@router.get("/{recipe_id}/note", response_model=RecipeNoteResponse)
+async def get_recipe_note(
+    recipe_id: UUID,
+    auth_data: Dict[str, Any] = Depends(require_auth_token_payload),
+    db: AsyncSession = Depends(get_db)
+):
+    """Fetch authenticated household's private note and rating for a recipe."""
+    hid = UUID(auth_data["hid"])
+
+    # Verify recipe exists
+    chk_stmt = select(Recipe).where(Recipe.recipe_id == recipe_id)
+    chk_res = await db.execute(chk_stmt)
+    if not chk_res.scalar_one_or_none():
+        raise HTTPException(status_code=404, detail="Recipe not found.")
+
+    stmt = select(HouseholdRecipeNote).where(
+        HouseholdRecipeNote.household_id == hid,
+        HouseholdRecipeNote.recipe_id == recipe_id
+    )
+    res = await db.execute(stmt)
+    note = res.scalar_one_or_none()
+
+    if not note:
+        return {
+            "note_id": None,
+            "household_id": hid,
+            "recipe_id": recipe_id,
+            "note_text": "",
+            "rating": None,
+            "updated_at": None,
+        }
+
+    return {
+        "note_id": note.note_id,
+        "household_id": note.household_id,
+        "recipe_id": note.recipe_id,
+        "note_text": note.note_text,
+        "rating": note.rating,
+        "updated_at": note.updated_at,
+    }
+
+@router.put("/{recipe_id}/note", response_model=RecipeNoteResponse)
+async def upsert_recipe_note(
+    recipe_id: UUID,
+    payload: RecipeNoteUpsertRequest,
+    auth_data: Dict[str, Any] = Depends(require_auth_token_payload),
+    db: AsyncSession = Depends(get_db)
+):
+    """Upsert authenticated household's private note and star rating for a recipe."""
+    hid = UUID(auth_data["hid"])
+
+    # Verify recipe exists
+    chk_stmt = select(Recipe).where(Recipe.recipe_id == recipe_id)
+    chk_res = await db.execute(chk_stmt)
+    if not chk_res.scalar_one_or_none():
+        raise HTTPException(status_code=404, detail="Recipe not found.")
+
+    stmt = select(HouseholdRecipeNote).where(
+        HouseholdRecipeNote.household_id == hid,
+        HouseholdRecipeNote.recipe_id == recipe_id
+    )
+    res = await db.execute(stmt)
+    note = res.scalar_one_or_none()
+
+    if not note:
+        note = HouseholdRecipeNote(
+            household_id=hid,
+            recipe_id=recipe_id,
+            note_text=payload.note_text if payload.note_text is not None else "",
+            rating=payload.rating
+        )
+        db.add(note)
+    else:
+        if payload.note_text is not None:
+            note.note_text = payload.note_text
+        note.rating = payload.rating
+
+    await db.commit()
+    await db.refresh(note)
+
+    return {
+        "note_id": note.note_id,
+        "household_id": note.household_id,
+        "recipe_id": note.recipe_id,
+        "note_text": note.note_text,
+        "rating": note.rating,
+        "updated_at": note.updated_at,
+    }
 
 from pydantic import BaseModel, HttpUrl
 from app.services.recipe_scraper import extract_recipe_from_url
