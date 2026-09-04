@@ -53,10 +53,13 @@ CREATE TABLE IF NOT EXISTS recipes (
     prep_time_minutes INT,
     difficulty_level VARCHAR(50),
     instructions JSONB NOT NULL,
+    default_servings INT NOT NULL DEFAULT 4,
     is_public BOOLEAN DEFAULT TRUE,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     embedding vector(1536)
 );
+
+ALTER TABLE recipes ADD COLUMN IF NOT EXISTS default_servings INT NOT NULL DEFAULT 4;
 
 -- Ensure embedding column exists if table was pre-existing
 ALTER TABLE recipes ADD COLUMN IF NOT EXISTS embedding vector(1536);
@@ -95,11 +98,13 @@ CREATE TABLE IF NOT EXISTS meal_plan_items (
     meal_plan_id UUID REFERENCES meal_plans(plan_id) ON DELETE CASCADE,
     recipe_id UUID REFERENCES recipes(recipe_id) ON DELETE SET NULL,
     day_of_week VARCHAR(20) NOT NULL,
+    servings INT NOT NULL DEFAULT 4,
     is_modified BOOLEAN DEFAULT FALSE,
     fallback_applied BOOLEAN DEFAULT FALSE,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
+ALTER TABLE meal_plan_items ADD COLUMN IF NOT EXISTS servings INT NOT NULL DEFAULT 4;
 ALTER TABLE meal_plan_items ADD COLUMN IF NOT EXISTS fallback_applied BOOLEAN DEFAULT FALSE;
 
 -- Aliases / legacy compatibility tables

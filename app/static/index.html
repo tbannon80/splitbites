@@ -2457,7 +2457,8 @@
 
       document.getElementById('planMeta').innerText = `Plan: ${plan.plan_id.slice(0, 8)}... | Week: ${plan.week_start_date}`;
 
-      const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
+      const allDays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+      const days = allDays.filter(d => Boolean(plan.meals[d]));
       const container = document.getElementById('planContainer');
       container.innerHTML = '';
 
@@ -2465,6 +2466,7 @@
         const meal = plan.meals[day];
         if (!meal) return;
 
+        const currentServings = meal.servings || 4;
         const row = document.createElement('div');
         row.className = "flex flex-col sm:flex-row sm:items-center justify-between p-3 rounded-lg bg-slate-950/60 border border-slate-800 hover:border-slate-700 transition gap-2.5 sm:gap-3";
         row.innerHTML = `
@@ -2478,8 +2480,32 @@
               <p class="text-[11px] text-slate-400 mt-0.5 line-clamp-1">${meal.description || ''}</p>
             </div>
           </div>
-          <div class="flex items-center justify-between sm:justify-end gap-3 shrink-0 pt-1 sm:pt-0">
-            <span class="text-xs text-slate-500 font-mono">${meal.prep_time_minutes}m • ${meal.difficulty_level}</span>
+          <div class="flex items-center justify-between sm:justify-end gap-2.5 sm:gap-3 shrink-0 pt-1 sm:pt-0">
+            <!-- Serving Stepper -->
+            <div class="flex items-center gap-1 bg-slate-900/90 border border-slate-700/80 rounded-lg p-0.5 ${isPlanLocked ? 'opacity-50' : ''}">
+              <button
+                type="button"
+                onclick="adjustSlotServings('${meal.item_id}', ${currentServings - 1})"
+                ${isPlanLocked || currentServings <= 1 ? 'disabled' : ''}
+                class="w-6 h-6 flex items-center justify-center rounded text-xs font-bold text-slate-300 hover:text-white hover:bg-slate-800 disabled:opacity-30 disabled:hover:bg-transparent transition"
+                title="Decrease servings"
+              >
+                -
+              </button>
+              <span class="text-[11px] font-mono font-semibold text-slate-200 px-1 min-w-[65px] text-center" title="Portion size">
+                ${currentServings} serving${currentServings === 1 ? '' : 's'}
+              </span>
+              <button
+                type="button"
+                onclick="adjustSlotServings('${meal.item_id}', ${currentServings + 1})"
+                ${isPlanLocked || currentServings >= 20 ? 'disabled' : ''}
+                class="w-6 h-6 flex items-center justify-center rounded text-xs font-bold text-slate-300 hover:text-white hover:bg-slate-800 disabled:opacity-30 disabled:hover:bg-transparent transition"
+                title="Increase servings"
+              >
+                +
+              </button>
+            </div>
+            <span class="text-xs text-slate-500 font-mono hidden md:inline">${meal.prep_time_minutes}m • ${meal.difficulty_level}</span>
             <button onclick="swapMeal('${day}')" ${isPlanLocked ? 'disabled' : ''} class="disabled:opacity-30 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs px-2.5 py-1 rounded transition flex items-center gap-1 border border-slate-700">
               <span>🔄</span> Swap
             </button>
@@ -2487,6 +2513,29 @@
         `;
         container.appendChild(row);
       });
+    }
+
+    async function adjustSlotServings(itemId, newServings) {
+      if (!activePlanId || isPlanLocked) return;
+      if (newServings < 1 || newServings > 20) return;
+
+      try {
+        const res = await apiFetch(`/api/meal-plans/${activePlanId}/slots/${itemId}/servings`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ servings: newServings })
+        });
+        if (!res.ok) {
+          const errData = await res.json().catch(() => ({}));
+          throw new Error(errData.detail || `HTTP ${res.status}`);
+        }
+        const updated = await res.json();
+        renderPlan(updated);
+        // Automatically trigger grocery re-aggregation
+        fetchGroceries(false);
+      } catch (err) {
+        alert("Failed to update servings: " + err.message);
+      }
     }
 
     async function swapMeal(day) {

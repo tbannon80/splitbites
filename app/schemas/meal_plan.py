@@ -1,4 +1,4 @@
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, Field
 from typing import Optional, List, Dict, Any
 from uuid import UUID
 from datetime import date
@@ -16,11 +16,14 @@ class MealPlanGenerateRequest(BaseModel):
     persist: bool = True
 
 class MealSlotResponse(BaseModel):
+    item_id: Optional[str] = None
     recipe_id: str
     title: str
     description: Optional[str] = None
     prep_time_minutes: Optional[int] = None
     difficulty_level: Optional[str] = None
+    servings: Optional[int] = 4
+    default_servings: Optional[int] = 4
     is_modified: Optional[bool] = False
     fallback_applied: Optional[bool] = False
 
@@ -59,3 +62,7 @@ class SlotAssignment(BaseModel):
     day_of_week: str
     recipe_id: UUID
     force: bool = False
+
+class ServingsUpdateRequest(BaseModel):
+    servings: int = Field(..., ge=1, le=20)
+

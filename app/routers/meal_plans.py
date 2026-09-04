@@ -23,6 +23,7 @@ from app.schemas.meal_plan import (
     MealPlanSubtractDayRequest,
     MealPlanDaysUpdateRequest,
     SlotAssignment,
+    ServingsUpdateRequest,
     MealSlotResponse,
     WeeklyMealPlanResponse,
 )
@@ -43,11 +44,14 @@ def format_plan_response(plan: MealPlan) -> Dict:
     for item in plan.items:
         if item.recipe:
             meals[item.day_of_week] = {
+                "item_id": str(item.item_id),
                 "recipe_id": str(item.recipe.recipe_id),
                 "title": item.recipe.title,
                 "description": item.recipe.description,
                 "prep_time_minutes": item.recipe.prep_time_minutes,
                 "difficulty_level": item.recipe.difficulty_level,
+                "servings": getattr(item, "servings", 4) or 4,
+                "default_servings": getattr(item.recipe, "default_servings", 4) or 4,
                 "is_modified": item.is_modified,
                 "fallback_applied": bool(getattr(item, "fallback_applied", False))
             }
@@ -264,6 +268,7 @@ async def generate_weekly_plan(
             meal_plan_id=new_plan.plan_id,
             recipe_id=chosen_recipe.recipe_id,
             day_of_week=day,
+            servings=getattr(chosen_recipe, "default_servings", 4) or 4,
             is_modified=False,
             fallback_applied=fallback_map.get(day, False)
         )
@@ -505,6 +510,7 @@ async def assign_slots(
         # Invariant 5: Update the corresponding meal_plan_items record, set is_modified = True, and preserve it against subsequent shuffles
         target_item = active_days_map[target_day]
         target_item.recipe_id = item_assign.recipe_id
+        target_item.servings = getattr(recipe, "default_servings", 4) or 4
         target_item.is_modified = True
         target_item.fallback_applied = False
 
@@ -958,6 +964,7 @@ async def add_day_to_meal_plan(
         meal_plan_id=plan.plan_id,
         recipe_id=chosen_recipe.recipe_id,
         day_of_week=day,
+        servings=getattr(chosen_recipe, "default_servings", 4) or 4,
         is_modified=True,
         fallback_applied=fallback_applied
     )
@@ -1126,6 +1133,7 @@ async def update_meal_plan_days(
                 meal_plan_id=plan.plan_id,
                 recipe_id=chosen.recipe_id,
                 day_of_week=day,
+                servings=getattr(chosen, "default_servings", 4) or 4,
                 is_modified=True,
                 fallback_applied=fallback_applied
             )
@@ -1133,6 +1141,70 @@ async def update_meal_plan_days(
 
     await db.commit()
     db.expire_all()
+    res = await db.execute(stmt)
+    full_plan = res.scalar_one()
+    return format_plan_response(full_plan)
+
+@router.patch("/{plan_id}/slots/{item_id}/servings", response_model=WeeklyMealPlanResponse)
+async def update_slot_servings(
+    plan_id: UUID,
+    item_id: UUID,
+    payload: ServingsUpdateRequest,
+    authorization: Optional[str] = Header(None),
+    x_auth_token: Optional[str] = Header(None),
+    token: Optional[str] = Query(None),
+    db: AsyncSession = Depends(get_db)
+):
+    """
+    Adjusts the portion/serving size of a specific scheduled meal slot (1 <= servings <= 20).
+    Enforces that locked plans cannot be modified (HTTP 400).
+    Verifies that item_id belongs to the plan and the authenticated household.
+    Sets is_modified = True on the slot so shuffles preserve it.
+    """
+    if payload.servings < 1 or payload.servings > 20:
+        raise HTTPException(status_code=422, detail="Servings must be between 1 and 20.")
+
+    stmt = (
+        select(MealPlan)
+        .options(selectinload(MealPlan.items).selectinload(MealPlanItem.recipe))
+        .where(MealPlan.plan_id == plan_id)
+    )
+    res = await db.execute(stmt)
+    plan = res.scalar_one_or_none()
+
+    if not plan:
+        raise HTTPException(status_code=404, detail=f"Meal plan {plan_id} not found.")
+
+    if plan.is_locked:
+        raise HTTPException(status_code=400, detail="Cannot modify servings on a locked meal plan. Unlock first.")
+
+    # Resolve token/household
+    tok = None
+    if authorization and authorization.startswith("Bearer "):
+        tok = authorization.split(" ")[1]
+    elif x_auth_token:
+        tok = x_auth_token
+    elif token:
+        tok = token
+
+    if tok:
+        auth_data = decode_access_token(tok)
+        if auth_data and "hid" in auth_data:
+            household_id = UUID(auth_data["hid"])
+            if plan.household_id and plan.household_id != household_id:
+                raise HTTPException(status_code=403, detail="Not authorized to modify this meal plan.")
+
+    # Verify item_id belongs to this plan
+    target_item = next((it for it in plan.items if it.item_id == item_id), None)
+    if not target_item:
+        raise HTTPException(status_code=404, detail=f"Meal slot {item_id} not found in meal plan {plan_id}.")
+
+    target_item.servings = payload.servings
+    target_item.is_modified = True
+
+    await db.commit()
+    db.expire_all()
+
     res = await db.execute(stmt)
     full_plan = res.scalar_one()
     return format_plan_response(full_plan)
@@ -1145,3 +1217,4 @@ async def get_plan_grocery_list(plan_id: UUID, db: AsyncSession = Depends(get_db
     and availability metrics across targeted local retailers (Aldi, Walmart, Meijer, Amazon).
     """
     return await aggregate_groceries_for_plan(plan_id, db)
+

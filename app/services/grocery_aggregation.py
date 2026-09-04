@@ -95,13 +95,18 @@ async def aggregate_groceries_for_plan(plan_id: UUID, db: AsyncSession) -> Dict[
         if not ingredients_list:
             continue
 
+        default_servings = getattr(recipe, "default_servings", 4) or 4
+        slot_servings = getattr(item, "servings", 4) or 4
+        scale = float(slot_servings) / float(default_servings)
+
         for ing in ingredients_list:
             name = ing.get("name", "").strip()
             if not name:
                 continue
 
             unit = ing.get("unit", "ea")
-            qty = float(ing.get("quantity", 1.0))
+            base_qty = float(ing.get("quantity", 1.0))
+            qty = round(base_qty * scale, 2)
             key = name.lower()
 
             if key not in raw_ingredients:

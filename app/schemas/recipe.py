@@ -18,6 +18,7 @@ class RecipeCreateRequest(BaseModel):
     description: Optional[str] = None
     prep_time_minutes: int = 30
     difficulty_level: str = "easy"
+    default_servings: int = 4
     ingredients: List[RecipeIngredientItem] = []
     instructions: Union[List[RecipeInstructionItem], List[str], str] = []
     dietary_tags: Optional[List[str]] = []
@@ -30,6 +31,7 @@ class RecipeResponse(BaseModel):
     description: Optional[str] = None
     prep_time_minutes: Optional[int] = None
     difficulty_level: Optional[str] = None
+    default_servings: int = 4
     instructions: List[Dict[str, Any]]
     ingredients: List[Dict[str, Any]]
     dietary_tags: List[str] = []

@@ -20,6 +20,7 @@ from app.schemas.meal_plan import (
     MealPlanDaysUpdateRequest,
     MealSlotResponse,
     WeeklyMealPlanResponse,
+    ServingsUpdateRequest,
 )
 from app.schemas.recipe import (
     RecipeIngredientItem,
@@ -42,6 +43,7 @@ __all__ = [
     "MealPlanShuffleRequest",
     "MealSlotResponse",
     "WeeklyMealPlanResponse",
+    "ServingsUpdateRequest",
     "RecipeIngredientItem",
     "RecipeInstructionItem",
     "RecipeCreateRequest",
