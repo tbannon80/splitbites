@@ -151,6 +151,108 @@ The SplitBites Team
 """
     return send_email(to_email, subject, html_body, text_body)
 
+def get_v11_guide_plain_text() -> str:
+    """Returns formatted plain-text instructions covering all SplitBites v1.1 capabilities."""
+    return """1. Standard 7-Day & Flexible Planning (Step 2)
+   - Full Monday–Sunday Schedules: Plan a complete 7-day week of dinners or customize to any subset of days.
+   - Dynamic Day Control: Add or subtract schedule days anytime using the [+] and [-] buttons.
+   - Smart Busy-Night Routing: Quick <=20m recipes automatically route to your designated busy family nights.
+   - Swap & Shuffle: Click "🔄 Swap" on any meal for a semantic alternative, or "🔀 Shuffle" unlocked days.
+
+2. Smart Calendar & Display Sync
+   - Click "📅 Sync to Calendar" on the schedule bar.
+   - One-Click Live Subscription: Subscribe via webcal:// or https:// ICS feeds.
+   - Universal Display Support: Live meals automatically appear and sync with Apple Calendar, Google Calendar, Outlook, and kitchen smart displays (like Skylight Calendar).
+
+3. Household Pantry Staples
+   - Click the "🧂 Pantry Staples" button on your grocery list.
+   - Track household basics you always keep in stock (e.g., Salt, Black Pepper, Olive Oil, Flour).
+   - Ingredients in your pantry are automatically excluded from store grocery lists so you never re-buy staples.
+
+4. Dynamic Serving Sizes
+   - Adjust servings directly on the schedule for any day using the [-] / [+] stepper controls (1–12 portions).
+   - Recipe ingredients and supermarket grocery purchase quantities automatically recalculate in real-time.
+
+5. Supermarket Aisle & Department Ordering
+   - Shopping lists are organized by store department: Produce 🥬, Meat & Seafood 🥩, Dairy & Eggs 🧀, Pantry & Dry Goods 🥫, Bakery 🍞, and Frozen ❄️.
+   - Live mobile checklist with persistent checkmarks that stay checked as you navigate store aisles.
+   - Filter with "Hide Completed" or export with department headers via "📋 Copy All".
+
+6. Fullscreen Cook Mode
+   - Tap "👨‍🍳 Cook Mode" on any recipe card to open a kitchen-optimized, hands-free view.
+   - Screen Wake Lock keeps your mobile or tablet display awake while your hands are busy cooking.
+   - Interactive step-by-step progress tracking with one-tap countdown timers for simmering and baking steps.
+   - Personal kitchen notes & 5-star ratings saved specifically to your household.
+
+7. Dietary Preference Lock
+   - In Step 1 (Family Dietary Preferences), toggle the lock button (🔒 / 🔓) next to your dietary tags.
+   - When locked (🔒), tag pills are guarded against accidental taps while scrolling on mobile devices.
+   - Unlock (🔓) anytime to adjust your household restrictions (gluten-free, dairy-free, high-protein, etc.).
+
+8. Multi-Store Price Savings & Family Collaboration
+   - Price comparison across Aldi, Walmart, Meijer, and Amazon for optimal split-basket savings.
+   - Switch to the "🍲 Recipes" tab to import online recipes via URL from your favorite cooking websites.
+   - Invite your spouse or family members from the "👨‍👩‍👧‍👦 Family" tab to plan and shop together live."""
+
+
+def get_v11_guide_html() -> str:
+    """Returns formatted HTML markup covering all SplitBites v1.1 capabilities."""
+    return """    <h2><span class="step-num">1</span> Standard 7-Day & Flexible Planning</h2>
+    <p>Full Monday–Sunday schedules tailored to your family's routine:</p>
+    <ul>
+      <li><strong style="color: #f8fafc;">Full 7-Day Week:</strong> Build complete Monday–Sunday dinner schedules with one click.</li>
+      <li><strong style="color: #f8fafc;">Add / Subtract Days:</strong> Dynamically add or remove days to fit your family's travel or dining plans.</li>
+      <li><strong style="color: #f8fafc;">Smart Busy-Night Routing:</strong> Quick &le;20m (<=20m) recipes automatically route to your designated busy weeknights.</li>
+      <li><strong style="color: #f8fafc;">Swap & Shuffle:</strong> Click <em>🔄 Swap</em> on any day for smart alternative recipes, or <em>🔀 Shuffle</em> unlocked meals.</li>
+    </ul>
+
+    <h2><span class="step-num">2</span> Smart Calendar & Display Sync</h2>
+    <ul>
+      <li><strong style="color: #f8fafc;">One-Click Subscription:</strong> Click <em>📅 Sync to Calendar</em> on the schedule bar for a live <code>webcal://</code> or <code>https://</code> ICS feed.</li>
+      <li><strong style="color: #f8fafc;">Universal Display Sync:</strong> Syncs live with Apple Calendar, Google Calendar, Outlook, and kitchen smart displays (like Skylight Calendar).</li>
+    </ul>
+
+    <h2><span class="step-num">3</span> Household Pantry Staples</h2>
+    <ul>
+      <li><strong style="color: #f8fafc;">Track Basics:</strong> Click the <em>🧂 Pantry Staples</em> button to manage pantry essentials (Salt, Black Pepper, Olive Oil, Flour).</li>
+      <li><strong style="color: #f8fafc;">Automatic Exclusion:</strong> Ingredients in your pantry are automatically excluded from store grocery purchase lists so you never overbuy.</li>
+    </ul>
+
+    <h2><span class="step-num">4</span> Dynamic Serving Sizes</h2>
+    <ul>
+      <li><strong style="color: #f8fafc;">Serving Steppers:</strong> Adjust portions directly on any day using the <strong>[-]</strong> / <strong>[+]</strong> steppers (1–12 portions).</li>
+      <li><strong style="color: #f8fafc;">Automatic Recalculation:</strong> Ingredient quantities and supermarket purchasing units automatically recalculate to match your family's exact headcount.</li>
+    </ul>
+
+    <h2><span class="step-num">5</span> Supermarket Aisle & Department Ordering</h2>
+    <ul>
+      <li><strong style="color: #f8fafc;">Department Grouping:</strong> Grocery lists are categorized by store department (Produce 🥬, Meat & Seafood 🥩, Dairy & Eggs 🧀, Pantry & Dry Goods 🥫, Bakery 🍞, Frozen ❄️).</li>
+      <li><strong style="color: #f8fafc;">Live Mobile Checklist:</strong> Check off items as you walk store aisles; checkmarks persist across browser refreshes so you never lose your place.</li>
+      <li><strong style="color: #f8fafc;">Export Helpers:</strong> Easily export aisle-ordered lists to Apple Notes or Google Keep with <em>📋 Copy All</em>.</li>
+    </ul>
+
+    <h2><span class="step-num">6</span> Fullscreen Cook Mode</h2>
+    <ul>
+      <li><strong style="color: #f8fafc;">Hands-Free Kitchen View:</strong> Tap <em>👨‍🍳 Cook Mode</em> on any recipe for large, readable step-by-step instructions.</li>
+      <li><strong style="color: #f8fafc;">Screen Wake Lock:</strong> Prevents your mobile or tablet screen from dimming or sleeping while cooking.</li>
+      <li><strong style="color: #f8fafc;">Interactive Timers:</strong> Tap inline countdown timers for boiling, simmering, or baking steps.</li>
+      <li><strong style="color: #f8fafc;">Personal Notes & Ratings:</strong> Save household recipe notes, tips, and 1–5 star ratings.</li>
+    </ul>
+
+    <h2><span class="step-num">7</span> Dietary Preference Lock</h2>
+    <ul>
+      <li><strong style="color: #f8fafc;">Accidental Tap Protection:</strong> Click the compact lock toggle (<strong>🔒</strong> / <strong>🔓</strong>) next to dietary tags in Step 1.</li>
+      <li><strong style="color: #f8fafc;">Protected Browsing:</strong> When locked, tag pills ignore accidental taps while scrolling; unlock anytime to edit household restrictions.</li>
+    </ul>
+
+    <h2><span class="step-num">8</span> Multi-Store Price Savings & Family Collaboration</h2>
+    <ul>
+      <li><strong style="color: #f8fafc;">Store Arbitrage:</strong> Price analysis across Aldi, Walmart, Meijer, and Amazon for optimal multi-store split-basket savings.</li>
+      <li><strong style="color: #f8fafc;">Web Recipe Import:</strong> Paste recipe URLs in the <em>🍲 Recipes</em> tab to auto-extract ingredients and instructions.</li>
+      <li><strong style="color: #f8fafc;">Family Sharing:</strong> Invite family members from the <em>👨‍👩‍👧‍👦 Family</em> tab to plan and shop together in real time.</li>
+    </ul>"""
+
+
 def send_welcome_user_instructions(to_email: str, user_name: str, household_name: str, is_originator: bool = True) -> bool:
     """Dispatches a detailed end-user onboarding guide with instructions on how to use SplitBites."""
     greeting = f"Hi {user_name}," if user_name else "Hello,"
@@ -158,43 +260,16 @@ def send_welcome_user_instructions(to_email: str, user_name: str, household_name
     subject = f"Welcome to SplitBites! Your Quick-Start Guide for {household_name}"
     login_url = f"{APP_DOMAIN}"
 
-    text_body = f"""
-{greeting}
+    guide_text = get_v11_guide_plain_text()
+    guide_html = get_v11_guide_html()
+
+    text_body = f"""{greeting}
 
 Welcome to SplitBites! You have successfully {role_text} your kitchen account for {household_name}.
 
-Here is your complete quick-start guide to getting the most out of SplitBites:
+Here is your complete quick-start guide to getting the most out of your kitchen dashboard:
 
-1. FAMILY DIETARY PREFERENCES (Step 1)
-   - On the Meal Planner tab, review your household dietary restrictions (e.g. gluten-free, dairy-free, high-protein).
-   - Any recipes suggested will automatically respect these household restrictions.
-   - Click "Save Preferences" whenever your household needs change.
-
-2. GENERATING & CUSTOMIZING MEAL PLANS (Step 2)
-   - Click "⚡ Generate Plan" to automatically build a Monday through Friday dinner schedule.
-   - Don't like a specific meal? Click "🔄 Swap" on that day to replace it with another matching recipe.
-   - Want to re-roll the entire week? Click "🔀 Shuffle".
-   - When you are ready to shop, click "🔒 Lock Plan" to freeze your weekly schedule.
-
-3. MULTI-STORE SPLIT-BASKET GROCERY SAVINGS (Step 3)
-   - Click "🛒 Analyze Grocery Pricing" to scan real-time pricing across Aldi, Walmart, Meijer, and Amazon.
-   - SplitBites calculates the cheapest combination (buying each ingredient where it costs the least) vs. the single best 1-stop store, showing you exact dollar savings.
-
-4. LIVE IN-STORE MOBILE SHOPPING CHECKLIST
-   - Take your phone with you to the store! Each retailer has its own itemized checklist.
-   - Check off items as you place them in your cart. Your checkmarks are saved automatically in your phone's browser so you never lose your place.
-   - Toggle "Hide Completed" to keep your screen focused on what's left.
-   - Click "📋 Copy All" to paste the entire list into Apple Notes or Google Keep.
-
-5. IMPORTING RECIPES FROM THE WEB
-   - Found a recipe online? Switch to the "🍲 Upload Custom Recipe" tab.
-   - Paste any recipe link (from Allrecipes, Food Network, NYT Cooking, food blogs, etc.) and click "📥 Fetch & Pre-Fill".
-   - SplitBites automatically extracts title, cooking times, ingredient measurements, and instructions.
-   - Click "Save & Index Recipe" to add it to your family's personal recipe rotation.
-
-6. FAMILY COLLABORATION
-   - Head over to the "👨‍👩‍👧‍👦 Family" tab to see who has access to your family kitchen.
-   - Click "➕ Invite Spouse / Member" to send an invite so your family can share the exact same meal planner and live grocery list.
+{guide_text}
 
 Sign in anytime to get started:
 {login_url}
@@ -203,66 +278,114 @@ Happy cooking and happy saving!
 The SplitBites Team
 """
 
-    html_body = f"""
-<!DOCTYPE html>
+    html_body = f"""<!DOCTYPE html>
 <html>
 <head>
   <meta charset="utf-8">
   <style>
     body {{ font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background-color: #090d16; color: #e2e8f0; margin: 0; padding: 24px; }}
-    .card {{ max-width: 600px; margin: 0 auto; background: #0f172a; border: 1px solid #1e293b; border-radius: 16px; padding: 32px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.5); }}
+    .card {{ max-width: 620px; margin: 0 auto; background: #0f172a; border: 1px solid #1e293b; border-radius: 16px; padding: 32px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.5); }}
     .logo {{ font-size: 28px; font-weight: 800; color: #10b981; margin-bottom: 8px; }}
     h1 {{ font-size: 22px; color: #f8fafc; margin-top: 0; }}
-    h2 {{ font-size: 15px; color: #34d399; margin-top: 20px; margin-bottom: 6px; border-bottom: 1px solid #1e293b; padding-bottom: 4px; }}
+    h2 {{ font-size: 15px; color: #34d399; margin-top: 22px; margin-bottom: 8px; border-bottom: 1px solid #1e293b; padding-bottom: 6px; }}
     p {{ font-size: 13px; line-height: 1.6; color: #94a3b8; margin: 6px 0; }}
     ul {{ font-size: 13px; line-height: 1.6; color: #cbd5e1; padding-left: 18px; margin: 6px 0; }}
-    li {{ margin-bottom: 4px; }}
-    .btn {{ display: inline-block; background-color: #059669; color: #ffffff !important; text-decoration: none; padding: 12px 28px; border-radius: 8px; font-weight: 600; font-size: 14px; margin-top: 24px; margin-bottom: 20px; }}
+    li {{ margin-bottom: 5px; }}
+    .btn {{ display: inline-block; background-color: #059669; color: #ffffff !important; text-decoration: none; padding: 12px 28px; border-radius: 8px; font-weight: 600; font-size: 14px; margin-top: 20px; margin-bottom: 20px; }}
     .footer {{ font-size: 11px; color: #64748b; margin-top: 28px; border-top: 1px solid #1e293b; padding-top: 16px; text-align: center; }}
-    .step-num {{ display: inline-block; background: #064e3b; color: #34d399; width: 20px; height: 20px; text-align: center; border-radius: 50%; font-size: 11px; font-weight: bold; line-height: 20px; margin-right: 6px; }}
+    .step-num {{ display: inline-block; background: #064e3b; color: #34d399; width: 22px; height: 22px; text-align: center; border-radius: 50%; font-size: 11px; font-weight: bold; line-height: 22px; margin-right: 8px; }}
   </style>
 </head>
 <body>
   <div class="card">
     <div class="logo">🥑 SplitBites</div>
     <h1>Welcome to SplitBites, {user_name or 'Friend'}!</h1>
-    <p>You have successfully {role_text} your kitchen account for <strong>{household_name}</strong>. SplitBites is designed to eliminate meal planning friction and save your family money through smart multi-store grocery price arbitrage.</p>
+    <p>You have successfully {role_text} your kitchen account for <strong>{household_name}</strong>. SplitBites makes weekly meal planning effortless and saves your household money through smart multi-store grocery price arbitrage.</p>
     
     <div style="text-align: center;">
       <a href="{login_url}" class="btn">Open Your Family Kitchen</a>
     </div>
 
-    <h2><span class="step-num">1</span> Family Dietary Preferences</h2>
-    <p>On your dashboard, select your household restrictions (e.g. <code>gluten-free</code>, <code>dairy-free</code>, <code>high-protein</code>, <code>vegetarian</code>). SplitBites ensures all generated meals strictly comply with your family's needs.</p>
+{guide_html}
 
-    <h2><span class="step-num">2</span> 5-Day Meal Planning (Mon-Fri)</h2>
-    <ul>
-      <li><strong>Generate:</strong> Click <em>⚡ Generate Plan</em> to create a curated dinner schedule.</li>
-      <li><strong>Swap:</strong> Click <em>🔄 Swap</em> on any day to trade that meal for another compliant recipe.</li>
-      <li><strong>Shuffle:</strong> Click <em>🔀 Shuffle</em> to randomize unlocked meals.</li>
-      <li><strong>Lock:</strong> When satisfied, click <em>🔒 Lock Plan</em> to finalize your schedule for grocery shopping.</li>
-    </ul>
+    <div style="text-align: center; margin-top: 24px;">
+      <a href="{login_url}" class="btn">Open Your Family Kitchen</a>
+    </div>
 
-    <h2><span class="step-num">3</span> Multi-Store Split-Basket Execution</h2>
-    <p>Click <em>🛒 Analyze Grocery Pricing</em> to scan inventory across <strong>Aldi, Walmart, Meijer, and Amazon</strong>. SplitBites highlights:</p>
-    <ul>
-      <li><strong>Optimal Split Basket:</strong> Buying each item where it's cheapest for maximum savings.</li>
-      <li><strong>Best 1-Stop Store:</strong> The lowest-cost single store if you only want to make one trip.</li>
-    </ul>
+    <div class="footer">
+      SplitBites Homelab Platform • Log in anytime at <a href="{login_url}" style="color: #34d399;">{login_url}</a>
+    </div>
+  </div>
+</body>
+</html>
+"""
+    return send_email(to_email, subject, html_body, text_body)
 
-    <h2><span class="step-num">4</span> Live In-Store Mobile Checklist</h2>
-    <ul>
-      <li>Use your smartphone while walking aisles! Check off items as you drop them in your basket.</li>
-      <li>Checkmarks persist across browser refreshes so you never lose track.</li>
-      <li>Toggle <em>Hide Completed</em> to only view items remaining in the store.</li>
-      <li>Click <em>📋 Copy All</em> to paste your grocery list into Apple Notes or Google Keep.</li>
-    </ul>
 
-    <h2><span class="step-num">5</span> Import Online Recipes via URL</h2>
-    <p>Paste any online recipe link (Allrecipes, Serious Eats, Food Network, blogs) in the <em>🍲 Upload Custom Recipe</em> tab. SplitBites will automatically parse ingredients, cooking times, steps, and dietary tags.</p>
+def send_feature_update_announcement(to_email: str, user_name: str) -> bool:
+    """Dispatches a v1.1 feature update broadcast email to an existing user."""
+    greeting = f"Hi {user_name}," if user_name else "Hello,"
+    subject = "SplitBites Update: New 7-Day Planning, Calendar Sync, Cook Mode & More!"
+    login_url = f"{APP_DOMAIN}"
 
-    <h2><span class="step-num">6</span> Invite Family Members & Spouses</h2>
-    <p>Visit the <em>👨‍👩‍👧‍👦 Family</em> tab anytime and click <em>➕ Invite Spouse / Member</em> to send an email invitation so your household can plan and shop together live.</p>
+    guide_text = get_v11_guide_plain_text()
+    guide_html = get_v11_guide_html()
+    personal_note = "We've added major new features to your SplitBites kitchen dashboard to make weekly meal planning and cooking even easier."
+
+    text_body = f"""{greeting}
+
+{personal_note}
+
+Here is your complete guide to all the newly added features in SplitBites v1.1:
+
+{guide_text}
+
+Log in to your kitchen dashboard to try out the new features:
+{login_url}
+
+Happy cooking and happy saving!
+The SplitBites Team
+"""
+
+    html_body = f"""<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <style>
+    body {{ font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background-color: #090d16; color: #e2e8f0; margin: 0; padding: 24px; }}
+    .card {{ max-width: 620px; margin: 0 auto; background: #0f172a; border: 1px solid #1e293b; border-radius: 16px; padding: 32px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.5); }}
+    .logo {{ font-size: 28px; font-weight: 800; color: #10b981; margin-bottom: 8px; }}
+    .badge {{ display: inline-block; background: #064e3b; color: #34d399; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 6px; margin-bottom: 12px; }}
+    h1 {{ font-size: 22px; color: #f8fafc; margin-top: 0; }}
+    h2 {{ font-size: 15px; color: #34d399; margin-top: 22px; margin-bottom: 8px; border-bottom: 1px solid #1e293b; padding-bottom: 6px; }}
+    p {{ font-size: 13px; line-height: 1.6; color: #94a3b8; margin: 6px 0; }}
+    ul {{ font-size: 13px; line-height: 1.6; color: #cbd5e1; padding-left: 18px; margin: 6px 0; }}
+    li {{ margin-bottom: 5px; }}
+    .btn {{ display: inline-block; background-color: #059669; color: #ffffff !important; text-decoration: none; padding: 12px 28px; border-radius: 8px; font-weight: 600; font-size: 14px; margin-top: 20px; margin-bottom: 20px; }}
+    .footer {{ font-size: 11px; color: #64748b; margin-top: 28px; border-top: 1px solid #1e293b; padding-top: 16px; text-align: center; }}
+    .step-num {{ display: inline-block; background: #064e3b; color: #34d399; width: 22px; height: 22px; text-align: center; border-radius: 50%; font-size: 11px; font-weight: bold; line-height: 22px; margin-right: 8px; }}
+    .note-box {{ background: #064e3b26; border-left: 4px solid #10b981; padding: 14px 18px; border-radius: 0 8px 8px 0; margin: 16px 0; color: #e2e8f0; font-size: 13px; line-height: 1.5; }}
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="logo">🥑 SplitBites</div>
+    <span class="badge">v1.1 FEATURE UPDATE</span>
+    <h1>Major New Features in SplitBites!</h1>
+    <p>{greeting}</p>
+    <div class="note-box">
+      <strong>{personal_note}</strong>
+    </div>
+    
+    <div style="text-align: center;">
+      <a href="{login_url}" class="btn">Explore Your Kitchen Dashboard</a>
+    </div>
+
+{guide_html}
+
+    <div style="text-align: center; margin-top: 24px;">
+      <a href="{login_url}" class="btn">Log In to SplitBites</a>
+    </div>
 
     <div class="footer">
       SplitBites Homelab Platform • Log in anytime at <a href="{login_url}" style="color: #34d399;">{login_url}</a>
