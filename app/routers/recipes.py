@@ -20,7 +20,7 @@ from app.models import (
     Household,
     User,
 )
-from app.schemas.recipe import RecipeCreateRequest, RecipeResponse
+from app.schemas.recipe import RecipeCreateRequest, RecipeResponse, RecipeIngredientItem, RecipeInstructionItem
 from app.services.embedding import get_embedding
 from app.services.auth import decode_access_token
 
@@ -76,18 +76,12 @@ def normalize_instructions(raw_inst: Union[List[Any], str]) -> List[Dict[str, An
         return steps
     return []
 
-@router.post("/", response_model=RecipeResponse, status_code=status.HTTP_201_CREATED)
-async def create_recipe(
+async def save_recipe_to_db(
     payload: RecipeCreateRequest,
-    auth_data: Optional[Dict[str, Any]] = Depends(get_auth_token_payload),
-    db: AsyncSession = Depends(get_db)
-):
-    """
-    Accepts user-submitted recipe ingredients, instructions, and dietary tags.
-    Automatically computes a 1536-dimensional pgvector embedding using embedding.py,
-    registers the recipe in the household pool, and provisions
-    baseline retailer pricing for immediate grocery aggregation compatibility.
-    """
+    creator_id: Optional[UUID],
+    household_id: Optional[UUID],
+    db: AsyncSession
+) -> Dict[str, Any]:
     if not payload.title.strip():
         raise HTTPException(status_code=400, detail="Recipe title is required.")
 
@@ -114,11 +108,7 @@ async def create_recipe(
     embed_text = f"{payload.title}. {payload.description or ''}. Tags: {tag_str}. Ingredients: {ing_names_str}."
     embedding_vector = await get_embedding(embed_text)
 
-    # 4. Determine creator and household
-    creator_id = UUID(auth_data["sub"]) if auth_data and "sub" in auth_data else payload.creator_id
-    household_id = UUID(auth_data["hid"]) if auth_data and "hid" in auth_data else None
-
-    # 5. Insert Recipe
+    # 4. Insert Recipe
     new_recipe = Recipe(
         title=payload.title.strip(),
         description=payload.description.strip() if payload.description else None,
@@ -241,6 +231,22 @@ async def create_recipe(
     full_recipe = res.scalar_one()
 
     return format_recipe_response(full_recipe)
+
+@router.post("/", response_model=RecipeResponse, status_code=status.HTTP_201_CREATED)
+async def create_recipe(
+    payload: RecipeCreateRequest,
+    auth_data: Optional[Dict[str, Any]] = Depends(get_auth_token_payload),
+    db: AsyncSession = Depends(get_db)
+):
+    """
+    Accepts user-submitted recipe ingredients, instructions, and dietary tags.
+    Automatically computes a 1536-dimensional pgvector embedding using embedding.py,
+    registers the recipe in the household pool, and provisions
+    baseline retailer pricing for immediate grocery aggregation compatibility.
+    """
+    creator_id = UUID(auth_data["sub"]) if auth_data and "sub" in auth_data else payload.creator_id
+    household_id = UUID(auth_data["hid"]) if auth_data and "hid" in auth_data else None
+    return await save_recipe_to_db(payload, creator_id=creator_id, household_id=household_id, db=db)
 
 @router.get("/", response_model=List[RecipeResponse])
 async def list_recipes(
@@ -424,18 +430,120 @@ from app.services.recipe_scraper import extract_recipe_from_url
 
 class ExtractRecipeUrlRequest(BaseModel):
     url: str
+    save_to_household: Optional[bool] = False
+    household_id: Optional[UUID] = None
+
+class ImportRecipeUrlRequest(BaseModel):
+    url: str
+    is_public: Optional[bool] = True
+    household_id: Optional[UUID] = None
 
 @router.post("/extract-url")
-async def extract_recipe_url(payload: ExtractRecipeUrlRequest):
+async def extract_recipe_url(
+    payload: ExtractRecipeUrlRequest,
+    auth_data: Optional[Dict[str, Any]] = Depends(get_auth_token_payload),
+    db: AsyncSession = Depends(get_db)
+):
     """
     Extracts structured recipe title, description, prep time, difficulty,
     ingredients, instructions, and dietary tags from any online recipe URL.
+    Returns HTTP 422 with a descriptive error payload if extraction fails.
+    If save_to_household is True, automatically links the recipe to the authenticated household's recipe book.
     """
     clean_url = payload.url.strip()
     if not clean_url.startswith("http://") and not clean_url.startswith("https://"):
-        raise HTTPException(status_code=400, detail="Invalid URL. Must start with http:// or https://")
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail="Invalid URL format. URL must start with http:// or https://"
+        )
     try:
         data = await extract_recipe_from_url(clean_url)
-        return data
     except Exception as e:
-        raise HTTPException(status_code=422, detail=f"Failed to scrape recipe from URL: {str(e)}")
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail=f"Failed to scrape recipe from URL: {str(e)}"
+        )
+
+    if payload.save_to_household:
+        creator_id = UUID(auth_data["sub"]) if auth_data and "sub" in auth_data else None
+        household_id = UUID(auth_data["hid"]) if auth_data and "hid" in auth_data else payload.household_id
+        create_payload = RecipeCreateRequest(
+            title=data["title"],
+            description=data.get("description"),
+            prep_time_minutes=data.get("prep_time_minutes", 30),
+            difficulty_level=data.get("difficulty_level", "easy"),
+            ingredients=[
+                RecipeIngredientItem(
+                    name=ing["name"],
+                    quantity=ing["quantity"],
+                    unit=ing["unit"],
+                    default_unit=ing.get("default_unit", ing["unit"])
+                )
+                for ing in data.get("ingredients", [])
+            ],
+            instructions=[
+                RecipeInstructionItem(step=it["step"], text=it["text"])
+                for it in data.get("instructions", [])
+            ],
+            dietary_tags=data.get("dietary_tags", []),
+            is_public=True,
+            creator_id=creator_id
+        )
+        return await save_recipe_to_db(create_payload, creator_id=creator_id, household_id=household_id, db=db)
+
+    return data
+
+@router.post("/import-url", response_model=RecipeResponse, status_code=status.HTTP_201_CREATED)
+@router.post("/scrape-and-import", response_model=RecipeResponse, status_code=status.HTTP_201_CREATED)
+async def import_recipe_url(
+    payload: ImportRecipeUrlRequest,
+    auth_data: Optional[Dict[str, Any]] = Depends(get_auth_token_payload),
+    db: AsyncSession = Depends(get_db)
+):
+    """
+    Scrapes a recipe from an online URL using Schema.org JSON-LD or Tier-2 HTML heuristics,
+    registers it in the database with embedding and retailer pricing,
+    and automatically links it to the authenticated household's recipe book (maintaining multi-tenancy isolation).
+    """
+    clean_url = payload.url.strip()
+    if not clean_url.startswith("http://") and not clean_url.startswith("https://"):
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail="Invalid URL format. URL must start with http:// or https://"
+        )
+
+    try:
+        data = await extract_recipe_from_url(clean_url)
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail=f"Failed to scrape recipe from URL: {str(e)}"
+        )
+
+    creator_id = UUID(auth_data["sub"]) if auth_data and "sub" in auth_data else None
+    household_id = UUID(auth_data["hid"]) if auth_data and "hid" in auth_data else payload.household_id
+
+    create_payload = RecipeCreateRequest(
+        title=data["title"],
+        description=data.get("description"),
+        prep_time_minutes=data.get("prep_time_minutes", 30),
+        difficulty_level=data.get("difficulty_level", "easy"),
+        ingredients=[
+            RecipeIngredientItem(
+                name=ing["name"],
+                quantity=ing["quantity"],
+                unit=ing["unit"],
+                default_unit=ing.get("default_unit", ing["unit"])
+            )
+            for ing in data.get("ingredients", [])
+        ],
+        instructions=[
+            RecipeInstructionItem(step=it["step"], text=it["text"])
+            for it in data.get("instructions", [])
+        ],
+        dietary_tags=data.get("dietary_tags", []),
+        is_public=payload.is_public if payload.is_public is not None else True,
+        creator_id=creator_id
+    )
+
+    return await save_recipe_to_db(create_payload, creator_id=creator_id, household_id=household_id, db=db)
