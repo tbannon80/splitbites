@@ -96,7 +96,11 @@ async def register(payload: RegisterRequest, db: AsyncSession = Depends(get_db))
         raise HTTPException(status_code=400, detail="An account with this email address already exists. Please log in.")
 
     # 1. Create Household
-    new_household = Household(household_name=payload.household_name.strip())
+    new_household = Household(
+        household_name=payload.household_name.strip(),
+        busy_days=payload.busy_days if payload.busy_days is not None else ["Tuesday", "Thursday"],
+        busy_max_prep_minutes=payload.busy_max_prep_minutes if payload.busy_max_prep_minutes is not None else 20
+    )
     db.add(new_household)
     await db.flush()
 
@@ -200,7 +204,9 @@ async def register(payload: RegisterRequest, db: AsyncSession = Depends(get_db))
         "household": {
             "household_id": str(full_household.household_id),
             "household_name": full_household.household_name,
-            "dietary_preferences": [p.preference_name for p in full_household.dietary_preferences]
+            "dietary_preferences": [p.preference_name for p in full_household.dietary_preferences],
+            "busy_days": full_household.busy_days if full_household.busy_days is not None else ["Tuesday", "Thursday"],
+            "busy_max_prep_minutes": full_household.busy_max_prep_minutes if full_household.busy_max_prep_minutes is not None else 20
         }
     }
 
@@ -246,7 +252,9 @@ async def login(payload: LoginRequest, db: AsyncSession = Depends(get_db)):
         "household": {
             "household_id": str(household.household_id),
             "household_name": household.household_name,
-            "dietary_preferences": [p.preference_name for p in household.dietary_preferences] if household.dietary_preferences else []
+            "dietary_preferences": [p.preference_name for p in household.dietary_preferences] if household.dietary_preferences else [],
+            "busy_days": household.busy_days if household.busy_days is not None else ["Tuesday", "Thursday"],
+            "busy_max_prep_minutes": household.busy_max_prep_minutes if household.busy_max_prep_minutes is not None else 20
         }
     }
 
@@ -265,7 +273,9 @@ async def get_me(current_auth = Depends(get_current_user_and_household)):
         "household": {
             "household_id": str(household.household_id),
             "household_name": household.household_name,
-            "dietary_preferences": [p.preference_name for p in household.dietary_preferences] if household.dietary_preferences else []
+            "dietary_preferences": [p.preference_name for p in household.dietary_preferences] if household.dietary_preferences else [],
+            "busy_days": household.busy_days if household.busy_days is not None else ["Tuesday", "Thursday"],
+            "busy_max_prep_minutes": household.busy_max_prep_minutes if household.busy_max_prep_minutes is not None else 20
         }
     }
 

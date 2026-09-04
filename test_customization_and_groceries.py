@@ -3,7 +3,7 @@ import json
 
 base_url = "http://127.0.0.1:8001/api/meal-plans"
 
-def run_tests():
+def test_customization_and_groceries():
     print("--- Testing Meal Plan Customization & Multi-Store Grocery Aggregation ---")
     
     # 1. Generate meal plan
@@ -62,12 +62,8 @@ def run_tests():
         store_subtotal = sum(it['cost'] for it in items)
         print(f"     * Buy at {store:<7} ({len(items):>2} items, subtotal: ${store_subtotal:>5.2f}): {sample_str}")
 
-if __name__ == "__main__":
-    run_tests()
-
 def test_shuffle():
     print("\n--- Testing Meal Plan Shuffle ---")
-    # Generate new plan
     req = urllib.request.Request(f"{base_url}/generate", data=b"{}", headers={"Content-Type": "application/json"}, method="POST")
     with urllib.request.urlopen(req) as resp:
         plan = json.loads(resp.read().decode())
@@ -90,4 +86,7 @@ def test_shuffle():
     assert shuffled["meals"]["Friday"]["title"] == friday_title, "Modified Friday meal should be preserved during shuffle"
     print(f"Shuffle succeeded! Friday preserved: {shuffled['meals']['Friday']['title']}")
 
-test_shuffle()
+if __name__ == "__main__":
+    test_customization_and_groceries()
+    test_shuffle()
+

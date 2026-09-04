@@ -11,6 +11,8 @@ class RegisterRequest(BaseModel):
     dietary_preferences: Optional[List[str]] = []
     spouse_name: Optional[str] = None
     spouse_email: Optional[str] = None
+    busy_days: Optional[List[str]] = ["Tuesday", "Thursday"]
+    busy_max_prep_minutes: Optional[int] = 20
 
 class LoginRequest(BaseModel):
     email: str
@@ -42,6 +44,8 @@ class HouseholdProfileResponse(BaseModel):
     household_id: str
     household_name: str
     dietary_preferences: List[str]
+    busy_days: List[str] = ["Tuesday", "Thursday"]
+    busy_max_prep_minutes: int = 20
 
 class AuthResponse(BaseModel):
     access_token: str

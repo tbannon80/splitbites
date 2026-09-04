@@ -4,14 +4,20 @@ from app.schemas.user import (
     UserResponse,
     HouseholdBase,
     HouseholdCreate,
+    HouseholdUpdate,
+    HouseholdScheduleUpdateRequest,
     HouseholdResponse,
     UserProfileScaffold,
 )
 from app.schemas.meal_plan import (
+    DEFAULT_7_DAYS,
     MealPlanGenerateRequest,
     MealPlanSwapRequest,
     MealPlanLockRequest,
     MealPlanShuffleRequest,
+    MealPlanAddDayRequest,
+    MealPlanSubtractDayRequest,
+    MealPlanDaysUpdateRequest,
     MealSlotResponse,
     WeeklyMealPlanResponse,
 )

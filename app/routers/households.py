@@ -7,7 +7,13 @@ from typing import List
 
 from app.database.session import AsyncSessionLocal
 from app.models import Household, HouseholdDietaryRestriction, DietaryPreference
-from app.schemas.user import HouseholdCreate, HouseholdResponse, HouseholdDietaryUpdateRequest
+from app.schemas.household import (
+    HouseholdCreate,
+    HouseholdResponse,
+    HouseholdDietaryUpdateRequest,
+    HouseholdScheduleUpdateRequest,
+    HouseholdUpdate,
+)
 
 router = APIRouter(prefix="/api/households", tags=["households"])
 
@@ -21,13 +27,19 @@ def format_household(h: Household) -> HouseholdResponse:
         household_id=h.household_id,
         household_name=h.household_name,
         dietary_preferences=prefs,
+        busy_days=h.busy_days if h.busy_days is not None else ["Tuesday", "Thursday"],
+        busy_max_prep_minutes=h.busy_max_prep_minutes if h.busy_max_prep_minutes is not None else 20,
         created_at=h.created_at
     )
 
 @router.post("/", response_model=HouseholdResponse)
 async def create_household(payload: HouseholdCreate, db: AsyncSession = Depends(get_db)):
     """Create a household and associate dietary restrictions."""
-    new_h = Household(household_name=payload.household_name)
+    new_h = Household(
+        household_name=payload.household_name,
+        busy_days=payload.busy_days if payload.busy_days is not None else ["Tuesday", "Thursday"],
+        busy_max_prep_minutes=payload.busy_max_prep_minutes if payload.busy_max_prep_minutes is not None else 20
+    )
     db.add(new_h)
     await db.flush()
 
@@ -92,6 +104,27 @@ async def update_dietary_preferences(household_id: UUID, payload: HouseholdDieta
             await db.flush()
         db.add(HouseholdDietaryRestriction(household_id=household_id, preference_id=pref.preference_id))
 
+    await db.commit()
+
+    res = await db.execute(stmt)
+    full_h = res.scalar_one()
+    return format_household(full_h)
+
+@router.put("/{household_id}/schedule", response_model=HouseholdResponse)
+async def update_household_schedule(
+    household_id: UUID,
+    payload: HouseholdScheduleUpdateRequest,
+    db: AsyncSession = Depends(get_db)
+):
+    """Update busy weeknight schedule preferences for a household."""
+    stmt = select(Household).options(selectinload(Household.dietary_preferences)).where(Household.household_id == household_id)
+    res = await db.execute(stmt)
+    h = res.scalar_one_or_none()
+    if not h:
+        raise HTTPException(status_code=404, detail="Household not found")
+
+    h.busy_days = payload.busy_days
+    h.busy_max_prep_minutes = payload.busy_max_prep_minutes
     await db.commit()
 
     res = await db.execute(stmt)

@@ -16,8 +16,13 @@ CREATE TABLE IF NOT EXISTS users (
 CREATE TABLE IF NOT EXISTS households (
     household_id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     household_name VARCHAR(100) NOT NULL,
+    busy_days JSONB DEFAULT '[]'::jsonb,
+    busy_max_prep_minutes INT DEFAULT 20,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
+
+ALTER TABLE households ADD COLUMN IF NOT EXISTS busy_days JSONB DEFAULT '[]'::jsonb;
+ALTER TABLE households ADD COLUMN IF NOT EXISTS busy_max_prep_minutes INT DEFAULT 20;
 
 CREATE TABLE IF NOT EXISTS household_members (
     household_id UUID REFERENCES households(household_id) ON DELETE CASCADE,
@@ -89,8 +94,11 @@ CREATE TABLE IF NOT EXISTS meal_plan_items (
     recipe_id UUID REFERENCES recipes(recipe_id) ON DELETE SET NULL,
     day_of_week VARCHAR(20) NOT NULL,
     is_modified BOOLEAN DEFAULT FALSE,
+    fallback_applied BOOLEAN DEFAULT FALSE,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
+
+ALTER TABLE meal_plan_items ADD COLUMN IF NOT EXISTS fallback_applied BOOLEAN DEFAULT FALSE;
 
 -- Aliases / legacy compatibility tables
 CREATE TABLE IF NOT EXISTS weekly_meal_plans (

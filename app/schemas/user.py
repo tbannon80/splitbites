@@ -15,21 +15,14 @@ class UserResponse(UserBase):
 
     model_config = ConfigDict(from_attributes=True)
 
-class HouseholdBase(BaseModel):
-    household_name: str
-
-class HouseholdCreate(HouseholdBase):
-    dietary_preferences: Optional[List[str]] = []
-
-class HouseholdResponse(HouseholdBase):
-    household_id: UUID
-    dietary_preferences: List[str] = []
-    created_at: datetime
-
-    model_config = ConfigDict(from_attributes=True)
-
-class HouseholdDietaryUpdateRequest(BaseModel):
-    dietary_preferences: List[str]
+from app.schemas.household import (
+    HouseholdBase,
+    HouseholdCreate,
+    HouseholdUpdate,
+    HouseholdScheduleUpdateRequest,
+    HouseholdResponse,
+    HouseholdDietaryUpdateRequest,
+)
 
 class UserProfileScaffold(BaseModel):
     user: UserResponse

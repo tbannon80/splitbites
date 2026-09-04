@@ -1,5 +1,5 @@
-from sqlalchemy import Column, String, DateTime, ForeignKey
-from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy import Column, String, Integer, DateTime, ForeignKey
+from sqlalchemy.dialects.postgresql import UUID, JSONB
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 from app.database.session import Base
@@ -10,6 +10,8 @@ class Household(Base):
 
     household_id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     household_name = Column(String(100), nullable=False)
+    busy_days = Column(JSONB, default=list, nullable=False, server_default='[]')
+    busy_max_prep_minutes = Column(Integer, default=20, nullable=False, server_default='20')
     created_at = Column(DateTime(timezone=True), server_default=func.now())
 
     dietary_preferences = relationship(
