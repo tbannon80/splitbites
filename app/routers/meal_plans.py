@@ -103,6 +103,8 @@ def format_plan_response(plan: MealPlan) -> Dict:
                 "default_servings": default_servings,
                 "is_modified": item.is_modified,
                 "fallback_applied": bool(getattr(item, "fallback_applied", False)),
+                "instructions": item.recipe.instructions or [],
+                "ingredients": item.recipe.ingredients or [],
                 "nutrition_per_serving": per_serving,
                 "daily_nutrition": day_nutr,
             }

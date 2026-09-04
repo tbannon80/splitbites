@@ -26,6 +26,8 @@ class MealSlotResponse(BaseModel):
     default_servings: Optional[int] = 4
     is_modified: Optional[bool] = False
     fallback_applied: Optional[bool] = False
+    instructions: Optional[List[Dict[str, Any]]] = Field(default_factory=list)
+    ingredients: Optional[List[Dict[str, Any]]] = Field(default_factory=list)
     nutrition_per_serving: Optional[Dict[str, Any]] = Field(default_factory=dict)
     daily_nutrition: Optional[Dict[str, Any]] = Field(default_factory=dict)
 

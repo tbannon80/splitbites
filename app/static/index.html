@@ -1033,6 +1033,146 @@
     </div>
   </div>
 
+  <!-- FULLSCREEN KITCHEN COOK MODE MODAL -->
+  <div id="cookModeModal" class="fixed inset-0 z-50 hidden bg-slate-950/98 backdrop-blur-xl flex flex-col text-slate-100 overflow-hidden select-none">
+    <!-- Top App Bar -->
+    <header class="flex items-center justify-between px-4 sm:px-6 py-3.5 bg-slate-900/90 border-b border-slate-800 shrink-0 z-20">
+      <div class="flex items-center gap-3 min-w-0 pr-2">
+        <div class="w-9 h-9 rounded-xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-lg shrink-0">
+          👨‍🍳
+        </div>
+        <div class="min-w-0">
+          <h2 id="cookModeTitle" class="text-base sm:text-lg font-bold text-white truncate leading-snug">Recipe Title</h2>
+          <div class="flex items-center gap-2 text-xs text-slate-400 font-mono mt-0.5 flex-wrap">
+            <span id="cookModeServingsBadge" class="inline-flex items-center gap-1 bg-slate-800/80 px-2 py-0.5 rounded text-slate-300">🍽️ 4 Servings</span>
+            <span id="cookModePrepTimeBadge" class="inline-flex items-center gap-1 bg-slate-800/80 px-2 py-0.5 rounded text-slate-300">⏱️ 30m</span>
+            <span id="cookModeDifficultyBadge" class="inline-flex items-center gap-1 bg-slate-800/80 px-2 py-0.5 rounded text-slate-300 capitalize">📊 Medium</span>
+            <span id="cookModeWakeLockBadge" class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded text-[11px] bg-emerald-950/80 border border-emerald-700/60 text-emerald-300">
+              <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> Screen Awake
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2 shrink-0">
+        <button
+          id="btnToggleCookIngredients"
+          type="button"
+          onclick="toggleCookIngredientsDrawer()"
+          class="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition"
+          title="Toggle Ingredients Reference"
+        >
+          <span>🥕</span>
+          <span class="hidden sm:inline">Ingredients</span>
+          <span id="cookIngredientsCountBadge" class="bg-slate-900 text-amber-400 px-1.5 py-0.2 rounded-full font-mono text-[11px]">0</span>
+        </button>
+        <button
+          type="button"
+          onclick="closeCookMode()"
+          class="flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold bg-slate-800 hover:bg-rose-900/60 text-slate-300 hover:text-rose-200 border border-slate-700 hover:border-rose-700 transition"
+          title="Exit Cook Mode (Esc)"
+        >
+          <span>✕</span>
+          <span class="hidden sm:inline">Exit</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Active Timers Dock (Shown when timers exist) -->
+    <div id="cookTimersDock" class="hidden px-4 sm:px-6 py-2.5 bg-slate-900/60 border-b border-slate-800/80 shrink-0 overflow-x-auto">
+      <div class="flex items-center gap-3 min-w-max" id="cookTimersList">
+        <!-- Timer cards dynamically injected here -->
+      </div>
+    </div>
+
+    <!-- Main Content Area with Optional Ingredients Drawer -->
+    <div class="flex-1 flex overflow-hidden relative">
+      <!-- Ingredients Collapsible Drawer / Sidebar -->
+      <aside
+        id="cookIngredientsDrawer"
+        class="w-full sm:w-80 md:w-96 bg-slate-900/95 border-r border-slate-800 flex flex-col shrink-0 transition-all duration-300 z-10 hidden sm:flex"
+      >
+        <div class="p-4 border-b border-slate-800 flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <span class="text-sm font-bold text-white">🥕 Ingredients</span>
+            <span id="cookIngredientsProgress" class="text-xs font-mono text-slate-400">(0/0 checked)</span>
+          </div>
+          <button
+            type="button"
+            onclick="resetCookIngredientsChecklist()"
+            class="text-[11px] font-mono text-slate-400 hover:text-amber-300 underline"
+          >
+            Reset
+          </button>
+        </div>
+        <div id="cookIngredientsList" class="flex-1 overflow-y-auto p-4 space-y-2.5">
+          <!-- Ingredient checkboxes rendered here -->
+        </div>
+      </aside>
+
+      <!-- Step Content Display -->
+      <main class="flex-1 flex flex-col justify-between p-4 sm:p-8 md:p-12 overflow-y-auto">
+        <div class="max-w-3xl w-full mx-auto flex flex-col justify-center flex-1 py-4">
+          <!-- Step Progress Info -->
+          <div class="mb-4 sm:mb-6">
+            <div class="flex items-center justify-between text-xs font-mono text-slate-400 mb-2">
+              <span id="cookStepHeader" class="font-bold text-amber-400 tracking-wider uppercase">Step 1 of 4</span>
+              <span id="cookStepPercent">25%</span>
+            </div>
+            <div class="w-full bg-slate-800 rounded-full h-2 overflow-hidden">
+              <div id="cookStepProgressBar" class="bg-gradient-to-r from-amber-500 to-emerald-500 h-full rounded-full transition-all duration-300" style="width: 25%"></div>
+            </div>
+          </div>
+
+          <!-- Step Instruction Big Text -->
+          <div class="bg-slate-900/80 border border-slate-800/90 rounded-2xl p-6 sm:p-8 shadow-2xl backdrop-blur">
+            <p id="cookStepText" class="text-lg sm:text-2xl md:text-3xl font-medium text-slate-100 leading-relaxed sm:leading-relaxed">
+              Step instructions will appear here...
+            </p>
+
+            <!-- Detected Timers Pills Container -->
+            <div id="cookStepTimersContainer" class="mt-6 pt-5 border-t border-slate-800 flex flex-wrap items-center gap-2.5 hidden">
+              <span class="text-xs font-mono text-slate-400 uppercase tracking-wider">Suggested Timers:</span>
+              <div id="cookStepTimersPills" class="flex flex-wrap gap-2">
+                <!-- e.g. <button class="...">⏱️ Start 15m Timer</button> -->
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Touch Controls Bar -->
+        <footer class="max-w-3xl w-full mx-auto pt-4 shrink-0">
+          <div class="flex items-center justify-between gap-4">
+            <button
+              id="btnCookPrevStep"
+              type="button"
+              onclick="prevCookStep()"
+              class="flex-1 sm:flex-none flex items-center justify-center gap-2 px-5 sm:px-8 py-3.5 rounded-xl text-sm sm:text-base font-bold bg-slate-800 hover:bg-slate-700 text-slate-200 disabled:opacity-30 disabled:pointer-events-none transition border border-slate-700 shadow-lg"
+            >
+              <span>◀</span>
+              <span>Previous</span>
+            </button>
+
+            <div class="hidden sm:flex flex-col items-center">
+              <span id="cookFooterCounter" class="text-xs font-mono text-slate-400">Step 1 / 4</span>
+              <span class="text-[10px] text-slate-500 font-mono mt-0.5">← / → Arrow Keys • Esc to Exit</span>
+            </div>
+
+            <button
+              id="btnCookNextStep"
+              type="button"
+              onclick="nextCookStep()"
+              class="flex-1 sm:flex-none flex items-center justify-center gap-2 px-6 sm:px-10 py-3.5 rounded-xl text-sm sm:text-base font-bold bg-amber-600 hover:bg-amber-500 text-white transition shadow-lg shadow-amber-950"
+            >
+              <span>Next</span>
+              <span>▶</span>
+            </button>
+          </div>
+        </footer>
+      </main>
+    </div>
+  </div>
+
   <!-- FLOATING FEEDBACK BUTTON -->
   <div class="fixed bottom-5 right-5 z-40">
     <button onclick="openFeedbackModal()" class="group flex items-center gap-2 bg-slate-900/95 hover:bg-slate-800 text-slate-300 hover:text-emerald-300 px-3.5 py-2 rounded-full border border-slate-700/80 hover:border-emerald-500 shadow-xl transition-all duration-200 text-xs font-semibold backdrop-blur">
@@ -1739,12 +1879,17 @@
               ${tagBadges}
             </div>
           </div>
-          <div class="pt-3 border-t border-slate-800/80 flex items-center justify-between gap-2">
-            <button onclick="openAssignRecipeModal('${r.recipe_id}', '${r.title.replace(/'/g, "\\'")}', ${r.prep_time_minutes || 0}, '${r.difficulty_level || 'medium'}')" class="text-xs bg-emerald-600 hover:bg-emerald-500 text-white font-semibold px-2.5 py-1.5 rounded-lg transition flex items-center gap-1 shadow">
-              <span>📅</span> Add to Active Plan
-            </button>
-            <button onclick="deleteMyRecipe('${r.recipe_id}', '${r.title.replace(/'/g, "\\'")}')" class="text-xs bg-rose-950/40 hover:bg-rose-900/60 text-rose-300 border border-rose-900/60 hover:border-rose-700 px-2.5 py-1.5 rounded-lg transition flex items-center gap-1 shadow">
-              <span>🗑️</span> Delete
+          <div class="pt-3 border-t border-slate-800/80 flex items-center justify-between gap-2 flex-wrap">
+            <div class="flex items-center gap-1.5">
+              <button onclick="openCookModeForRecipe('${r.recipe_id}')" class="text-xs bg-amber-600 hover:bg-amber-500 text-white font-semibold px-2.5 py-1.5 rounded-lg transition flex items-center gap-1 shadow" title="Open In-Kitchen Cook Mode">
+                <span>👨‍🍳</span> Cook
+              </button>
+              <button onclick="openAssignRecipeModal('${r.recipe_id}', '${r.title.replace(/'/g, "\\'")}', ${r.prep_time_minutes || 0}, '${r.difficulty_level || 'medium'}')" class="text-xs bg-emerald-600 hover:bg-emerald-500 text-white font-semibold px-2.5 py-1.5 rounded-lg transition flex items-center gap-1 shadow">
+                <span>📅</span> Add to Active Plan
+              </button>
+            </div>
+            <button onclick="deleteMyRecipe('${r.recipe_id}', '${r.title.replace(/'/g, "\\'")}')" class="text-xs bg-rose-950/40 hover:bg-rose-900/60 text-rose-300 border border-rose-900/60 hover:border-rose-700 px-2 py-1.5 rounded-lg transition flex items-center gap-1 shadow" title="Delete Recipe">
+              <span>🗑️</span>
             </button>
           </div>
         `;
@@ -2571,6 +2716,9 @@
               </button>
             </div>
             <span class="text-xs text-slate-500 font-mono hidden md:inline">${meal.prep_time_minutes}m • ${meal.difficulty_level}</span>
+            <button onclick="openCookModeForScheduledMeal('${day}')" class="bg-amber-600 hover:bg-amber-500 text-white text-xs px-2.5 py-1 rounded transition flex items-center gap-1 shadow font-medium" title="Launch In-Kitchen Cook Mode">
+              <span>👨‍🍳</span> Cook
+            </button>
             <button onclick="swapMeal('${day}')" ${isPlanLocked ? 'disabled' : ''} class="disabled:opacity-30 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs px-2.5 py-1 rounded transition flex items-center gap-1 border border-slate-700">
               <span>🔄</span> Swap
             </button>
@@ -3260,6 +3408,558 @@
         btn.disabled = false;
       }
     }
+
+    // ==========================================
+    // IN-KITCHEN COOK MODE & STEP TIMERS ENGINE
+    // ==========================================
+    let activeCookRecipe = null;
+    let cookSteps = [];
+    let currentCookStepIndex = 0;
+    let cookModeWakeLock = null;
+    let cookTimers = [];
+    let cookTimerTickInterval = null;
+
+    const COOK_TIMER_REGEX = /(?:(?:for|about|another|approx(?:\.|imately)?)\s+)?(\d+(?:\.\d+)?(?:\s*(?:-|–|to)\s*\d+(?:\.\d+)?)?)\s*(mins?|minutes?|hours?|hrs?)\b/gi;
+
+    function normalizeCookSteps(rawInstructions) {
+      if (!rawInstructions) return [];
+      if (typeof rawInstructions === 'string') {
+        return rawInstructions
+          .split('\n')
+          .map(line => line.trim())
+          .filter(line => line.length > 0)
+          .map((line, idx) => ({
+            step: idx + 1,
+            text: line.replace(/^[0-9]+[\.\-\)]\s*/, '')
+          }));
+      }
+      if (Array.isArray(rawInstructions)) {
+        return rawInstructions.map((item, idx) => {
+          if (typeof item === 'string') {
+            return { step: idx + 1, text: item.trim() };
+          }
+          if (typeof item === 'object' && item !== null) {
+            return {
+              step: item.step || (idx + 1),
+              text: (item.text || item.instruction || '').trim()
+            };
+          }
+          return { step: idx + 1, text: String(item).trim() };
+        }).filter(s => s.text.length > 0);
+      }
+      return [];
+    }
+
+    function extractTimersFromText(text) {
+      if (!text) return [];
+      const timers = [];
+      const seen = new Set();
+      const re = new RegExp(COOK_TIMER_REGEX.source, 'gi');
+      let m;
+      while ((m = re.exec(text)) !== null) {
+        const rawVal = m[1].trim();
+        const unitStr = m[2].toLowerCase();
+        const nums = rawVal.match(/\d+(?:\.\d+)?/g);
+        if (!nums || nums.length === 0) continue;
+
+        const baseNum = parseFloat(nums[0]);
+        const isHour = unitStr.startsWith('h');
+        const minutes = isHour ? Math.round(baseNum * 60) : Math.round(baseNum);
+        const totalSeconds = minutes * 60;
+        const label = isHour ? `${baseNum}h` : `${minutes}m`;
+
+        if (seen.has(totalSeconds) || totalSeconds <= 0) continue;
+        seen.add(totalSeconds);
+
+        timers.push({
+          label: `${label} Timer`,
+          seconds: totalSeconds,
+          minutes: minutes,
+          rawText: m[0]
+        });
+      }
+      return timers;
+    }
+
+    function formatCookTimerTime(totalSeconds) {
+      const mins = Math.floor(totalSeconds / 60);
+      const secs = totalSeconds % 60;
+      return `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+    }
+
+    function playTimerChime() {
+      try {
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        if (!AudioCtx) return;
+        const ctx = new AudioCtx();
+        if (ctx.state === 'suspended') {
+          ctx.resume().catch(() => {});
+        }
+        // Synthesize pleasant 4-note arpeggio: E5 -> G#5 -> B5 -> E6
+        const notes = [659.25, 830.61, 987.77, 1318.51];
+        notes.forEach((freq, idx) => {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = 'sine';
+          const startTime = ctx.currentTime + idx * 0.14;
+          osc.frequency.setValueAtTime(freq, startTime);
+          gain.gain.setValueAtTime(0, startTime);
+          gain.gain.linearRampToValueAtTime(0.25, startTime + 0.02);
+          gain.gain.exponentialRampToValueAtTime(0.0001, startTime + 0.4);
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start(startTime);
+          osc.stop(startTime + 0.45);
+        });
+      } catch (err) {
+        console.warn('Audio chime playback failed:', err);
+      }
+    }
+
+    async function requestCookWakeLock() {
+      if ('wakeLock' in navigator) {
+        try {
+          cookModeWakeLock = await navigator.wakeLock.request('screen');
+          updateWakeLockBadge(true);
+          cookModeWakeLock.addEventListener('release', () => {
+            updateWakeLockBadge(false);
+          });
+        } catch (err) {
+          console.warn('Screen Wake Lock request failed:', err);
+          updateWakeLockBadge(false);
+        }
+      } else {
+        updateWakeLockBadge(false);
+      }
+    }
+
+    async function releaseCookWakeLock() {
+      if (cookModeWakeLock !== null) {
+        try {
+          await cookModeWakeLock.release();
+        } catch (e) {}
+        cookModeWakeLock = null;
+      }
+      updateWakeLockBadge(false);
+    }
+
+    function updateWakeLockBadge(active) {
+      const badge = document.getElementById('cookModeWakeLockBadge');
+      if (!badge) return;
+      if (active) {
+        badge.className = "inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded text-[11px] bg-emerald-950/80 border border-emerald-700/60 text-emerald-300";
+        badge.innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> Screen Awake`;
+        badge.title = "Screen Wake Lock active - screen will stay on during Cook Mode";
+      } else {
+        badge.className = "inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded text-[11px] bg-slate-800/60 border border-slate-700/50 text-slate-400";
+        badge.innerHTML = `<span class="w-2 h-2 rounded-full bg-slate-500"></span> Normal Screen`;
+        badge.title = "Screen Wake Lock inactive";
+      }
+    }
+
+    document.addEventListener('visibilitychange', async () => {
+      const modal = document.getElementById('cookModeModal');
+      if (modal && !modal.classList.contains('hidden') && document.visibilityState === 'visible') {
+        await requestCookWakeLock();
+      }
+    });
+
+    function ensureCookTimerTick() {
+      if (!cookTimerTickInterval) {
+        cookTimerTickInterval = setInterval(tickCookTimers, 500);
+      }
+    }
+
+    function tickCookTimers() {
+      if (!cookTimers || cookTimers.length === 0) return;
+      const now = Date.now();
+      let changed = false;
+
+      cookTimers.forEach(t => {
+        if (t.isRunning) {
+          const rem = Math.max(0, Math.ceil((t.targetEpoch - now) / 1000));
+          if (rem !== t.remainingSeconds) {
+            t.remainingSeconds = rem;
+            changed = true;
+          }
+          if (rem <= 0 && !t.isFinished) {
+            t.isFinished = true;
+            t.isRunning = false;
+            t.remainingSeconds = 0;
+            changed = true;
+            playTimerChime();
+            showToast(`⏰ Timer Finished: ${t.label}!`);
+          }
+        }
+      });
+
+      if (changed || cookTimers.some(t => t.isRunning)) {
+        renderCookTimers();
+      }
+    }
+
+    function renderCookTimers() {
+      const dock = document.getElementById('cookTimersDock');
+      const list = document.getElementById('cookTimersList');
+      if (!dock || !list) return;
+
+      if (cookTimers.length === 0) {
+        dock.classList.add('hidden');
+        list.innerHTML = '';
+        return;
+      }
+
+      dock.classList.remove('hidden');
+      list.innerHTML = '';
+
+      cookTimers.forEach(t => {
+        const card = document.createElement('div');
+        const isDone = t.isFinished;
+        const isRunning = t.isRunning;
+
+        card.className = `flex items-center gap-3 px-3 py-2 rounded-xl border transition shadow-md ${
+          isDone 
+            ? 'bg-rose-950/80 border-rose-600 text-rose-100 animate-pulse' 
+            : isRunning 
+              ? 'bg-slate-950/90 border-amber-500/70 text-slate-100' 
+              : 'bg-slate-900/90 border-slate-700 text-slate-400'
+        }`;
+
+        const formattedTime = formatCookTimerTime(t.remainingSeconds);
+
+        card.innerHTML = `
+          <div class="flex items-center gap-2">
+            <span class="text-sm">${isDone ? '⏰' : (isRunning ? '⏱️' : '⏸️')}</span>
+            <div>
+              <div class="text-[11px] font-medium leading-tight truncate max-w-[120px] sm:max-w-[160px]" title="${t.label}">
+                ${t.label}
+              </div>
+              <div class="text-sm font-bold font-mono tracking-wider ${isDone ? 'text-rose-300 font-extrabold' : 'text-amber-400'}">
+                ${isDone ? "00:00 (DONE)" : formattedTime}
+              </div>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-1">
+            ${!isDone ? `
+              <button 
+                type="button" 
+                onclick="${isRunning ? `pauseCookTimer('${t.id}')` : `resumeCookTimer('${t.id}')`}" 
+                class="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs text-slate-200 transition"
+                title="${isRunning ? 'Pause Timer' : 'Resume Timer'}"
+              >
+                ${isRunning ? '⏸' : '▶'}
+              </button>
+            ` : ''}
+            <button 
+              type="button" 
+              onclick="resetCookTimer('${t.id}')" 
+              class="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs text-slate-200 transition"
+              title="Reset Timer"
+            >
+              ↺
+            </button>
+            <button 
+              type="button" 
+              onclick="dismissCookTimer('${t.id}')" 
+              class="p-1.5 rounded-lg bg-slate-800 hover:bg-rose-900/60 text-xs text-slate-300 hover:text-rose-200 transition"
+              title="Dismiss Timer"
+            >
+              ✕
+            </button>
+          </div>
+        `;
+
+        list.appendChild(card);
+      });
+    }
+
+    function startCookTimer(seconds, label) {
+      const id = 'timer_' + Date.now() + '_' + Math.random().toString(36).substr(2, 4);
+      const newTimer = {
+        id,
+        label: label || `${Math.round(seconds / 60)}m Timer`,
+        totalSeconds: seconds,
+        targetEpoch: Date.now() + (seconds * 1000),
+        remainingSeconds: seconds,
+        isRunning: true,
+        isFinished: false
+      };
+      cookTimers.push(newTimer);
+      ensureCookTimerTick();
+      renderCookTimers();
+      showToast(`⏱️ Started ${newTimer.label}`);
+    }
+
+    function pauseCookTimer(id) {
+      const t = cookTimers.find(x => x.id === id);
+      if (!t || !t.isRunning) return;
+      t.isRunning = false;
+      t.remainingSeconds = Math.max(0, Math.ceil((t.targetEpoch - Date.now()) / 1000));
+      renderCookTimers();
+    }
+
+    function resumeCookTimer(id) {
+      const t = cookTimers.find(x => x.id === id);
+      if (!t || t.isRunning) return;
+      t.targetEpoch = Date.now() + (t.remainingSeconds * 1000);
+      t.isRunning = true;
+      ensureCookTimerTick();
+      renderCookTimers();
+    }
+
+    function resetCookTimer(id) {
+      const t = cookTimers.find(x => x.id === id);
+      if (!t) return;
+      t.remainingSeconds = t.totalSeconds;
+      t.targetEpoch = Date.now() + (t.totalSeconds * 1000);
+      t.isRunning = true;
+      t.isFinished = false;
+      ensureCookTimerTick();
+      renderCookTimers();
+    }
+
+    function dismissCookTimer(id) {
+      cookTimers = cookTimers.filter(x => x.id !== id);
+      renderCookTimers();
+    }
+
+    function renderCookIngredients(ingredients) {
+      const listEl = document.getElementById('cookIngredientsList');
+      const countBadge = document.getElementById('cookIngredientsCountBadge');
+      const progEl = document.getElementById('cookIngredientsProgress');
+      if (!listEl) return;
+      listEl.innerHTML = '';
+
+      if (!ingredients || ingredients.length === 0) {
+        listEl.innerHTML = '<p class="text-xs text-slate-500 italic p-2">No ingredients listed for this recipe.</p>';
+        if (countBadge) countBadge.innerText = '0';
+        if (progEl) progEl.innerText = '(0/0 checked)';
+        return;
+      }
+
+      if (countBadge) countBadge.innerText = ingredients.length;
+
+      ingredients.forEach((ing) => {
+        const item = document.createElement('label');
+        item.className = "flex items-start gap-2.5 p-2.5 rounded-xl bg-slate-950/60 border border-slate-800 hover:border-slate-700 cursor-pointer transition select-none group";
+
+        const qtyText = (ing.quantity !== undefined && ing.quantity !== null && ing.quantity !== '') 
+          ? `<span class="font-mono text-amber-400 font-semibold">${ing.quantity} ${ing.unit || ''}</span>` 
+          : '';
+
+        item.innerHTML = `
+          <input type="checkbox" onchange="updateCookIngredientsProgress()" class="mt-0.5 rounded border-slate-700 text-amber-500 focus:ring-0 focus:ring-offset-0 bg-slate-900 cursor-pointer">
+          <span class="text-xs text-slate-300 group-hover:text-white transition leading-snug">
+            ${qtyText} ${ing.name || ing.item || (typeof ing === 'string' ? ing : '')}
+          </span>
+        `;
+        listEl.appendChild(item);
+      });
+
+      updateCookIngredientsProgress();
+    }
+
+    function updateCookIngredientsProgress() {
+      const listEl = document.getElementById('cookIngredientsList');
+      const progEl = document.getElementById('cookIngredientsProgress');
+      if (!listEl || !progEl) return;
+      const checkboxes = listEl.querySelectorAll('input[type="checkbox"]');
+      const total = checkboxes.length;
+      const checked = Array.from(checkboxes).filter(cb => cb.checked).length;
+      progEl.innerText = `(${checked}/${total} checked)`;
+    }
+
+    function resetCookIngredientsChecklist() {
+      const listEl = document.getElementById('cookIngredientsList');
+      if (!listEl) return;
+      const checkboxes = listEl.querySelectorAll('input[type="checkbox"]');
+      checkboxes.forEach(cb => cb.checked = false);
+      updateCookIngredientsProgress();
+    }
+
+    function toggleCookIngredientsDrawer() {
+      const drawer = document.getElementById('cookIngredientsDrawer');
+      if (drawer) {
+        drawer.classList.toggle('hidden');
+      }
+    }
+
+    function setCookStep(idx) {
+      if (!cookSteps || cookSteps.length === 0) return;
+      if (idx < 0) idx = 0;
+      if (idx >= cookSteps.length) idx = cookSteps.length - 1;
+      currentCookStepIndex = idx;
+
+      const total = cookSteps.length;
+      const currentStep = cookSteps[idx];
+      const percent = Math.round(((idx + 1) / total) * 100);
+
+      const stepHeader = document.getElementById('cookStepHeader');
+      const stepPercent = document.getElementById('cookStepPercent');
+      const progressBar = document.getElementById('cookStepProgressBar');
+      const stepText = document.getElementById('cookStepText');
+      const footerCounter = document.getElementById('cookFooterCounter');
+      const btnPrev = document.getElementById('btnCookPrevStep');
+      const btnNext = document.getElementById('btnCookNextStep');
+
+      if (stepHeader) stepHeader.innerText = `Step ${idx + 1} of ${total}`;
+      if (stepPercent) stepPercent.innerText = `${percent}%`;
+      if (progressBar) progressBar.style.width = `${percent}%`;
+      if (stepText) stepText.innerText = currentStep.text;
+      if (footerCounter) footerCounter.innerText = `Step ${idx + 1} / ${total}`;
+
+      if (btnPrev) {
+        btnPrev.disabled = (idx === 0);
+      }
+
+      if (btnNext) {
+        if (idx === total - 1) {
+          btnNext.innerHTML = '<span>🎉 Finish Cooking</span>';
+          btnNext.className = "flex-1 sm:flex-none flex items-center justify-center gap-2 px-6 sm:px-10 py-3.5 rounded-xl text-sm sm:text-base font-bold bg-emerald-600 hover:bg-emerald-500 text-white transition shadow-lg shadow-emerald-950";
+        } else {
+          btnNext.innerHTML = '<span>Next</span> <span>▶</span>';
+          btnNext.className = "flex-1 sm:flex-none flex items-center justify-center gap-2 px-6 sm:px-10 py-3.5 rounded-xl text-sm sm:text-base font-bold bg-amber-600 hover:bg-amber-500 text-white transition shadow-lg shadow-amber-950";
+        }
+      }
+
+      // Scan step text for timers
+      const detectedTimers = extractTimersFromText(currentStep.text);
+      const timersContainer = document.getElementById('cookStepTimersContainer');
+      const timersPills = document.getElementById('cookStepTimersPills');
+
+      if (timersContainer && timersPills) {
+        if (detectedTimers.length > 0) {
+          timersContainer.classList.remove('hidden');
+          timersPills.innerHTML = '';
+          detectedTimers.forEach(t => {
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.onclick = () => startCookTimer(t.seconds, `${t.label} (Step ${idx + 1})`);
+            btn.className = "inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40 hover:border-amber-400 transition shadow-sm";
+            btn.innerHTML = `<span>⏱️</span> <span>Start ${t.label}</span>`;
+            timersPills.appendChild(btn);
+          });
+        } else {
+          timersContainer.classList.add('hidden');
+          timersPills.innerHTML = '';
+        }
+      }
+    }
+
+    function prevCookStep() {
+      if (currentCookStepIndex > 0) {
+        setCookStep(currentCookStepIndex - 1);
+      }
+    }
+
+    function nextCookStep() {
+      if (currentCookStepIndex < cookSteps.length - 1) {
+        setCookStep(currentCookStepIndex + 1);
+      } else {
+        showToast("🎉 Recipe finished! Bon appétit!");
+        closeCookMode();
+      }
+    }
+
+    function openCookMode(recipe) {
+      activeCookRecipe = recipe;
+      const modal = document.getElementById('cookModeModal');
+      if (!modal) return;
+
+      document.getElementById('cookModeTitle').innerText = recipe.title || 'Cooking Mode';
+
+      const servings = recipe.servings || recipe.default_servings || 4;
+      document.getElementById('cookModeServingsBadge').innerText = `🍽️ ${servings} Serving${servings === 1 ? '' : 's'}`;
+
+      const prepTime = recipe.prep_time_minutes || 30;
+      document.getElementById('cookModePrepTimeBadge').innerText = `⏱️ ${prepTime}m`;
+
+      const difficulty = recipe.difficulty_level || 'medium';
+      document.getElementById('cookModeDifficultyBadge').innerText = `📊 ${difficulty}`;
+
+      cookSteps = normalizeCookSteps(recipe.instructions);
+      if (cookSteps.length === 0) {
+        cookSteps = [{
+          step: 1,
+          text: recipe.description || "Follow your standard recipe preparation steps and enjoy cooking!"
+        }];
+      }
+
+      renderCookIngredients(recipe.ingredients || []);
+      setCookStep(0);
+
+      modal.classList.remove('hidden');
+      document.body.classList.add('overflow-hidden');
+
+      requestCookWakeLock();
+      ensureCookTimerTick();
+    }
+
+    function closeCookMode() {
+      const modal = document.getElementById('cookModeModal');
+      if (modal) {
+        modal.classList.add('hidden');
+      }
+      document.body.classList.remove('overflow-hidden');
+      releaseCookWakeLock();
+    }
+
+    async function openCookModeForScheduledMeal(day) {
+      if (!activePlanData || !activePlanData.meals || !activePlanData.meals[day]) {
+        showToast("⚠️ Meal data not found");
+        return;
+      }
+      const meal = activePlanData.meals[day];
+      if (!meal.instructions || meal.instructions.length === 0) {
+        try {
+          const res = await apiFetch(`/api/recipes/${meal.recipe_id}`);
+          if (res.ok) {
+            const fullRecipe = await res.json();
+            meal.instructions = fullRecipe.instructions;
+            meal.ingredients = fullRecipe.ingredients || meal.ingredients;
+          }
+        } catch (e) {
+          console.warn("Could not fetch full recipe details:", e);
+        }
+      }
+      openCookMode(meal);
+    }
+
+    async function openCookModeForRecipe(recipeId) {
+      let recipe = (myRecipesList || []).find(r => r.recipe_id === recipeId);
+      if (!recipe || !recipe.instructions || recipe.instructions.length === 0) {
+        try {
+          const res = await apiFetch(`/api/recipes/${recipeId}`);
+          if (res.ok) {
+            recipe = await res.json();
+          }
+        } catch (e) {
+          console.warn("Could not fetch recipe details:", e);
+        }
+      }
+      if (!recipe) {
+        showToast("⚠️ Recipe details not found");
+        return;
+      }
+      openCookMode(recipe);
+    }
+
+    window.addEventListener('keydown', (e) => {
+      const modal = document.getElementById('cookModeModal');
+      if (!modal || modal.classList.contains('hidden')) return;
+
+      if (e.key === 'ArrowRight' || e.key === 'PageDown') {
+        e.preventDefault();
+        nextCookStep();
+      } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+        e.preventDefault();
+        prevCookStep();
+      } else if (e.key === 'Escape') {
+        e.preventDefault();
+        closeCookMode();
+      }
+    });
   </script>
 </body>
 </html>

@@ -7,6 +7,11 @@ from app.services.grocery_aggregation import (
     classify_ingredient_department,
     group_items_by_department,
 )
+from app.services.cook_mode import (
+    TIMER_REGEX,
+    extract_timer_durations,
+    normalize_instruction_steps,
+)
 
 __all__ = [
     "get_embedding",
@@ -18,4 +23,7 @@ __all__ = [
     "DEPARTMENT_ICONS",
     "classify_ingredient_department",
     "group_items_by_department",
+    "TIMER_REGEX",
+    "extract_timer_durations",
+    "normalize_instruction_steps",
 ]
