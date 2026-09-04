@@ -2187,5 +2187,5083 @@
       "carbs_g": 42.0,
       "fat_g": 18.0
     }
+  },
+  {
+    "title": "Crispy Pan-Seared Lemon Rosemary Salmon",
+    "description": "Pan-seared Atlantic salmon fillets with fresh rosemary sprigs, lemon wheels, and a bright garlic white wine pan reduction.",
+    "prep_time_minutes": 20,
+    "difficulty_level": "easy",
+    "dietary_tags": [
+      "quick",
+      "high-protein",
+      "gluten-free",
+      "pescatarian",
+      "low-carb"
+    ],
+    "ingredients": [
+      {
+        "name": "Salmon Fillets",
+        "quantity": 1.5,
+        "unit": "lbs",
+        "default_unit": "lbs"
+      },
+      {
+        "name": "Fresh Rosemary",
+        "quantity": 3.0,
+        "unit": "count",
+        "default_unit": "count"
+      },
+      {
+        "name": "Lemons",
+        "quantity": 2.0,
+        "unit": "count",
+        "default_unit": "count"
+      },
+      {
+        "name": "Garlic Cloves",
+        "quantity": 4.0,
+        "unit": "count",
+        "default_unit": "count"
+      },
+      {
+        "name": "Olive Oil",
+        "quantity": 2.0,
+        "unit": "tbsp",
+        "default_unit": "tbsp"
+      }
+    ],
+    "instructions": [
+      {
+        "step": 1,
+        "text": "Pat salmon dry and season with salt and pepper."
+      },
+      {
+        "step": 2,
+        "text": "Heat oil in skillet over medium-high heat until shimmering."
+      },
+      {
+        "step": 3,
+        "text": "Sear salmon skin-side down for 5 minutes."
+      },
+      {
+        "step": 4,
+        "text": "Flip, add rosemary, lemon, and garlic, basting for 3 minutes."
+      }
+    ],
+    "nutrition_per_serving": {
+      "calories": 480,
+      "protein_g": 42.0,
+      "carbs_g": 3.0,
+      "fat_g": 32.0
+    }
+  },
+  {
+    "title": "Wild Pacific Halibut with Mediterranean Herb Chimichurri",
+    "description": "Tender grilled wild Pacific halibut topped with a vibrant homemade parsley, oregano, garlic, and red wine vinegar chimichurri.",
+    "prep_time_minutes": 25,
+    "difficulty_level": "medium",
+    "dietary_tags": [
+      "high-protein",
+      "gluten-free",
+      "dairy-free",
+      "pescatarian",
+      "low-carb",
+      "quick"
+    ],
+    "ingredients": [
+      {
+        "name": "Halibut Fillets",
+        "quantity": 1.5,
+        "unit": "lbs",
+        "default_unit": "lbs"
+      },
+      {
+        "name": "Fresh Flat-Leaf Parsley",
+        "quantity": 1.0,
+        "unit": "cups",
+        "default_unit": "cups"
+      },
+      {
+        "name": "Fresh Oregano",
+        "quantity": 2.0,
+        "unit": "tbsp",
+        "default_unit": "tbsp"
+      },
+      {
+        "name": "Red Wine Vinegar",
+        "quantity": 2.0,
+        "unit": "tbsp",
+        "default_unit": "tbsp"
+      },
+      {
+        "name": "Olive Oil",
+        "quantity": 4.0,
+        "unit": "tbsp",
+        "default_unit": "tbsp"
+      }
+    ],
+    "instructions": [
+      {
+        "step": 1,
+        "text": "Whisk minced parsley, oregano, garlic, vinegar, and olive oil for chimichurri."
+      },
+      {
+        "step": 2,
+        "text": "Preheat grill to medium-high heat."
+      },
+      {
+        "step": 3,
+        "text": "Season halibut with olive oil, salt, and pepper."
+      },
+      {
+        "step": 4,
+        "text": "Grill 4 minutes per side until opaque; top with chimichurri."
+      }
+    ],
+    "nutrition_per_serving": {
+      "calories": 410,
+      "protein_g": 44.0,
+      "carbs_g": 2.0,
+      "fat_g": 24.0
+    }
+  },
+  {
+    "title": "Curry Stand Chicken Tikka Masala",
+    "description": "Yogurt-marinated chicken breast pieces charred under high heat and simmered in a velvety, aromatic spiced tomato and cream sauce.",
+    "prep_time_minutes": 45,
+    "difficulty_level": "medium",
+    "dietary_tags": [
+      "high-protein",
+      "gluten-free"
+    ],
+    "ingredients": [
+      {
+        "name": "Boneless Skinless Chicken Breast",
+        "quantity": 2.0,
+        "unit": "lbs",
+        "default_unit": "lbs"
+      },
+      {
+        "name": "Plain Greek Yogurt",
+        "quantity": 0.75,
+        "unit": "cups",
+        "default_unit": "cups"
+      },
+      {
+        "name": "Canned Tomato Sauce",
+        "quantity": 2.0,
+        "unit": "can",
+        "default_unit": "can"
+      },
+      {
+        "name": "Heavy Cream",
+        "quantity": 0.5,
+        "unit": "cups",
+        "default_unit": "cups"
+      },
+      {
+        "name": "Garam Masala",
+        "quantity": 2.0,
+        "unit": "tbsp",
+        "default_unit": "tbsp"
+      }
+    ],
+    "instructions": [
+      {
+        "step": 1,
+        "text": "Marinate diced chicken in yogurt, garlic, and garam masala for 15 minutes."
+      },
+      {
+        "step": 2,
+        "text": "Broil chicken chunks on high for 8 minutes until charred."
+      },
+      {
+        "step": 3,
+        "text": "Simmer onions, ginger, and tomato sauce for 15 minutes."
+      },
+      {
+        "step": 4,
+        "text": "Stir in cream and broiled chicken, simmering 5 minutes."
+      }
+    ],
+    "nutrition_per_serving": {
+      "calories": 540,
+      "protein_g": 48.0,
+      "carbs_g": 16.0,
+      "fat_g": 30.0
+    }
+  },
+  {
+    "title": "Slow-Roasted Smoked Texas Brisket Style Beef",
+    "description": "Tender beef chuck roast slow roasted with coarse black pepper, smoked sea salt, and garlic until melt-in-your-mouth tender.",
+    "prep_time_minutes": 60,
+    "difficulty_level": "medium",
+    "dietary_tags": [
+      "high-protein",
+      "gluten-free",
+      "dairy-free",
+      "low-carb",
+      "keto"
+    ],
+    "ingredients": [
+      {
+        "name": "Beef Chuck Roast",
+        "quantity": 3.0,
+        "unit": "lbs",
+        "default_unit": "lbs"
+      },
+      {
+        "name": "Black Pepper",
+        "quantity": 2.0,
+        "unit": "tbsp",
+        "default_unit": "tbsp"
+      },
+      {
+        "name": "Smoked Paprika",
+        "quantity": 1.0,
+        "unit": "tbsp",
+        "default_unit": "tbsp"
+      },
+      {
+        "name": "Beef Broth",
+        "quantity": 1.0,
+        "unit": "cups",
+        "default_unit": "cups"
+      },
+      {
+        "name": "Apple Cider Vinegar",
+        "quantity": 2.0,
+        "unit": "tbsp",
+        "default_unit": "tbsp"
+      }
+    ],
+    "instructions": [
+      {
+        "step": 1,
+        "text": "Rub chuck roast with coarse pepper, smoked paprika, and salt."
+      },
+      {
+        "step": 2,
+        "text": "Sear on all sides in a Dutch oven."
+      },
+      {
+        "step": 3,
+        "text": "Add broth and vinegar, cover tightly."
+      },
+      {
+        "step": 4,
+        "text": "Braise at 300\u00b0F for 3.5 hours until probe tender."
+      }
+    ],
+    "nutrition_per_serving": {
+      "calories": 580,
+      "protein_g": 54.0,
+      "carbs_g": 2.0,
+      "fat_g": 38.0
+    }
+  },
+  {
+    "title": "Skillet Chicken Piccata",
+    "description": "Thin chicken cutlets pan-fried in olive oil and simmered in a zesty lemon, white wine, butter, and caper sauce.",
+    "prep_time_minutes": 25,
+    "difficulty_level": "easy",
+    "dietary_tags": [
+      "quick",
+      "high-protein"
+    ],
+    "ingredients": [
+      {
+        "name": "Chicken Breast Cutlets",
+        "quantity": 1.5,
+        "unit": "lbs",
+        "default_unit": "lbs"
+      },
+      {
+        "name": "All-Purpose Flour",
+        "quantity": 0.5,
+        "unit": "cups",
+        "default_unit": "cups"
+      },
+      {
+        "name": "Butter",
+        "quantity": 3.0,
+        "unit": "tbsp",
+        "default_unit": "tbsp"
+      },
+      {
+        "name": "Capers",
+        "quantity": 3.0,
+        "unit": "tbsp",
+        "default_unit": "tbsp"
+      },
+      {
+        "name": "Chicken Broth",
+        "quantity": 0.75,
+        "unit": "cups",
+        "default_unit": "cups"
+      },
+      {
+        "name": "Fresh Lemon Juice",
+        "quantity": 0.25,
+        "unit": "cups",
+        "default_unit": "cups"
+      }
+    ],
+    "instructions": [
+      {
+        "step": 1,
+        "text": "Dredge cutlets in seasoned flour."
+      },
+      {
+        "step": 2,
+        "text": "Pan-sear in oil and butter for 3 minutes per side until golden."
+      },
+      {
+        "step": 3,
+        "text": "Deglaze skillet with broth, lemon juice, and capers."
+      },
+      {
+        "step": 4,
+        "text": "Swirl in cold butter, coat cutlets, and garnish with parsley."
+      }
+    ],
+    "nutrition_per_serving": {
+      "calories": 440,
+      "protein_g": 42.0,
+      "carbs_g": 14.0,
+      "fat_g": 22.0
+    }
+  },
+  {
+    "title": "Authentic Mexican Carnitas Bowls",
+    "description": "Slow-cooked citrus and Mexican oregano seasoned pork shoulder crisped under high heat, served with cilantro lime rice and black beans.",
+    "prep_time_minutes": 45,
+    "difficulty_level": "medium",
+    "dietary_tags": [
+      "high-protein",
+      "gluten-free",
+      "dairy-free"
+    ],
+    "ingredients": [
+      {
+        "name": "Pork Shoulder",
+        "quantity": 2.5,
+        "unit": "lbs",
+        "default_unit": "lbs"
+      },
+      {
+        "name": "Oranges",
+        "quantity": 2.0,
+        "unit": "count",
+        "default_unit": "count"
+      },
+      {
+        "name": "Limes",
+        "quantity": 2.0,
+        "unit": "count",
+        "default_unit": "count"
+      },
+      {
+        "name": "Ground Cumin",
+        "quantity": 1.0,
+        "unit": "tbsp",
+        "default_unit": "tbsp"
+      },
+      {
+        "name": "Canned Black Beans",
+        "quantity": 1.0,
+        "unit": "can",
+        "default_unit": "can"
+      },
+      {
+        "name": "White Jasmine Rice",
+        "quantity": 1.5,
+        "unit": "cups",
+        "default_unit": "cups"
+      }
+    ],
+    "instructions": [
+      {
+        "step": 1,
+        "text": "Season pork cubes with cumin, oregano, and salt."
+      },
+      {
+        "step": 2,
+        "text": "Simmer covered in orange and lime juice for 2 hours."
+      },
+      {
+        "step": 3,
+        "text": "Shred pork and broil on sheet pan until edges crisp."
+      },
+      {
+        "step": 4,
+        "text": "Assemble bowls with rice, black beans, and crispy carnitas."
+      }
+    ],
+    "nutrition_per_serving": {
+      "calories": 560,
+      "protein_g": 46.0,
+      "carbs_g": 48.0,
+      "fat_g": 20.0
+    }
+  },
+  {
+    "title": "Cast Iron Ribeye Steak with Garlic Herb Butter",
+    "description": "Thick-cut prime ribeye seared with a dark savory crust and basted with melted rosemary, thyme, and roasted garlic compound butter.",
+    "prep_time_minutes": 20,
+    "difficulty_level": "medium",
+    "dietary_tags": [
+      "quick",
+      "high-protein",
+      "gluten-free",
+      "keto",
+      "low-carb"
+    ],
+    "ingredients": [
+      {
+        "name": "Ribeye Steak",
+        "quantity": 2.0,
+        "unit": "lbs",
+        "default_unit": "lbs"
+      },
+      {
+        "name": "Butter",
+        "quantity": 4.0,
+        "unit": "tbsp",
+        "default_unit": "tbsp"
+      },
+      {
+        "name": "Garlic Cloves",
+        "quantity": 4.0,
+        "unit": "count",
+        "default_unit": "count"
+      },
+      {
+        "name": "Fresh Thyme",
+        "quantity": 4.0,
+        "unit": "count",
+        "default_unit": "count"
+      },
+      {
+        "name": "Fresh Rosemary",
+        "quantity": 2.0,
+        "unit": "count",
+        "default_unit": "count"
+      }
+    ],
+    "instructions": [
+      {
+        "step": 1,
+        "text": "Season room-temperature steak liberally with salt and coarse pepper."
+      },
+      {
+        "step": 2,
+        "text": "Sear in a screaming hot cast iron pan for 3 minutes per side."
+      },
+      {
+        "step": 3,
+        "text": "Add butter, garlic, and herbs to pan."
+      },
+      {
+        "step": 4,
+        "text": "Baste steak continuously with foaming butter for 2 minutes; rest 8 minutes."
+      }
+    ],
+    "nutrition_per_serving": {
+      "calories": 620,
+      "protein_g": 52.0,
+      "carbs_g": 1.0,
+      "fat_g": 46.0
+    }
+  },
+  {
+    "title": "Spicy Thai Basil Chicken (Pad Krapow Gai)",
+    "description": "Minced chicken stir-fried over high wok heat with bird's eye chilies, garlic, sweet dark soy sauce, and fragrant Thai holy basil.",
+    "prep_time_minutes": 15,
+    "difficulty_level": "easy",
+    "dietary_tags": [
+      "quick",
+      "high-protein",
+      "dairy-free"
+    ],
+    "ingredients": [
+      {
+        "name": "Ground Chicken",
+        "quantity": 1.5,
+        "unit": "lbs",
+        "default_unit": "lbs"
+      },
+      {
+        "name": "Thai Basil Leaves",
+        "quantity": 2.0,
+        "unit": "cups",
+        "default_unit": "cups"
+      },
+      {
+        "name": "Garlic Cloves",
+        "quantity": 6.0,
+        "unit": "count",
+        "default_unit": "count"
+      },
+      {
+        "name": "Oyster Sauce",
+        "quantity": 2.0,
+        "unit": "tbsp",
+        "default_unit": "tbsp"
+      },
+      {
+        "name": "Soy Sauce",
+        "quantity": 1.0,
+        "unit": "tbsp",
+        "default_unit": "tbsp"
+      },
+      {
+        "name": "Jasmine Rice",
+        "quantity": 1.5,
+        "unit": "cups",
+        "default_unit": "cups"
+      }
+    ],
+    "instructions": [
+      {
+        "step": 1,
+        "text": "Pound chilies and garlic into coarse paste."
+      },
+      {
+        "step": 2,
+        "text": "Stir-fry paste in hot wok for 30 seconds."
+      },
+      {
+        "step": 3,
+        "text": "Add ground chicken, browning thoroughly with sauces."
+      },
+      {
+        "step": 4,
+        "text": "Stir in Thai basil leaves until wilted; serve over rice with fried egg."
+      }
+    ],
+    "nutrition_per_serving": {
+      "calories": 490,
+      "protein_g": 40.0,
+      "carbs_g": 38.0,
+      "fat_g": 18.0
+    }
+  },
+  {
+    "title": "Classic Italian Chicken Saltimbocca",
+    "description": "Tender chicken breasts wrapped with fresh sage leaves and delicate prosciutto di Parma, saut\u00e9ed in a rich Marsala pan glaze.",
+    "prep_time_minutes": 25,
+    "difficulty_level": "medium",
+    "dietary_tags": [
+      "high-protein",
+      "quick"
+    ],
+    "ingredients": [
+      {
+        "name": "Chicken Cutlets",
+        "quantity": 1.5,
+        "unit": "lbs",
+        "default_unit": "lbs"
+      },
+      {
+        "name": "Prosciutto di Parma",
+        "quantity": 8.0,
+        "unit": "slices",
+        "default_unit": "slices"
+      },
+      {
+        "name": "Fresh Sage Leaves",
+        "quantity": 16.0,
+        "unit": "count",
+        "default_unit": "count"
+      },
+      {
+        "name": "Butter",
+        "quantity": 3.0,
+        "unit": "tbsp",
+        "default_unit": "tbsp"
+      },
+      {
+        "name": "Dry White Wine",
+        "quantity": 0.5,
+        "unit": "cups",
+        "default_unit": "cups"
+      }
+    ],
+    "instructions": [
+      {
+        "step": 1,
+        "text": "Wrap sage leaves and prosciutto onto cutlets."
+      },
+      {
+        "step": 2,
+        "text": "Pan-sear prosciutto-side down for 3 minutes until crisp."
+      },
+      {
+        "step": 3,
+        "text": "Flip and cook 2 minutes longer."
+      },
+      {
+        "step": 4,
+        "text": "Deglaze pan with white wine and swirl in butter to sauce."
+      }
+    ],
+    "nutrition_per_serving": {
+      "calories": 460,
+      "protein_g": 46.0,
+      "carbs_g": 4.0,
+      "fat_g": 26.0
+    }
+  },
+  {
+    "title": "Creamy Tuscan White Bean and Kale Soup",
+    "description": "Rich and hearty Tuscan soup featuring creamy cannellini beans, tender lacinato kale, sweet Italian sausage, and parmesan broth.",
+    "prep_time_minutes": 30,
+    "difficulty_level": "easy",
+    "dietary_tags": [
+      "high-protein",
+      "gluten-free"
+    ],
+    "ingredients": [
+      {
+        "name": "Sweet Italian Sausage",
+        "quantity": 1.0,
+        "unit": "lbs",
+        "default_unit": "lbs"
+      },
+      {
+        "name": "Canned Cannellini Beans",
+        "quantity": 2.0,
+        "unit": "can",
+        "default_unit": "can"
+      },
+      {
+        "name": "Lacinato Kale",
+        "quantity": 1.0,
+        "unit": "bunch",
+        "default_unit": "bunch"
+      },
+      {
+        "name": "Chicken Broth",
+        "quantity": 4.0,
+        "unit": "cups",
+        "default_unit": "cups"
+      },
+      {
+        "name": "Parmesan Cheese",
+        "quantity": 0.5,
+        "unit": "cups",
+        "default_unit": "cups"
+      }
+    ],
+    "instructions": [
+      {
+        "step": 1,
+        "text": "Brown sausage in soup pot; remove."
+      },
+      {
+        "step": 2,
+        "text": "Saut\u00e9 diced aromatics in rendered fat."
+      },
+      {
+        "step": 3,
+        "text": "Add beans, broth, and browned sausage, mashing half the beans."
+      },
+      {
+        "step": 4,
+        "text": "Simmer 15 minutes, then fold in chopped kale and parmesan."
+      }
+    ],
+    "nutrition_per_serving": {
+      "calories": 480,
+      "protein_g": 32.0,
+      "carbs_g": 34.0,
+      "fat_g": 24.0
+    }
+  },
+  {
+    "title": "Garlic Herb Butter Basted Pork Chops",
+    "description": "Thick center-cut bone-in pork chops seared golden brown and basted in cast iron with foaming thyme and garlic butter.",
+    "prep_time_minutes": 20,
+    "difficulty_level": "easy",
+    "dietary_tags": [
+      "quick",
+      "high-protein",
+      "gluten-free",
+      "low-carb",
+      "keto"
+    ],
+    "ingredients": [
+      {
+        "name": "Bone-In Pork Chops",
+        "quantity": 2.0,
+        "unit": "lbs",
+        "default_unit": "lbs"
+      },
+      {
+        "name": "Butter",
+        "quantity": 3.0,
+        "unit": "tbsp",
+        "default_unit": "tbsp"
+      },
+      {
+        "name": "Garlic Cloves",
+        "quantity": 4.0,
+        "unit": "count",
+        "default_unit": "count"
+      },
+      {
+        "name": "Fresh Thyme",
+        "quantity": 4.0,
+        "unit": "count",
+        "default_unit": "count"
+      },
+      {
+        "name": "Olive Oil",
+        "quantity": 1.0,
+        "unit": "tbsp",
+        "default_unit": "tbsp"
+      }
+    ],
+    "instructions": [
+      {
+        "step": 1,
+        "text": "Pat pork chops dry and season generously with salt and pepper."
+      },
+      {
+        "step": 2,
+        "text": "Heat oil in skillet over medium-high heat until hot."
+      },
+      {
+        "step": 3,
+        "text": "Sear chops 4 minutes per side until golden brown."
+      },
+      {
+        "step": 4,
+        "text": "Add butter, garlic, and thyme, basting for 2 minutes to 145\u00b0F."
+      }
+    ],
+    "nutrition_per_serving": {
+      "calories": 450,
+      "protein_g": 48.0,
+      "carbs_g": 1.0,
+      "fat_g": 27.0
+    }
+  },
+  {
+    "title": "Greek Lemon Herb Chicken Souvlaki Skewers",
+    "description": "Skewered tender chicken breast marinated in Greek olive oil, lemon juice, dried oregano, and garlic, served with cooling tzatziki sauce.",
+    "prep_time_minutes": 25,
+    "difficulty_level": "easy",
+    "dietary_tags": [
+      "quick",
+      "high-protein",
+      "gluten-free"
+    ],
+    "ingredients": [
+      {
+        "name": "Boneless Skinless Chicken Breast",
+        "quantity": 1.5,
+        "unit": "lbs",
+        "default_unit": "lbs"
+      },
+      {
+        "name": "Olive Oil",
+        "quantity": 3.0,
+        "unit": "tbsp",
+        "default_unit": "tbsp"
+      },
+      {
+        "name": "Fresh Lemon Juice",
+        "quantity": 3.0,
+        "unit": "tbsp",
+        "default_unit": "tbsp"
+      },
+      {
+        "name": "Dried Oregano",
+        "quantity": 1.0,
+        "unit": "tbsp",
+        "default_unit": "tbsp"
+      },
+      {
+        "name": "Plain Greek Yogurt",
+        "quantity": 1.0,
+        "unit": "cups",
+        "default_unit": "cups"
+      },
+      {
+        "name": "English Cucumber",
+        "quantity": 0.5,
+        "unit": "count",
+        "default_unit": "count"
+      }
+    ],
+    "instructions": [
+      {
+        "step": 1,
+        "text": "Toss cubed chicken with olive oil, lemon juice, oregano, and garlic; thread onto skewers."
+      },
+      {
+        "step": 2,
+        "text": "Whisk grated drained cucumber into yogurt with lemon and garlic for tzatziki."
+      },
+      {
+        "step": 3,
+        "text": "Grill skewers 8-10 minutes over medium-high heat until charred and cooked."
+      },
+      {
+        "step": 4,
+        "text": "Serve hot with cool cucumber tzatziki."
+      }
+    ],
+    "nutrition_per_serving": {
+      "calories": 420,
+      "protein_g": 46.0,
+      "carbs_g": 8.0,
+      "fat_g": 21.0
+    }
+  },
+  {
+    "title": "Sheet Pan Chimichurri Flank Steak and Sweet Potatoes",
+    "description": "Marinated flank steak broiled alongside crispy cubed sweet potatoes and sweet bell peppers, topped with herbaceous green chimichurri.",
+    "prep_time_minutes": 30,
+    "difficulty_level": "medium",
+    "dietary_tags": [
+      "high-protein",
+      "gluten-free",
+      "dairy-free"
+    ],
+    "ingredients": [
+      {
+        "name": "Flank Steak",
+        "quantity": 1.5,
+        "unit": "lbs",
+        "default_unit": "lbs"
+      },
+      {
+        "name": "Sweet Potatoes",
+        "quantity": 2.0,
+        "unit": "count",
+        "default_unit": "count"
+      },
+      {
+        "name": "Bell Peppers",
+        "quantity": 2.0,
+        "unit": "count",
+        "default_unit": "count"
+      },
+      {
+        "name": "Fresh Parsley",
+        "quantity": 1.0,
+        "unit": "cups",
+        "default_unit": "cups"
+      },
+      {
+        "name": "Olive Oil",
+        "quantity": 3.0,
+        "unit": "tbsp",
+        "default_unit": "tbsp"
+      }
+    ],
+    "instructions": [
+      {
+        "step": 1,
+        "text": "Roast cubed sweet potatoes with olive oil at 400\u00b0F for 15 minutes."
+      },
+      {
+        "step": 2,
+        "text": "Add seasoned flank steak and bell peppers to sheet pan."
+      },
+      {
+        "step": 3,
+        "text": "Broil on high for 6-8 minutes until medium-rare."
+      },
+      {
+        "step": 4,
+        "text": "Slice thinly across grain and drizzle with fresh chimichurri."
+      }
+    ],
+    "nutrition_per_serving": {
+      "calories": 510,
+      "protein_g": 44.0,
+      "carbs_g": 36.0,
+      "fat_g": 20.0
+    }
+  },
+  {
+    "title": "Creamy Coconut Lime White Fish",
+    "description": "Flaky wild white cod or mahi mahi poached gently in a fragrant broth of coconut milk, red curry paste, fresh lime, and ginger.",
+    "prep_time_minutes": 20,
+    "difficulty_level": "easy",
+    "dietary_tags": [
+      "quick",
+      "high-protein",
+      "gluten-free",
+      "dairy-free",
+      "pescatarian"
+    ],
+    "ingredients": [
+      {
+        "name": "White Fish Fillets",
+        "quantity": 1.5,
+        "unit": "lbs",
+        "default_unit": "lbs"
+      },
+      {
+        "name": "Canned Coconut Milk",
+        "quantity": 1.0,
+        "unit": "can",
+        "default_unit": "can"
+      },
+      {
+        "name": "Red Curry Paste",
+        "quantity": 2.0,
+        "unit": "tbsp",
+        "default_unit": "tbsp"
+      },
+      {
+        "name": "Fresh Ginger",
+        "quantity": 1.0,
+        "unit": "tbsp",
+        "default_unit": "tbsp"
+      },
+      {
+        "name": "Baby Spinach",
+        "quantity": 3.0,
+        "unit": "cups",
+        "default_unit": "cups"
+      }
+    ],
+    "instructions": [
+      {
+        "step": 1,
+        "text": "Saut\u00e9 ginger, garlic, and red curry paste in coconut oil for 1 minute."
+      },
+      {
+        "step": 2,
+        "text": "Pour in coconut milk and lime zest; bring to gentle simmer."
+      },
+      {
+        "step": 3,
+        "text": "Poach fish fillets covered for 8 minutes until flaky."
+      },
+      {
+        "step": 4,
+        "text": "Fold in baby spinach and fresh lime juice before serving."
+      }
+    ],
+    "nutrition_per_serving": {
+      "calories": 430,
+      "protein_g": 38.0,
+      "carbs_g": 6.0,
+      "fat_g": 28.0
+    }
+  },
+  {
+    "title": "Loaded Turkey Stuffed Zucchini Boats",
+    "description": "Tender zucchini halves hollowed and stuffed with seasoned lean ground turkey, fire-roasted tomatoes, corn, and melted pepper jack cheese.",
+    "prep_time_minutes": 30,
+    "difficulty_level": "easy",
+    "dietary_tags": [
+      "high-protein",
+      "gluten-free",
+      "low-carb"
+    ],
+    "ingredients": [
+      {
+        "name": "Lean Ground Turkey (93/7)",
+        "quantity": 1.0,
+        "unit": "lbs",
+        "default_unit": "lbs"
+      },
+      {
+        "name": "Medium Zucchini",
+        "quantity": 4.0,
+        "unit": "count",
+        "default_unit": "count"
+      },
+      {
+        "name": "Canned Fire-Roasted Diced Tomatoes",
+        "quantity": 1.0,
+        "unit": "can",
+        "default_unit": "can"
+      },
+      {
+        "name": "Shredded Pepper Jack Cheese",
+        "quantity": 1.0,
+        "unit": "cups",
+        "default_unit": "cups"
+      },
+      {
+        "name": "Taco Seasoning",
+        "quantity": 2.0,
+        "unit": "tbsp",
+        "default_unit": "tbsp"
+      }
+    ],
+    "instructions": [
+      {
+        "step": 1,
+        "text": "Hollow out halved zucchini to create 1/4-inch thick boats."
+      },
+      {
+        "step": 2,
+        "text": "Brown turkey and diced onion; stir in taco seasoning and tomatoes."
+      },
+      {
+        "step": 3,
+        "text": "Stuff zucchini boats with turkey and top with cheese."
+      },
+      {
+        "step": 4,
+        "text": "Bake at 375\u00b0F for 20 minutes until bubbly and tender."
+      }
+    ],
+    "nutrition_per_serving": {
+      "calories": 360,
+      "protein_g": 36.0,
+      "carbs_g": 12.0,
+      "fat_g": 18.0
+    }
+  },
+  {
+    "title": "Classic New England Pan-Seared Scallops",
+    "description": "Jumbo sea scallops pan-seared to caramelized golden perfection, served with garlic herb compound butter and fresh lemon wedges.",
+    "prep_time_minutes": 15,
+    "difficulty_level": "medium",
+    "dietary_tags": [
+      "quick",
+      "high-protein",
+      "gluten-free",
+      "pescatarian",
+      "low-carb"
+    ],
+    "ingredients": [
+      {
+        "name": "Sea Scallops",
+        "quantity": 1.25,
+        "unit": "lbs",
+        "default_unit": "lbs"
+      },
+      {
+        "name": "Butter",
+        "quantity": 3.0,
+        "unit": "tbsp",
+        "default_unit": "tbsp"
+      },
+      {
+        "name": "Olive Oil",
+        "quantity": 1.0,
+        "unit": "tbsp",
+        "default_unit": "tbsp"
+      },
+      {
+        "name": "Garlic Cloves",
+        "quantity": 2.0,
+        "unit": "count",
+        "default_unit": "count"
+      },
+      {
+        "name": "Fresh Lemon",
+        "quantity": 1.0,
+        "unit": "count",
+        "default_unit": "count"
+      }
+    ],
+    "instructions": [
+      {
+        "step": 1,
+        "text": "Thoroughly pat scallops dry; season with salt and pepper."
+      },
+      {
+        "step": 2,
+        "text": "Sear in screaming hot pan with oil for 2 minutes without moving."
+      },
+      {
+        "step": 3,
+        "text": "Flip and add butter and garlic."
+      },
+      {
+        "step": 4,
+        "text": "Baste for 1 minute only; finish with fresh lemon squeeze."
+      }
+    ],
+    "nutrition_per_serving": {
+      "calories": 320,
+      "protein_g": 32.0,
+      "carbs_g": 6.0,
+      "fat_g": 18.0
+    }
+  },
+  {
+    "title": "Sheet Pan Greek Meatballs with Lemon Roasted Potatoes",
+    "description": "Herbaceous beef and lamb meatballs roasted on a single sheet pan with lemon-oregano tossed Yukon gold potato wedges.",
+    "prep_time_minutes": 35,
+    "difficulty_level": "easy",
+    "dietary_tags": [
+      "high-protein",
+      "gluten-free"
+    ],
+    "ingredients": [
+      {
+        "name": "Ground Beef (85/15)",
+        "quantity": 1.0,
+        "unit": "lbs",
+        "default_unit": "lbs"
+      },
+      {
+        "name": "Ground Lamb",
+        "quantity": 0.5,
+        "unit": "lbs",
+        "default_unit": "lbs"
+      },
+      {
+        "name": "Yukon Gold Potatoes",
+        "quantity": 1.5,
+        "unit": "lbs",
+        "default_unit": "lbs"
+      },
+      {
+        "name": "Dried Oregano",
+        "quantity": 1.0,
+        "unit": "tbsp",
+        "default_unit": "tbsp"
+      },
+      {
+        "name": "Lemons",
+        "quantity": 2.0,
+        "unit": "count",
+        "default_unit": "count"
+      }
+    ],
+    "instructions": [
+      {
+        "step": 1,
+        "text": "Toss potato wedges with olive oil, lemon juice, and oregano; roast at 400\u00b0F for 15 minutes."
+      },
+      {
+        "step": 2,
+        "text": "Mix beef, lamb, garlic, mint, and spices into 16 meatballs."
+      },
+      {
+        "step": 3,
+        "text": "Add meatballs to sheet pan with potatoes."
+      },
+      {
+        "step": 4,
+        "text": "Roast 18 minutes until meatballs are browned and potatoes crisp."
+      }
+    ],
+    "nutrition_per_serving": {
+      "calories": 540,
+      "protein_g": 42.0,
+      "carbs_g": 32.0,
+      "fat_g": 26.0
+    }
+  },
+  {
+    "title": "One-Pot Creamy Tomato Basil Tortellini Soup",
+    "description": "A 20-minute velvety tomato soup packed with tender cheese-stuffed tortellini, fresh baby spinach, and parmesan.",
+    "prep_time_minutes": 20,
+    "difficulty_level": "easy",
+    "dietary_tags": [
+      "quick",
+      "vegetarian"
+    ],
+    "ingredients": [
+      {
+        "name": "Refrigerated Cheese Tortellini",
+        "quantity": 9.0,
+        "unit": "oz",
+        "default_unit": "oz"
+      },
+      {
+        "name": "Canned Crushed Tomatoes",
+        "quantity": 1.0,
+        "unit": "can",
+        "default_unit": "can"
+      },
+      {
+        "name": "Vegetable Broth",
+        "quantity": 3.0,
+        "unit": "cups",
+        "default_unit": "cups"
+      },
+      {
+        "name": "Heavy Cream",
+        "quantity": 0.5,
+        "unit": "cups",
+        "default_unit": "cups"
+      },
+      {
+        "name": "Baby Spinach",
+        "quantity": 3.0,
+        "unit": "cups",
+        "default_unit": "cups"
+      }
+    ],
+    "instructions": [
+      {
+        "step": 1,
+        "text": "Saut\u00e9 garlic in olive oil in soup pot for 1 minute."
+      },
+      {
+        "step": 2,
+        "text": "Add crushed tomatoes and vegetable broth; simmer 5 minutes."
+      },
+      {
+        "step": 3,
+        "text": "Add tortellini and cook 5 minutes until tender."
+      },
+      {
+        "step": 4,
+        "text": "Stir in heavy cream and baby spinach until spinach wilts."
+      }
+    ],
+    "nutrition_per_serving": {
+      "calories": 390,
+      "protein_g": 16.0,
+      "carbs_g": 46.0,
+      "fat_g": 18.0
+    }
+  },
+  {
+    "title": "Crispy Skin Duck Breast with Blackberry Balsamic Reduction",
+    "description": "Pan-seared Moulard duck breast with deeply rendered crispy skin, served with a tart sweet blackberry and aged balsamic reduction.",
+    "prep_time_minutes": 30,
+    "difficulty_level": "hard",
+    "dietary_tags": [
+      "high-protein",
+      "gluten-free",
+      "dairy-free"
+    ],
+    "ingredients": [
+      {
+        "name": "Duck Breasts",
+        "quantity": 1.5,
+        "unit": "lbs",
+        "default_unit": "lbs"
+      },
+      {
+        "name": "Fresh Blackberries",
+        "quantity": 1.0,
+        "unit": "cups",
+        "default_unit": "cups"
+      },
+      {
+        "name": "Aged Balsamic Vinegar",
+        "quantity": 0.25,
+        "unit": "cups",
+        "default_unit": "cups"
+      },
+      {
+        "name": "Shallots",
+        "quantity": 1.0,
+        "unit": "count",
+        "default_unit": "count"
+      },
+      {
+        "name": "Honey",
+        "quantity": 1.0,
+        "unit": "tbsp",
+        "default_unit": "tbsp"
+      }
+    ],
+    "instructions": [
+      {
+        "step": 1,
+        "text": "Score duck skin in diamonds and season with salt."
+      },
+      {
+        "step": 2,
+        "text": "Place skin-down in cold skillet; render fat on medium-low for 14 minutes until crisp."
+      },
+      {
+        "step": 3,
+        "text": "Flip and cook 3 minutes to medium-rare; rest."
+      },
+      {
+        "step": 4,
+        "text": "Saut\u00e9 shallots in 1 tbsp duck fat, reduce balsamic, honey, and blackberries to syrup; spoon over sliced duck."
+      }
+    ],
+    "nutrition_per_serving": {
+      "calories": 520,
+      "protein_g": 42.0,
+      "carbs_g": 18.0,
+      "fat_g": 32.0
+    }
+  },
+  {
+    "title": "Spicy Honey Sriracha Glazed Salmon",
+    "description": "Salmon fillets coated in a sticky-sweet sauce of pure honey, sriracha, garlic, and lime juice, broiled until caramelized.",
+    "prep_time_minutes": 15,
+    "difficulty_level": "easy",
+    "dietary_tags": [
+      "quick",
+      "high-protein",
+      "gluten-free",
+      "pescatarian"
+    ],
+    "ingredients": [
+      {
+        "name": "Salmon Fillets",
+        "quantity": 1.5,
+        "unit": "lbs",
+        "default_unit": "lbs"
+      },
+      {
+        "name": "Honey",
+        "quantity": 3.0,
+        "unit": "tbsp",
+        "default_unit": "tbsp"
+      },
+      {
+        "name": "Sriracha Sauce",
+        "quantity": 2.0,
+        "unit": "tbsp",
+        "default_unit": "tbsp"
+      },
+      {
+        "name": "Soy Sauce",
+        "quantity": 1.0,
+        "unit": "tbsp",
+        "default_unit": "tbsp"
+      },
+      {
+        "name": "Green Onions",
+        "quantity": 3.0,
+        "unit": "count",
+        "default_unit": "count"
+      }
+    ],
+    "instructions": [
+      {
+        "step": 1,
+        "text": "Whisk honey, sriracha, soy sauce, garlic, and lime juice."
+      },
+      {
+        "step": 2,
+        "text": "Place salmon fillets on foil-lined baking sheet and spoon glaze on top."
+      },
+      {
+        "step": 3,
+        "text": "Broil on high for 7 minutes until bubbling and glazed."
+      },
+      {
+        "step": 4,
+        "text": "Garnish with scallions and sesame seeds."
+      }
+    ],
+    "nutrition_per_serving": {
+      "calories": 460,
+      "protein_g": 40.0,
+      "carbs_g": 18.0,
+      "fat_g": 26.0
+    }
+  },
+  {
+    "title": "Vietnamese Lemongrass Pork Chops",
+    "description": "Thin bone-in pork chops marinated with fragrant lemongrass, garlic, fish sauce, and brown sugar, grilled with charred caramelized edges.",
+    "prep_time_minutes": 25,
+    "difficulty_level": "easy",
+    "dietary_tags": [
+      "high-protein",
+      "dairy-free",
+      "quick"
+    ],
+    "ingredients": [
+      {
+        "name": "Pork Chops (Thin Cut)",
+        "quantity": 1.5,
+        "unit": "lbs",
+        "default_unit": "lbs"
+      },
+      {
+        "name": "Fresh Lemongrass Stalks",
+        "quantity": 2.0,
+        "unit": "count",
+        "default_unit": "count"
+      },
+      {
+        "name": "Fish Sauce",
+        "quantity": 2.0,
+        "unit": "tbsp",
+        "default_unit": "tbsp"
+      },
+      {
+        "name": "Brown Sugar",
+        "quantity": 1.5,
+        "unit": "tbsp",
+        "default_unit": "tbsp"
+      },
+      {
+        "name": "Soy Sauce",
+        "quantity": 1.0,
+        "unit": "tbsp",
+        "default_unit": "tbsp"
+      }
+    ],
+    "instructions": [
+      {
+        "step": 1,
+        "text": "Mince lemongrass and garlic; mix with fish sauce, brown sugar, and soy."
+      },
+      {
+        "step": 2,
+        "text": "Marinate pork chops for 15 minutes."
+      },
+      {
+        "step": 3,
+        "text": "Grill on high 3-4 minutes per side until caramelized."
+      },
+      {
+        "step": 4,
+        "text": "Serve with jasmine rice and sliced cucumbers."
+      }
+    ],
+    "nutrition_per_serving": {
+      "calories": 440,
+      "protein_g": 42.0,
+      "carbs_g": 12.0,
+      "fat_g": 24.0
+    }
+  },
+  {
+    "title": "Classic Italian Rigatoni Bolognese",
+    "description": "Slow-simmered rich meat sauce of ground beef, sweet Italian pork, mirepoix, San Marzano tomatoes, and whole milk over al dente rigatoni.",
+    "prep_time_minutes": 60,
+    "difficulty_level": "medium",
+    "dietary_tags": [
+      "high-protein"
+    ],
+    "ingredients": [
+      {
+        "name": "Rigatoni Pasta",
+        "quantity": 1.0,
+        "unit": "lbs",
+        "default_unit": "lbs"
+      },
+      {
+        "name": "Ground Beef (80/20)",
+        "quantity": 0.75,
+        "unit": "lbs",
+        "default_unit": "lbs"
+      },
+      {
+        "name": "Ground Pork",
+        "quantity": 0.75,
+        "unit": "lbs",
+        "default_unit": "lbs"
+      },
+      {
+        "name": "Canned San Marzano Tomatoes",
+        "quantity": 1.0,
+        "unit": "can",
+        "default_unit": "can"
+      },
+      {
+        "name": "Whole Milk",
+        "quantity": 0.5,
+        "unit": "cups",
+        "default_unit": "cups"
+      },
+      {
+        "name": "Parmesan Cheese",
+        "quantity": 0.5,
+        "unit": "cups",
+        "default_unit": "cups"
+      }
+    ],
+    "instructions": [
+      {
+        "step": 1,
+        "text": "Saut\u00e9 diced mirepoix in butter for 6 minutes."
+      },
+      {
+        "step": 2,
+        "text": "Brown beef and pork thoroughly."
+      },
+      {
+        "step": 3,
+        "text": "Add wine and milk in succession until absorbed; add tomatoes and simmer 45 minutes."
+      },
+      {
+        "step": 4,
+        "text": "Toss with al dente rigatoni and parmesan."
+      }
+    ],
+    "nutrition_per_serving": {
+      "calories": 590,
+      "protein_g": 38.0,
+      "carbs_g": 54.0,
+      "fat_g": 24.0
+    }
+  },
+  {
+    "title": "Vegetarian Chickpea Shakshuka with Goat Cheese",
+    "description": "Eggs poached gently in a spiced sauce of crushed tomatoes, bell peppers, hearty chickpeas, fresh cilantro, and creamy crumbled goat cheese.",
+    "prep_time_minutes": 25,
+    "difficulty_level": "easy",
+    "dietary_tags": [
+      "quick",
+      "vegetarian",
+      "gluten-free"
+    ],
+    "ingredients": [
+      {
+        "name": "Eggs",
+        "quantity": 5.0,
+        "unit": "count",
+        "default_unit": "count"
+      },
+      {
+        "name": "Canned Chickpeas",
+        "quantity": 1.0,
+        "unit": "can",
+        "default_unit": "can"
+      },
+      {
+        "name": "Canned Crushed Tomatoes",
+        "quantity": 1.0,
+        "unit": "can",
+        "default_unit": "can"
+      },
+      {
+        "name": "Crumbled Goat Cheese",
+        "quantity": 0.5,
+        "unit": "cups",
+        "default_unit": "cups"
+      },
+      {
+        "name": "Ground Cumin",
+        "quantity": 1.0,
+        "unit": "tsp",
+        "default_unit": "tsp"
+      }
+    ],
+    "instructions": [
+      {
+        "step": 1,
+        "text": "Saut\u00e9 onions and bell peppers in skillet for 5 minutes."
+      },
+      {
+        "step": 2,
+        "text": "Add tomatoes, cumin, and chickpeas; simmer 8 minutes."
+      },
+      {
+        "step": 3,
+        "text": "Make wells and crack in 5 eggs; cover on low for 6 minutes."
+      },
+      {
+        "step": 4,
+        "text": "Top with crumbled goat cheese and fresh cilantro."
+      }
+    ],
+    "nutrition_per_serving": {
+      "calories": 370,
+      "protein_g": 22.0,
+      "carbs_g": 28.0,
+      "fat_g": 19.0
+    }
+  },
+  {
+    "title": "Chicken Tinga Tacos with Pickled Red Onions",
+    "description": "Shredded chicken breast simmered in a smoky chipotle-tomato sauce, folded into warm corn tortillas with cotija cheese and quick pickled red onions.",
+    "prep_time_minutes": 25,
+    "difficulty_level": "easy",
+    "dietary_tags": [
+      "quick",
+      "high-protein",
+      "gluten-free"
+    ],
+    "ingredients": [
+      {
+        "name": "Shredded Cooked Chicken Breast",
+        "quantity": 1.5,
+        "unit": "lbs",
+        "default_unit": "lbs"
+      },
+      {
+        "name": "Canned Chipotle Peppers in Adobo",
+        "quantity": 2.0,
+        "unit": "tbsp",
+        "default_unit": "tbsp"
+      },
+      {
+        "name": "Corn Tortillas",
+        "quantity": 8.0,
+        "unit": "count",
+        "default_unit": "count"
+      },
+      {
+        "name": "Cotija Cheese",
+        "quantity": 0.5,
+        "unit": "cups",
+        "default_unit": "cups"
+      },
+      {
+        "name": "Red Onion",
+        "quantity": 1.0,
+        "unit": "count",
+        "default_unit": "count"
+      }
+    ],
+    "instructions": [
+      {
+        "step": 1,
+        "text": "Pickle sliced red onions in lime juice with a pinch of salt."
+      },
+      {
+        "step": 2,
+        "text": "Blend chipotle adobo, tomatoes, and garlic; simmer with shredded chicken for 6 minutes."
+      },
+      {
+        "step": 3,
+        "text": "Warm tortillas on hot skillet."
+      },
+      {
+        "step": 4,
+        "text": "Assemble tacos with chicken, cotija, and pickled onions."
+      }
+    ],
+    "nutrition_per_serving": {
+      "calories": 420,
+      "protein_g": 44.0,
+      "carbs_g": 36.0,
+      "fat_g": 11.0
+    }
+  },
+  {
+    "title": "Creamy Tuscan Garlic Chicken",
+    "description": "Pan-seared golden chicken breasts in a decadent sauce of sun-dried tomatoes, tender baby spinach, garlic, and parmesan cream.",
+    "prep_time_minutes": 25,
+    "difficulty_level": "easy",
+    "dietary_tags": [
+      "quick",
+      "high-protein",
+      "gluten-free",
+      "keto",
+      "low-carb"
+    ],
+    "ingredients": [
+      {
+        "name": "Boneless Skinless Chicken Breast",
+        "quantity": 1.5,
+        "unit": "lbs",
+        "default_unit": "lbs"
+      },
+      {
+        "name": "Heavy Cream",
+        "quantity": 0.75,
+        "unit": "cups",
+        "default_unit": "cups"
+      },
+      {
+        "name": "Sun-Dried Tomatoes",
+        "quantity": 0.5,
+        "unit": "cups",
+        "default_unit": "cups"
+      },
+      {
+        "name": "Baby Spinach",
+        "quantity": 3.0,
+        "unit": "cups",
+        "default_unit": "cups"
+      },
+      {
+        "name": "Parmesan Cheese",
+        "quantity": 0.5,
+        "unit": "cups",
+        "default_unit": "cups"
+      }
+    ],
+    "instructions": [
+      {
+        "step": 1,
+        "text": "Pan-sear seasoned chicken in olive oil 6 minutes per side; remove."
+      },
+      {
+        "step": 2,
+        "text": "Saut\u00e9 sun-dried tomatoes and garlic in skillet for 1 minute."
+      },
+      {
+        "step": 3,
+        "text": "Stir in cream, broth, and parmesan until bubbling and smooth."
+      },
+      {
+        "step": 4,
+        "text": "Fold in spinach, return chicken to skillet, and spoon sauce over top."
+      }
+    ],
+    "nutrition_per_serving": {
+      "calories": 510,
+      "protein_g": 48.0,
+      "carbs_g": 8.0,
+      "fat_g": 32.0
+    }
+  },
+  {
+    "title": "Authentic Japanese Chicken Katsu Curry",
+    "description": "Panko-crusted crispy fried chicken cutlets sliced over steamed sushi rice with rich, savory Japanese golden curry sauce and carrots.",
+    "prep_time_minutes": 35,
+    "difficulty_level": "medium",
+    "dietary_tags": [
+      "high-protein"
+    ],
+    "ingredients": [
+      {
+        "name": "Chicken Cutlets",
+        "quantity": 1.5,
+        "unit": "lbs",
+        "default_unit": "lbs"
+      },
+      {
+        "name": "Panko Breadcrumbs",
+        "quantity": 1.5,
+        "unit": "cups",
+        "default_unit": "cups"
+      },
+      {
+        "name": "Japanese Curry Roux Cubes",
+        "quantity": 3.0,
+        "unit": "count",
+        "default_unit": "count"
+      },
+      {
+        "name": "Carrots",
+        "quantity": 2.0,
+        "unit": "count",
+        "default_unit": "count"
+      },
+      {
+        "name": "Short-Grain White Rice",
+        "quantity": 1.5,
+        "unit": "cups",
+        "default_unit": "cups"
+      }
+    ],
+    "instructions": [
+      {
+        "step": 1,
+        "text": "Simmer sliced carrots and onions in water; dissolve curry roux cubes."
+      },
+      {
+        "step": 2,
+        "text": "Bread chicken cutlets in flour, egg, and panko."
+      },
+      {
+        "step": 3,
+        "text": "Fry in 1/2-inch hot oil 4 minutes per side until crunchy and golden."
+      },
+      {
+        "step": 4,
+        "text": "Slice cutlets crosswise and serve over rice with curry."
+      }
+    ],
+    "nutrition_per_serving": {
+      "calories": 590,
+      "protein_g": 44.0,
+      "carbs_g": 58.0,
+      "fat_g": 20.0
+    }
+  },
+  {
+    "title": "Herb Crusted Baked Halibut with Roasted Asparagus",
+    "description": "Wild Pacific halibut topped with toasted panko, lemon zest, garlic, and fresh dill, baked alongside tender roasted asparagus spears.",
+    "prep_time_minutes": 25,
+    "difficulty_level": "easy",
+    "dietary_tags": [
+      "quick",
+      "high-protein",
+      "pescatarian"
+    ],
+    "ingredients": [
+      {
+        "name": "Halibut Fillets",
+        "quantity": 1.5,
+        "unit": "lbs",
+        "default_unit": "lbs"
+      },
+      {
+        "name": "Fresh Asparagus",
+        "quantity": 1.0,
+        "unit": "lbs",
+        "default_unit": "lbs"
+      },
+      {
+        "name": "Panko Breadcrumbs",
+        "quantity": 0.5,
+        "unit": "cups",
+        "default_unit": "cups"
+      },
+      {
+        "name": "Fresh Dill",
+        "quantity": 2.0,
+        "unit": "tbsp",
+        "default_unit": "tbsp"
+      },
+      {
+        "name": "Butter",
+        "quantity": 2.0,
+        "unit": "tbsp",
+        "default_unit": "tbsp"
+      }
+    ],
+    "instructions": [
+      {
+        "step": 1,
+        "text": "Toss asparagus in olive oil on baking sheet."
+      },
+      {
+        "step": 2,
+        "text": "Mix panko, melted butter, dill, and lemon zest."
+      },
+      {
+        "step": 3,
+        "text": "Place halibut fillets on sheet and press herb breadcrumbs on top."
+      },
+      {
+        "step": 4,
+        "text": "Bake at 400\u00b0F for 14 minutes until fish flakes easily."
+      }
+    ],
+    "nutrition_per_serving": {
+      "calories": 380,
+      "protein_g": 40.0,
+      "carbs_g": 14.0,
+      "fat_g": 18.0
+    }
+  },
+  {
+    "title": "Balsamic Glazed Caprese Stuffed Chicken",
+    "description": "Chicken breasts pocketed with fresh mozzarella, Roma tomatoes, and basil leaves, baked and glazed with a sweet balsamic syrup.",
+    "prep_time_minutes": 30,
+    "difficulty_level": "medium",
+    "dietary_tags": [
+      "high-protein",
+      "gluten-free",
+      "low-carb"
+    ],
+    "ingredients": [
+      {
+        "name": "Boneless Skinless Chicken Breast",
+        "quantity": 2.0,
+        "unit": "lbs",
+        "default_unit": "lbs"
+      },
+      {
+        "name": "Fresh Mozzarella Cheese",
+        "quantity": 6.0,
+        "unit": "oz",
+        "default_unit": "oz"
+      },
+      {
+        "name": "Roma Tomatoes",
+        "quantity": 2.0,
+        "unit": "count",
+        "default_unit": "count"
+      },
+      {
+        "name": "Fresh Basil Leaves",
+        "quantity": 12.0,
+        "unit": "count",
+        "default_unit": "count"
+      },
+      {
+        "name": "Balsamic Glaze",
+        "quantity": 3.0,
+        "unit": "tbsp",
+        "default_unit": "tbsp"
+      }
+    ],
+    "instructions": [
+      {
+        "step": 1,
+        "text": "Cut horizontal pocket in each chicken breast."
+      },
+      {
+        "step": 2,
+        "text": "Stuff with mozzarella, tomato slices, and basil leaves."
+      },
+      {
+        "step": 3,
+        "text": "Sear in oven-safe skillet 3 minutes per side."
+      },
+      {
+        "step": 4,
+        "text": "Bake at 375\u00b0F for 18 minutes to 165\u00b0F; drizzle with balsamic glaze."
+      }
+    ],
+    "nutrition_per_serving": {
+      "calories": 480,
+      "protein_g": 52.0,
+      "carbs_g": 8.0,
+      "fat_g": 26.0
+    }
+  },
+  {
+    "title": "Spicy Peanut Soba Noodles with Crispy Tofu",
+    "description": "Buckwheat soba noodles tossed in a spicy, savory peanut lime sauce with shredded purple cabbage, edamame, and crispy pan-fried tofu.",
+    "prep_time_minutes": 25,
+    "difficulty_level": "easy",
+    "dietary_tags": [
+      "quick",
+      "vegetarian",
+      "vegan",
+      "dairy-free"
+    ],
+    "ingredients": [
+      {
+        "name": "Extra-Firm Tofu",
+        "quantity": 14.0,
+        "unit": "oz",
+        "default_unit": "oz"
+      },
+      {
+        "name": "Buckwheat Soba Noodles",
+        "quantity": 8.0,
+        "unit": "oz",
+        "default_unit": "oz"
+      },
+      {
+        "name": "Creamy Peanut Butter",
+        "quantity": 0.33,
+        "unit": "cups",
+        "default_unit": "cups"
+      },
+      {
+        "name": "Soy Sauce",
+        "quantity": 3.0,
+        "unit": "tbsp",
+        "default_unit": "tbsp"
+      },
+      {
+        "name": "Frozen Shelled Edamame",
+        "quantity": 1.0,
+        "unit": "cups",
+        "default_unit": "cups"
+      }
+    ],
+    "instructions": [
+      {
+        "step": 1,
+        "text": "Pan-fry pressed tofu cubes in sesame oil until golden crisp."
+      },
+      {
+        "step": 2,
+        "text": "Boil soba noodles 4 minutes and rinse cold."
+      },
+      {
+        "step": 3,
+        "text": "Whisk peanut butter, soy, lime juice, and sriracha with warm water."
+      },
+      {
+        "step": 4,
+        "text": "Toss noodles, cabbage, edamame, and tofu in peanut dressing."
+      }
+    ],
+    "nutrition_per_serving": {
+      "calories": 450,
+      "protein_g": 24.0,
+      "carbs_g": 52.0,
+      "fat_g": 18.0
+    }
+  },
+  {
+    "title": "Classic French Beef Bourguignon",
+    "description": "Chunks of beef chuck braised low and slow in dry red wine and beef stock with bacon lardons, cremini mushrooms, and sweet pearl onions.",
+    "prep_time_minutes": 75,
+    "difficulty_level": "hard",
+    "dietary_tags": [
+      "high-protein",
+      "gluten-free",
+      "dairy-free"
+    ],
+    "ingredients": [
+      {
+        "name": "Beef Chuck Roast",
+        "quantity": 2.5,
+        "unit": "lbs",
+        "default_unit": "lbs"
+      },
+      {
+        "name": "Thick-Cut Bacon",
+        "quantity": 6.0,
+        "unit": "slices",
+        "default_unit": "slices"
+      },
+      {
+        "name": "Cremini Mushrooms",
+        "quantity": 8.0,
+        "unit": "oz",
+        "default_unit": "oz"
+      },
+      {
+        "name": "Dry Red Wine",
+        "quantity": 2.0,
+        "unit": "cups",
+        "default_unit": "cups"
+      },
+      {
+        "name": "Carrots",
+        "quantity": 3.0,
+        "unit": "count",
+        "default_unit": "count"
+      }
+    ],
+    "instructions": [
+      {
+        "step": 1,
+        "text": "Crisp bacon; sear beef cubes in rendered fat until browned."
+      },
+      {
+        "step": 2,
+        "text": "Deglaze with red wine and beef broth."
+      },
+      {
+        "step": 3,
+        "text": "Cover and braise in oven at 325\u00b0F for 2.5 hours."
+      },
+      {
+        "step": 4,
+        "text": "Saut\u00e9 mushrooms and pearl onions; fold in during final 20 minutes."
+      }
+    ],
+    "nutrition_per_serving": {
+      "calories": 580,
+      "protein_g": 52.0,
+      "carbs_g": 14.0,
+      "fat_g": 34.0
+    }
+  },
+  {
+    "title": "Sheet Pan Lemon Parmesan Crusted Cod",
+    "description": "Tender Atlantic cod fillets coated in a crunchy crust of freshly grated parmesan, lemon zest, garlic, and herbs, baked with green beans.",
+    "prep_time_minutes": 20,
+    "difficulty_level": "easy",
+    "dietary_tags": [
+      "quick",
+      "high-protein",
+      "pescatarian",
+      "low-carb"
+    ],
+    "ingredients": [
+      {
+        "name": "Cod Fillets",
+        "quantity": 1.5,
+        "unit": "lbs",
+        "default_unit": "lbs"
+      },
+      {
+        "name": "Fresh Green Beans",
+        "quantity": 1.0,
+        "unit": "lbs",
+        "default_unit": "lbs"
+      },
+      {
+        "name": "Parmesan Cheese",
+        "quantity": 0.75,
+        "unit": "cups",
+        "default_unit": "cups"
+      },
+      {
+        "name": "Lemon Zest",
+        "quantity": 1.0,
+        "unit": "tbsp",
+        "default_unit": "tbsp"
+      },
+      {
+        "name": "Butter",
+        "quantity": 2.0,
+        "unit": "tbsp",
+        "default_unit": "tbsp"
+      }
+    ],
+    "instructions": [
+      {
+        "step": 1,
+        "text": "Toss green beans in olive oil, salt, and pepper on sheet pan."
+      },
+      {
+        "step": 2,
+        "text": "Mix parmesan, lemon zest, garlic powder, and melted butter."
+      },
+      {
+        "step": 3,
+        "text": "Press parmesan mixture onto cod fillets on the sheet pan."
+      },
+      {
+        "step": 4,
+        "text": "Bake at 400\u00b0F for 12-14 minutes until golden crust forms."
+      }
+    ],
+    "nutrition_per_serving": {
+      "calories": 360,
+      "protein_g": 42.0,
+      "carbs_g": 8.0,
+      "fat_g": 18.0
+    }
+  },
+  {
+    "title": "Creamy Sun-Dried Tomato and Spinach Gnocchi",
+    "description": "Pillowy potato gnocchi tossed in a decadent pan sauce of heavy cream, sun-dried tomatoes, tender spinach, and fresh garlic.",
+    "prep_time_minutes": 20,
+    "difficulty_level": "easy",
+    "dietary_tags": [
+      "quick",
+      "vegetarian"
+    ],
+    "ingredients": [
+      {
+        "name": "Potato Gnocchi",
+        "quantity": 1.0,
+        "unit": "lbs",
+        "default_unit": "lbs"
+      },
+      {
+        "name": "Heavy Cream",
+        "quantity": 0.75,
+        "unit": "cups",
+        "default_unit": "cups"
+      },
+      {
+        "name": "Sun-Dried Tomatoes",
+        "quantity": 0.5,
+        "unit": "cups",
+        "default_unit": "cups"
+      },
+      {
+        "name": "Baby Spinach",
+        "quantity": 3.0,
+        "unit": "cups",
+        "default_unit": "cups"
+      },
+      {
+        "name": "Parmesan Cheese",
+        "quantity": 0.5,
+        "unit": "cups",
+        "default_unit": "cups"
+      }
+    ],
+    "instructions": [
+      {
+        "step": 1,
+        "text": "Pan-sear gnocchi in butter for 6 minutes until golden crisp."
+      },
+      {
+        "step": 2,
+        "text": "Add garlic and sun-dried tomatoes for 1 minute."
+      },
+      {
+        "step": 3,
+        "text": "Pour in cream and parmesan; simmer until thickened."
+      },
+      {
+        "step": 4,
+        "text": "Fold in baby spinach until wilted; season with black pepper."
+      }
+    ],
+    "nutrition_per_serving": {
+      "calories": 490,
+      "protein_g": 14.0,
+      "carbs_g": 56.0,
+      "fat_g": 25.0
+    }
+  },
+  {
+    "title": "Mexican Chipotle Beef Barbacoa Bowls",
+    "description": "Fork-tender chuck roast braised in chipotle adobo, lime, and Mexican spices, served over cilantro brown rice with pinto beans.",
+    "prep_time_minutes": 45,
+    "difficulty_level": "medium",
+    "dietary_tags": [
+      "high-protein",
+      "gluten-free",
+      "dairy-free"
+    ],
+    "ingredients": [
+      {
+        "name": "Beef Chuck Roast",
+        "quantity": 2.5,
+        "unit": "lbs",
+        "default_unit": "lbs"
+      },
+      {
+        "name": "Canned Chipotle in Adobo",
+        "quantity": 3.0,
+        "unit": "count",
+        "default_unit": "count"
+      },
+      {
+        "name": "Canned Pinto Beans",
+        "quantity": 1.0,
+        "unit": "can",
+        "default_unit": "can"
+      },
+      {
+        "name": "Brown Rice",
+        "quantity": 1.5,
+        "unit": "cups",
+        "default_unit": "cups"
+      },
+      {
+        "name": "Ground Cumin",
+        "quantity": 1.0,
+        "unit": "tbsp",
+        "default_unit": "tbsp"
+      }
+    ],
+    "instructions": [
+      {
+        "step": 1,
+        "text": "Puree chipotles, broth, lime juice, garlic, and cumin."
+      },
+      {
+        "step": 2,
+        "text": "Sear chuck roast chunks in Dutch oven."
+      },
+      {
+        "step": 3,
+        "text": "Pour chipotle sauce over beef; braise covered at 300\u00b0F for 3 hours."
+      },
+      {
+        "step": 4,
+        "text": "Shred beef and serve over brown rice with warmed pinto beans."
+      }
+    ],
+    "nutrition_per_serving": {
+      "calories": 540,
+      "protein_g": 48.0,
+      "carbs_g": 42.0,
+      "fat_g": 20.0
+    }
+  },
+  {
+    "title": "Chimichurri Grilled Chicken Breast",
+    "description": "Grilled marinated chicken breast topped with authentic fresh Argentine parsley chimichurri.",
+    "prep_time_minutes": 25,
+    "difficulty_level": "easy",
+    "dietary_tags": [
+      "quick",
+      "high-protein",
+      "gluten-free",
+      "dairy-free",
+      "low-carb"
+    ],
+    "ingredients": [
+      {
+        "name": "Chicken Breast",
+        "quantity": 1.5,
+        "unit": "lbs",
+        "default_unit": "lbs"
+      },
+      {
+        "name": "Fresh Parsley",
+        "quantity": 1.0,
+        "unit": "cups",
+        "default_unit": "cups"
+      },
+      {
+        "name": "Olive Oil",
+        "quantity": 3.0,
+        "unit": "tbsp",
+        "default_unit": "tbsp"
+      },
+      {
+        "name": "Red Wine Vinegar",
+        "quantity": 2.0,
+        "unit": "tbsp",
+        "default_unit": "tbsp"
+      },
+      {
+        "name": "Garlic Cloves",
+        "quantity": 3.0,
+        "unit": "count",
+        "default_unit": "count"
+      }
+    ],
+    "instructions": [
+      {
+        "step": 1,
+        "text": "Whisk parsley, garlic, vinegar, olive oil, and salt for chimichurri."
+      },
+      {
+        "step": 2,
+        "text": "Pound chicken breasts to even thickness; season with olive oil, salt, and pepper."
+      },
+      {
+        "step": 3,
+        "text": "Grill 5-6 minutes per side over medium-high heat to 165\u00b0F."
+      },
+      {
+        "step": 4,
+        "text": "Rest 5 minutes, slice, and spoon chimichurri over top."
+      }
+    ],
+    "nutrition_per_serving": {
+      "calories": 410,
+      "protein_g": 46.0,
+      "carbs_g": 2.0,
+      "fat_g": 24.0
+    }
+  },
+  {
+    "title": "Blackened Mahi Mahi with Mango Salsa",
+    "description": "Cast-iron blackened mahi mahi fillets topped with a sweet and tangy fresh mango avocado salsa.",
+    "prep_time_minutes": 20,
+    "difficulty_level": "easy",
+    "dietary_tags": [
+      "quick",
+      "high-protein",
+      "gluten-free",
+      "dairy-free",
+      "pescatarian"
+    ],
+    "ingredients": [
+      {
+        "name": "Mahi Mahi Fillets",
+        "quantity": 1.5,
+        "unit": "lbs",
+        "default_unit": "lbs"
+      },
+      {
+        "name": "Fresh Mango",
+        "quantity": 1.0,
+        "unit": "count",
+        "default_unit": "count"
+      },
+      {
+        "name": "Avocado",
+        "quantity": 1.0,
+        "unit": "count",
+        "default_unit": "count"
+      },
+      {
+        "name": "Blackened Seasoning",
+        "quantity": 1.5,
+        "unit": "tbsp",
+        "default_unit": "tbsp"
+      },
+      {
+        "name": "Lime Juice",
+        "quantity": 2.0,
+        "unit": "tbsp",
+        "default_unit": "tbsp"
+      }
+    ],
+    "instructions": [
+      {
+        "step": 1,
+        "text": "Dice mango and avocado; toss with lime juice and cilantro."
+      },
+      {
+        "step": 2,
+        "text": "Coat mahi mahi generously in blackened seasoning."
+      },
+      {
+        "step": 3,
+        "text": "Sear in screaming hot cast iron pan with 1 tbsp oil for 3 minutes per side."
+      },
+      {
+        "step": 4,
+        "text": "Top blackened fillets with fresh mango avocado salsa."
+      }
+    ],
+    "nutrition_per_serving": {
+      "calories": 390,
+      "protein_g": 40.0,
+      "carbs_g": 22.0,
+      "fat_g": 16.0
+    }
+  },
+  {
+    "title": "Mediterranean Lamb Kofta Wraps",
+    "description": "Spiced ground lamb kebabs with cumin, coriander, and mint wrapped in warm flatbread with garlicky tahini sauce.",
+    "prep_time_minutes": 30,
+    "difficulty_level": "medium",
+    "dietary_tags": [
+      "high-protein"
+    ],
+    "ingredients": [
+      {
+        "name": "Ground Lamb",
+        "quantity": 1.25,
+        "unit": "lbs",
+        "default_unit": "lbs"
+      },
+      {
+        "name": "Flatbread",
+        "quantity": 4.0,
+        "unit": "count",
+        "default_unit": "count"
+      },
+      {
+        "name": "Tahini Paste",
+        "quantity": 0.25,
+        "unit": "cups",
+        "default_unit": "cups"
+      },
+      {
+        "name": "Ground Cumin",
+        "quantity": 1.0,
+        "unit": "tsp",
+        "default_unit": "tsp"
+      },
+      {
+        "name": "Fresh Mint",
+        "quantity": 2.0,
+        "unit": "tbsp",
+        "default_unit": "tbsp"
+      }
+    ],
+    "instructions": [
+      {
+        "step": 1,
+        "text": "Mix lamb with minced onion, garlic, mint, cumin, and coriander."
+      },
+      {
+        "step": 2,
+        "text": "Shape around skewers into oblong koftas."
+      },
+      {
+        "step": 3,
+        "text": "Grill 8-10 minutes over high heat until browned."
+      },
+      {
+        "step": 4,
+        "text": "Serve wrapped in warm flatbread with tahini sauce and tomatoes."
+      }
+    ],
+    "nutrition_per_serving": {
+      "calories": 540,
+      "protein_g": 38.0,
+      "carbs_g": 36.0,
+      "fat_g": 28.0
+    }
+  },
+  {
+    "title": "Sesame Crusted Ahi Tuna Steaks",
+    "description": "Sashimi-grade ahi tuna coated in sesame seeds, flash seared rare, served with wasabi ginger soy drizzle.",
+    "prep_time_minutes": 15,
+    "difficulty_level": "easy",
+    "dietary_tags": [
+      "quick",
+      "high-protein",
+      "dairy-free",
+      "pescatarian",
+      "low-carb"
+    ],
+    "ingredients": [
+      {
+        "name": "Ahi Tuna Steaks",
+        "quantity": 1.25,
+        "unit": "lbs",
+        "default_unit": "lbs"
+      },
+      {
+        "name": "Sesame Seeds",
+        "quantity": 0.33,
+        "unit": "cups",
+        "default_unit": "cups"
+      },
+      {
+        "name": "Soy Sauce",
+        "quantity": 2.0,
+        "unit": "tbsp",
+        "default_unit": "tbsp"
+      },
+      {
+        "name": "Sesame Oil",
+        "quantity": 1.0,
+        "unit": "tbsp",
+        "default_unit": "tbsp"
+      },
+      {
+        "name": "Wasabi Paste",
+        "quantity": 1.0,
+        "unit": "tsp",
+        "default_unit": "tsp"
+      }
+    ],
+    "instructions": [
+      {
+        "step": 1,
+        "text": "Press ahi tuna steaks firmly into white and black sesame seeds."
+      },
+      {
+        "step": 2,
+        "text": "Heat sesame oil in cast iron pan over high heat until smoking."
+      },
+      {
+        "step": 3,
+        "text": "Sear tuna 45-60 seconds per side, keeping center rare."
+      },
+      {
+        "step": 4,
+        "text": "Slice into thick medallions and serve with soy-wasabi dipping sauce."
+      }
+    ],
+    "nutrition_per_serving": {
+      "calories": 360,
+      "protein_g": 44.0,
+      "carbs_g": 4.0,
+      "fat_g": 18.0
+    }
+  },
+  {
+    "title": "Classic Beef Stroganoff with Egg Noodles",
+    "description": "Tender sirloin steak strips and sliced cremini mushrooms in a creamy sour cream and Dijon mustard sauce.",
+    "prep_time_minutes": 30,
+    "difficulty_level": "medium",
+    "dietary_tags": [
+      "high-protein"
+    ],
+    "ingredients": [
+      {
+        "name": "Top Sirloin Steak",
+        "quantity": 1.5,
+        "unit": "lbs",
+        "default_unit": "lbs"
+      },
+      {
+        "name": "Wide Egg Noodles",
+        "quantity": 8.0,
+        "unit": "oz",
+        "default_unit": "oz"
+      },
+      {
+        "name": "Cremini Mushrooms",
+        "quantity": 8.0,
+        "unit": "oz",
+        "default_unit": "oz"
+      },
+      {
+        "name": "Sour Cream",
+        "quantity": 0.5,
+        "unit": "cups",
+        "default_unit": "cups"
+      },
+      {
+        "name": "Beef Broth",
+        "quantity": 1.0,
+        "unit": "cups",
+        "default_unit": "cups"
+      }
+    ],
+    "instructions": [
+      {
+        "step": 1,
+        "text": "Flash-sear seasoned sirloin strips in butter for 2 minutes; set aside."
+      },
+      {
+        "step": 2,
+        "text": "Saut\u00e9 mushrooms and onions until deeply browned."
+      },
+      {
+        "step": 3,
+        "text": "Deglaze with beef broth and Dijon mustard; simmer 5 minutes."
+      },
+      {
+        "step": 4,
+        "text": "Stir in sour cream and returned beef; serve over buttered egg noodles."
+      }
+    ],
+    "nutrition_per_serving": {
+      "calories": 560,
+      "protein_g": 46.0,
+      "carbs_g": 42.0,
+      "fat_g": 24.0
+    }
+  },
+  {
+    "title": "Lemon Ricotta Stuffed Shells",
+    "description": "Jumbo pasta shells loaded with whipped whole-milk ricotta, lemon zest, baby spinach, and baked under marinara.",
+    "prep_time_minutes": 35,
+    "difficulty_level": "easy",
+    "dietary_tags": [
+      "vegetarian"
+    ],
+    "ingredients": [
+      {
+        "name": "Jumbo Pasta Shells",
+        "quantity": 12.0,
+        "unit": "oz",
+        "default_unit": "oz"
+      },
+      {
+        "name": "Whole-Milk Ricotta",
+        "quantity": 15.0,
+        "unit": "oz",
+        "default_unit": "oz"
+      },
+      {
+        "name": "Marinara Sauce",
+        "quantity": 1.0,
+        "unit": "can",
+        "default_unit": "can"
+      },
+      {
+        "name": "Baby Spinach",
+        "quantity": 2.0,
+        "unit": "cups",
+        "default_unit": "cups"
+      },
+      {
+        "name": "Mozzarella Cheese",
+        "quantity": 1.0,
+        "unit": "cups",
+        "default_unit": "cups"
+      }
+    ],
+    "instructions": [
+      {
+        "step": 1,
+        "text": "Boil jumbo shells in salted water until al dente."
+      },
+      {
+        "step": 2,
+        "text": "Mix ricotta, wilted spinach, lemon zest, egg, and parmesan."
+      },
+      {
+        "step": 3,
+        "text": "Stuff shells generously and arrange in baking dish over marinara sauce."
+      },
+      {
+        "step": 4,
+        "text": "Top with mozzarella and bake at 375\u00b0F for 25 minutes until bubbly."
+      }
+    ],
+    "nutrition_per_serving": {
+      "calories": 430,
+      "protein_g": 22.0,
+      "carbs_g": 48.0,
+      "fat_g": 18.0
+    }
+  },
+  {
+    "title": "Thai Green Coconut Curry with Shrimp",
+    "description": "Succulent shrimp poached in rich Thai green curry broth with bamboo shoots, bell peppers, and fresh Thai basil.",
+    "prep_time_minutes": 20,
+    "difficulty_level": "easy",
+    "dietary_tags": [
+      "quick",
+      "high-protein",
+      "gluten-free",
+      "dairy-free",
+      "pescatarian"
+    ],
+    "ingredients": [
+      {
+        "name": "Raw Shrimp",
+        "quantity": 1.25,
+        "unit": "lbs",
+        "default_unit": "lbs"
+      },
+      {
+        "name": "Canned Coconut Milk",
+        "quantity": 1.0,
+        "unit": "can",
+        "default_unit": "can"
+      },
+      {
+        "name": "Thai Green Curry Paste",
+        "quantity": 2.0,
+        "unit": "tbsp",
+        "default_unit": "tbsp"
+      },
+      {
+        "name": "Bamboo Shoots",
+        "quantity": 1.0,
+        "unit": "can",
+        "default_unit": "can"
+      },
+      {
+        "name": "Thai Basil",
+        "quantity": 1.0,
+        "unit": "cups",
+        "default_unit": "cups"
+      }
+    ],
+    "instructions": [
+      {
+        "step": 1,
+        "text": "Fry green curry paste in coconut cream for 2 minutes."
+      },
+      {
+        "step": 2,
+        "text": "Add coconut milk, bamboo shoots, and bell peppers; simmer 6 minutes."
+      },
+      {
+        "step": 3,
+        "text": "Add raw peeled shrimp, cooking 3-4 minutes until pink."
+      },
+      {
+        "step": 4,
+        "text": "Stir in fresh Thai basil leaves and lime juice; serve with jasmine rice."
+      }
+    ],
+    "nutrition_per_serving": {
+      "calories": 420,
+      "protein_g": 36.0,
+      "carbs_g": 12.0,
+      "fat_g": 26.0
+    }
+  },
+  {
+    "title": "Honey Mustard Sheet Pan Pork Tenderloin",
+    "description": "Juicy roasted pork tenderloin glazed with Dijon mustard, honey, and rosemary, cooked with baby red potatoes.",
+    "prep_time_minutes": 30,
+    "difficulty_level": "easy",
+    "dietary_tags": [
+      "high-protein",
+      "gluten-free",
+      "dairy-free"
+    ],
+    "ingredients": [
+      {
+        "name": "Pork Tenderloin",
+        "quantity": 1.5,
+        "unit": "lbs",
+        "default_unit": "lbs"
+      },
+      {
+        "name": "Baby Red Potatoes",
+        "quantity": 1.0,
+        "unit": "lbs",
+        "default_unit": "lbs"
+      },
+      {
+        "name": "Dijon Mustard",
+        "quantity": 2.0,
+        "unit": "tbsp",
+        "default_unit": "tbsp"
+      },
+      {
+        "name": "Honey",
+        "quantity": 2.0,
+        "unit": "tbsp",
+        "default_unit": "tbsp"
+      },
+      {
+        "name": "Olive Oil",
+        "quantity": 2.0,
+        "unit": "tbsp",
+        "default_unit": "tbsp"
+      }
+    ],
+    "instructions": [
+      {
+        "step": 1,
+        "text": "Toss halved red potatoes with olive oil, salt, and pepper; roast at 400\u00b0F for 10 minutes."
+      },
+      {
+        "step": 2,
+        "text": "Rub pork tenderloin with Dijon, honey, and chopped rosemary."
+      },
+      {
+        "step": 3,
+        "text": "Place tenderloin on sheet pan with potatoes."
+      },
+      {
+        "step": 4,
+        "text": "Roast 20 minutes until pork registers 145\u00b0F; rest 5 minutes before slicing."
+      }
+    ],
+    "nutrition_per_serving": {
+      "calories": 460,
+      "protein_g": 44.0,
+      "carbs_g": 34.0,
+      "fat_g": 16.0
+    }
+  },
+  {
+    "title": "Creamy Garlic Tuscan White Fish",
+    "description": "Delicate white fish fillets simmered in rich garlic cream with sun-dried tomatoes and tender baby kale.",
+    "prep_time_minutes": 20,
+    "difficulty_level": "easy",
+    "dietary_tags": [
+      "quick",
+      "high-protein",
+      "gluten-free",
+      "pescatarian",
+      "low-carb"
+    ],
+    "ingredients": [
+      {
+        "name": "White Fish Fillets",
+        "quantity": 1.5,
+        "unit": "lbs",
+        "default_unit": "lbs"
+      },
+      {
+        "name": "Heavy Cream",
+        "quantity": 0.5,
+        "unit": "cups",
+        "default_unit": "cups"
+      },
+      {
+        "name": "Sun-Dried Tomatoes",
+        "quantity": 0.5,
+        "unit": "cups",
+        "default_unit": "cups"
+      },
+      {
+        "name": "Baby Kale",
+        "quantity": 2.0,
+        "unit": "cups",
+        "default_unit": "cups"
+      },
+      {
+        "name": "Garlic Cloves",
+        "quantity": 4.0,
+        "unit": "count",
+        "default_unit": "count"
+      }
+    ],
+    "instructions": [
+      {
+        "step": 1,
+        "text": "Pan-sear white fish in olive oil 3 minutes per side; remove."
+      },
+      {
+        "step": 2,
+        "text": "Saut\u00e9 garlic and chopped sun-dried tomatoes in pan."
+      },
+      {
+        "step": 3,
+        "text": "Add heavy cream and simmer until thickened into sauce."
+      },
+      {
+        "step": 4,
+        "text": "Add baby kale until wilted, return fish to pan, and spoon sauce over top."
+      }
+    ],
+    "nutrition_per_serving": {
+      "calories": 410,
+      "protein_g": 38.0,
+      "carbs_g": 6.0,
+      "fat_g": 26.0
+    }
+  },
+  {
+    "title": "Authentic Indian Palak Paneer",
+    "description": "Fresh paneer cheese cubes pan-fried and enveloped in a spiced puree of fresh spinach, garlic, ginger, and garam masala.",
+    "prep_time_minutes": 30,
+    "difficulty_level": "medium",
+    "dietary_tags": [
+      "vegetarian",
+      "gluten-free",
+      "high-protein"
+    ],
+    "ingredients": [
+      {
+        "name": "Paneer Cheese",
+        "quantity": 12.0,
+        "unit": "oz",
+        "default_unit": "oz"
+      },
+      {
+        "name": "Fresh Spinach",
+        "quantity": 1.0,
+        "unit": "lbs",
+        "default_unit": "lbs"
+      },
+      {
+        "name": "Yellow Onion",
+        "quantity": 1.0,
+        "unit": "count",
+        "default_unit": "count"
+      },
+      {
+        "name": "Garam Masala",
+        "quantity": 1.0,
+        "unit": "tbsp",
+        "default_unit": "tbsp"
+      },
+      {
+        "name": "Fresh Ginger",
+        "quantity": 1.0,
+        "unit": "tbsp",
+        "default_unit": "tbsp"
+      }
+    ],
+    "instructions": [
+      {
+        "step": 1,
+        "text": "Blanch spinach in boiling water for 2 minutes; shock in ice water and blend smooth."
+      },
+      {
+        "step": 2,
+        "text": "Pan-fry paneer cubes in ghee or oil until golden."
+      },
+      {
+        "step": 3,
+        "text": "Saut\u00e9 onion, ginger, garlic, and spices in skillet until aromatic."
+      },
+      {
+        "step": 4,
+        "text": "Add spinach puree and paneer; simmer gently for 5 minutes with a splash of cream."
+      }
+    ],
+    "nutrition_per_serving": {
+      "calories": 420,
+      "protein_g": 24.0,
+      "carbs_g": 14.0,
+      "fat_g": 30.0
+    }
+  },
+  {
+    "title": "Spicy Pork Dan Dan Noodles",
+    "description": "Chewy noodles tossed in a fiery Sichuan chili oil and sesame paste sauce, topped with crispy ground pork and scallions.",
+    "prep_time_minutes": 20,
+    "difficulty_level": "easy",
+    "dietary_tags": [
+      "quick",
+      "high-protein"
+    ],
+    "ingredients": [
+      {
+        "name": "Ground Pork",
+        "quantity": 1.0,
+        "unit": "lbs",
+        "default_unit": "lbs"
+      },
+      {
+        "name": "Asian Noodles",
+        "quantity": 10.0,
+        "unit": "oz",
+        "default_unit": "oz"
+      },
+      {
+        "name": "Tahini / Sesame Paste",
+        "quantity": 3.0,
+        "unit": "tbsp",
+        "default_unit": "tbsp"
+      },
+      {
+        "name": "Chili Oil",
+        "quantity": 2.0,
+        "unit": "tbsp",
+        "default_unit": "tbsp"
+      },
+      {
+        "name": "Soy Sauce",
+        "quantity": 2.0,
+        "unit": "tbsp",
+        "default_unit": "tbsp"
+      }
+    ],
+    "instructions": [
+      {
+        "step": 1,
+        "text": "Crisp ground pork in wok with soy sauce and five-spice powder."
+      },
+      {
+        "step": 2,
+        "text": "Whisk sesame paste, soy sauce, chili oil, garlic, and broth in bowls."
+      },
+      {
+        "step": 3,
+        "text": "Cook noodles in boiling water; drain."
+      },
+      {
+        "step": 4,
+        "text": "Place noodles in bowls with sauce; top with crispy pork, scallions, and roasted peanuts."
+      }
+    ],
+    "nutrition_per_serving": {
+      "calories": 580,
+      "protein_g": 36.0,
+      "carbs_g": 52.0,
+      "fat_g": 26.0
+    }
+  },
+  {
+    "title": "Spanish Garlic Shrimp (Gambas al Ajillo)",
+    "description": "Jumbo shrimp sizzling in Spanish olive oil with thinly sliced garlic, dried red chilies, and fresh lemon juice.",
+    "prep_time_minutes": 15,
+    "difficulty_level": "easy",
+    "dietary_tags": [
+      "quick",
+      "high-protein",
+      "gluten-free",
+      "dairy-free",
+      "pescatarian",
+      "low-carb"
+    ],
+    "ingredients": [
+      {
+        "name": "Jumbo Shrimp",
+        "quantity": 1.25,
+        "unit": "lbs",
+        "default_unit": "lbs"
+      },
+      {
+        "name": "Extra Virgin Olive Oil",
+        "quantity": 0.33,
+        "unit": "cups",
+        "default_unit": "cups"
+      },
+      {
+        "name": "Garlic Cloves",
+        "quantity": 8.0,
+        "unit": "count",
+        "default_unit": "count"
+      },
+      {
+        "name": "Crushed Red Pepper",
+        "quantity": 1.0,
+        "unit": "tsp",
+        "default_unit": "tsp"
+      },
+      {
+        "name": "Sherry Vinegar",
+        "quantity": 1.0,
+        "unit": "tbsp",
+        "default_unit": "tbsp"
+      }
+    ],
+    "instructions": [
+      {
+        "step": 1,
+        "text": "Warm olive oil in skillet over medium-low heat with thinly sliced garlic and chilies until golden."
+      },
+      {
+        "step": 2,
+        "text": "Turn heat to high, add peeled shrimp, and saut\u00e9 2 minutes until just pink."
+      },
+      {
+        "step": 3,
+        "text": "Splash with sherry vinegar and lemon juice; remove from heat."
+      },
+      {
+        "step": 4,
+        "text": "Garnish with fresh parsley and serve sizzling with crusty bread."
+      }
+    ],
+    "nutrition_per_serving": {
+      "calories": 370,
+      "protein_g": 34.0,
+      "carbs_g": 3.0,
+      "fat_g": 25.0
+    }
+  },
+  {
+    "title": "Sheet Pan Lemon Pepper Chicken Thighs",
+    "description": "Crispy bone-in chicken thighs roasted with cracked black pepper, lemon wheels, and tender roasted broccoli florets.",
+    "prep_time_minutes": 35,
+    "difficulty_level": "easy",
+    "dietary_tags": [
+      "high-protein",
+      "gluten-free",
+      "dairy-free",
+      "low-carb"
+    ],
+    "ingredients": [
+      {
+        "name": "Bone-In Chicken Thighs",
+        "quantity": 2.0,
+        "unit": "lbs",
+        "default_unit": "lbs"
+      },
+      {
+        "name": "Broccoli Florets",
+        "quantity": 1.0,
+        "unit": "lbs",
+        "default_unit": "lbs"
+      },
+      {
+        "name": "Lemon Pepper Seasoning",
+        "quantity": 1.5,
+        "unit": "tbsp",
+        "default_unit": "tbsp"
+      },
+      {
+        "name": "Olive Oil",
+        "quantity": 2.0,
+        "unit": "tbsp",
+        "default_unit": "tbsp"
+      },
+      {
+        "name": "Lemons",
+        "quantity": 1.0,
+        "unit": "count",
+        "default_unit": "count"
+      }
+    ],
+    "instructions": [
+      {
+        "step": 1,
+        "text": "Season chicken thighs on all sides with lemon pepper seasoning and salt."
+      },
+      {
+        "step": 2,
+        "text": "Toss broccoli florets in olive oil."
+      },
+      {
+        "step": 3,
+        "text": "Arrange chicken thighs and broccoli with lemon slices on baking sheet."
+      },
+      {
+        "step": 4,
+        "text": "Roast at 425\u00b0F for 30 minutes until skin is crackling crisp and internal temp is 175\u00b0F."
+      }
+    ],
+    "nutrition_per_serving": {
+      "calories": 510,
+      "protein_g": 42.0,
+      "carbs_g": 8.0,
+      "fat_g": 34.0
+    }
+  },
+  {
+    "title": "Vegetarian Moroccan Chickpea and Sweet Potato Stew",
+    "description": "Aromatic North African stew of tender sweet potatoes, chickpeas, warming cinnamon, cumin, and dried apricots.",
+    "prep_time_minutes": 35,
+    "difficulty_level": "easy",
+    "dietary_tags": [
+      "vegetarian",
+      "vegan",
+      "gluten-free",
+      "dairy-free"
+    ],
+    "ingredients": [
+      {
+        "name": "Canned Chickpeas",
+        "quantity": 2.0,
+        "unit": "can",
+        "default_unit": "can"
+      },
+      {
+        "name": "Sweet Potatoes",
+        "quantity": 2.0,
+        "unit": "count",
+        "default_unit": "count"
+      },
+      {
+        "name": "Canned Diced Tomatoes",
+        "quantity": 1.0,
+        "unit": "can",
+        "default_unit": "can"
+      },
+      {
+        "name": "Ground Cinnamon",
+        "quantity": 0.5,
+        "unit": "tsp",
+        "default_unit": "tsp"
+      },
+      {
+        "name": "Ground Cumin",
+        "quantity": 1.0,
+        "unit": "tsp",
+        "default_unit": "tsp"
+      }
+    ],
+    "instructions": [
+      {
+        "step": 1,
+        "text": "Saut\u00e9 onions and garlic in olive oil until soft."
+      },
+      {
+        "step": 2,
+        "text": "Add cubed sweet potatoes, cinnamon, cumin, turmeric, and ginger."
+      },
+      {
+        "step": 3,
+        "text": "Add diced tomatoes, chickpeas, and vegetable broth; bring to a boil."
+      },
+      {
+        "step": 4,
+        "text": "Simmer 20 minutes until sweet potatoes are tender; garnish with chopped cilantro."
+      }
+    ],
+    "nutrition_per_serving": {
+      "calories": 380,
+      "protein_g": 14.0,
+      "carbs_g": 64.0,
+      "fat_g": 8.0
+    }
+  },
+  {
+    "title": "Grilled Chimichurri Skirt Steak",
+    "description": "Charred skirt steak grilled over roaring heat and sliced across the grain, accompanied by piquant green chimichurri.",
+    "prep_time_minutes": 20,
+    "difficulty_level": "easy",
+    "dietary_tags": [
+      "quick",
+      "high-protein",
+      "gluten-free",
+      "dairy-free",
+      "keto",
+      "low-carb"
+    ],
+    "ingredients": [
+      {
+        "name": "Skirt Steak",
+        "quantity": 1.5,
+        "unit": "lbs",
+        "default_unit": "lbs"
+      },
+      {
+        "name": "Fresh Parsley",
+        "quantity": 1.0,
+        "unit": "cups",
+        "default_unit": "cups"
+      },
+      {
+        "name": "Olive Oil",
+        "quantity": 3.0,
+        "unit": "tbsp",
+        "default_unit": "tbsp"
+      },
+      {
+        "name": "Red Wine Vinegar",
+        "quantity": 2.0,
+        "unit": "tbsp",
+        "default_unit": "tbsp"
+      },
+      {
+        "name": "Garlic Cloves",
+        "quantity": 3.0,
+        "unit": "count",
+        "default_unit": "count"
+      }
+    ],
+    "instructions": [
+      {
+        "step": 1,
+        "text": "Whisk finely chopped parsley, minced garlic, red wine vinegar, olive oil, and red pepper flakes."
+      },
+      {
+        "step": 2,
+        "text": "Season skirt steak with salt and pepper."
+      },
+      {
+        "step": 3,
+        "text": "Grill over high direct heat for 3 minutes per side for medium-rare."
+      },
+      {
+        "step": 4,
+        "text": "Rest 5 minutes, slice thinly against the grain, and top with chimichurri."
+      }
+    ],
+    "nutrition_per_serving": {
+      "calories": 520,
+      "protein_g": 48.0,
+      "carbs_g": 2.0,
+      "fat_g": 36.0
+    }
+  },
+  {
+    "title": "Creamy Lemon Basil Tagliatelle with Asparagus",
+    "description": "Fresh ribbons of tagliatelle pasta tossed in silky mascarpone cream with tender asparagus tips and fresh torn basil.",
+    "prep_time_minutes": 20,
+    "difficulty_level": "easy",
+    "dietary_tags": [
+      "quick",
+      "vegetarian"
+    ],
+    "ingredients": [
+      {
+        "name": "Tagliatelle Pasta",
+        "quantity": 12.0,
+        "unit": "oz",
+        "default_unit": "oz"
+      },
+      {
+        "name": "Fresh Asparagus",
+        "quantity": 0.75,
+        "unit": "lbs",
+        "default_unit": "lbs"
+      },
+      {
+        "name": "Mascarpone Cheese",
+        "quantity": 0.5,
+        "unit": "cups",
+        "default_unit": "cups"
+      },
+      {
+        "name": "Fresh Lemon Juice",
+        "quantity": 2.0,
+        "unit": "tbsp",
+        "default_unit": "tbsp"
+      },
+      {
+        "name": "Fresh Basil",
+        "quantity": 0.5,
+        "unit": "cups",
+        "default_unit": "cups"
+      }
+    ],
+    "instructions": [
+      {
+        "step": 1,
+        "text": "Boil tagliatelle pasta in salted water; add asparagus pieces during the final 2 minutes of cooking."
+      },
+      {
+        "step": 2,
+        "text": "Whisk mascarpone cheese, lemon juice, lemon zest, and pasta cooking water into a silky sauce."
+      },
+      {
+        "step": 3,
+        "text": "Drain pasta and toss immediately in the mascarpone sauce."
+      },
+      {
+        "step": 4,
+        "text": "Fold in fresh torn basil leaves and grated parmesan cheese."
+      }
+    ],
+    "nutrition_per_serving": {
+      "calories": 480,
+      "protein_g": 15.0,
+      "carbs_g": 58.0,
+      "fat_g": 22.0
+    }
+  },
+  {
+    "title": "Crispy Sesame Ginger Salmon Rice Bowls",
+    "description": "Oven-baked crispy skin salmon cubes glazed with toasted sesame oil, ginger, and honey over brown rice.",
+    "prep_time_minutes": 25,
+    "difficulty_level": "easy",
+    "dietary_tags": [
+      "quick",
+      "high-protein",
+      "pescatarian"
+    ],
+    "ingredients": [
+      {
+        "name": "Salmon Fillets",
+        "quantity": 1.5,
+        "unit": "lbs",
+        "default_unit": "lbs"
+      },
+      {
+        "name": "Brown Rice",
+        "quantity": 1.5,
+        "unit": "cups",
+        "default_unit": "cups"
+      },
+      {
+        "name": "Sesame Oil",
+        "quantity": 1.5,
+        "unit": "tbsp",
+        "default_unit": "tbsp"
+      },
+      {
+        "name": "Fresh Ginger",
+        "quantity": 1.0,
+        "unit": "tbsp",
+        "default_unit": "tbsp"
+      },
+      {
+        "name": "Honey",
+        "quantity": 2.0,
+        "unit": "tbsp",
+        "default_unit": "tbsp"
+      }
+    ],
+    "instructions": [
+      {
+        "step": 1,
+        "text": "Cut salmon into bite-sized cubes and toss with sesame oil, soy sauce, grated ginger, and honey."
+      },
+      {
+        "step": 2,
+        "text": "Bake on a parchment-lined sheet at 400\u00b0F for 10 minutes until glazed and flaky."
+      },
+      {
+        "step": 3,
+        "text": "Spoon steamed brown rice into bowls."
+      },
+      {
+        "step": 4,
+        "text": "Top with warm glazed salmon cubes, sliced avocado, and toasted sesame seeds."
+      }
+    ],
+    "nutrition_per_serving": {
+      "calories": 510,
+      "protein_g": 42.0,
+      "carbs_g": 44.0,
+      "fat_g": 20.0
+    }
+  },
+  {
+    "title": "Slow Cooker Mexican Chicken Pozole Verde",
+    "description": "Shredded chicken and white hominy simmered in a zesty tomatillo, poblano pepper, and Mexican oregano green broth.",
+    "prep_time_minutes": 40,
+    "difficulty_level": "medium",
+    "dietary_tags": [
+      "high-protein",
+      "gluten-free",
+      "dairy-free"
+    ],
+    "ingredients": [
+      {
+        "name": "Chicken Breast",
+        "quantity": 1.5,
+        "unit": "lbs",
+        "default_unit": "lbs"
+      },
+      {
+        "name": "Canned White Hominy",
+        "quantity": 1.0,
+        "unit": "can",
+        "default_unit": "can"
+      },
+      {
+        "name": "Fresh Tomatillos",
+        "quantity": 1.0,
+        "unit": "lbs",
+        "default_unit": "lbs"
+      },
+      {
+        "name": "Poblano Pepper",
+        "quantity": 1.0,
+        "unit": "count",
+        "default_unit": "count"
+      },
+      {
+        "name": "Chicken Broth",
+        "quantity": 3.0,
+        "unit": "cups",
+        "default_unit": "cups"
+      }
+    ],
+    "instructions": [
+      {
+        "step": 1,
+        "text": "Broil tomatillos, poblano pepper, and garlic until charred; blend into a smooth green salsa."
+      },
+      {
+        "step": 2,
+        "text": "Place chicken breasts, drained hominy, chicken broth, and salsa verde in a pot."
+      },
+      {
+        "step": 3,
+        "text": "Simmer for 30 minutes until chicken is tender; shred chicken with two forks."
+      },
+      {
+        "step": 4,
+        "text": "Ladle hot pozole into bowls and garnish with shredded cabbage, radishes, and lime."
+      }
+    ],
+    "nutrition_per_serving": {
+      "calories": 410,
+      "protein_g": 44.0,
+      "carbs_g": 32.0,
+      "fat_g": 10.0
+    }
+  },
+  {
+    "title": "Pan-Roasted Sea Bass with Proven\u00e7al Ratatouille",
+    "description": "Crispy-skin sea bass fillets served over a classic French ratatouille of eggplant, zucchini, bell pepper, and tomato.",
+    "prep_time_minutes": 35,
+    "difficulty_level": "medium",
+    "dietary_tags": [
+      "high-protein",
+      "gluten-free",
+      "dairy-free",
+      "pescatarian"
+    ],
+    "ingredients": [
+      {
+        "name": "Sea Bass Fillets",
+        "quantity": 1.5,
+        "unit": "lbs",
+        "default_unit": "lbs"
+      },
+      {
+        "name": "Eggplant",
+        "quantity": 1.0,
+        "unit": "count",
+        "default_unit": "count"
+      },
+      {
+        "name": "Zucchini",
+        "quantity": 1.0,
+        "unit": "count",
+        "default_unit": "count"
+      },
+      {
+        "name": "Bell Pepper",
+        "quantity": 1.0,
+        "unit": "count",
+        "default_unit": "count"
+      },
+      {
+        "name": "Canned Crushed Tomatoes",
+        "quantity": 1.0,
+        "unit": "can",
+        "default_unit": "can"
+      }
+    ],
+    "instructions": [
+      {
+        "step": 1,
+        "text": "Dice eggplant, zucchini, and bell peppers; saut\u00e9 in olive oil with garlic and thyme for 10 minutes."
+      },
+      {
+        "step": 2,
+        "text": "Add crushed tomatoes and simmer on low for 15 minutes until vegetables are meltingly tender."
+      },
+      {
+        "step": 3,
+        "text": "Score skin of sea bass fillets; sear skin-side down in hot skillet for 4 minutes until crisp."
+      },
+      {
+        "step": 4,
+        "text": "Flip fish and cook 2 minutes longer; serve over warm vegetable ratatouille."
+      }
+    ],
+    "nutrition_per_serving": {
+      "calories": 420,
+      "protein_g": 42.0,
+      "carbs_g": 18.0,
+      "fat_g": 20.0
+    }
+  },
+  {
+    "title": "Authentic Thai Red Curry with Duck",
+    "description": "Rich and creamy red coconut curry packed with tender roasted duck breast, sweet pineapple chunks, and Thai basil.",
+    "prep_time_minutes": 35,
+    "difficulty_level": "medium",
+    "dietary_tags": [
+      "high-protein",
+      "gluten-free",
+      "dairy-free"
+    ],
+    "ingredients": [
+      {
+        "name": "Duck Breasts",
+        "quantity": 1.25,
+        "unit": "lbs",
+        "default_unit": "lbs"
+      },
+      {
+        "name": "Canned Coconut Milk",
+        "quantity": 1.0,
+        "unit": "can",
+        "default_unit": "can"
+      },
+      {
+        "name": "Red Curry Paste",
+        "quantity": 2.0,
+        "unit": "tbsp",
+        "default_unit": "tbsp"
+      },
+      {
+        "name": "Canned Pineapple Chunks",
+        "quantity": 1.0,
+        "unit": "can",
+        "default_unit": "can"
+      },
+      {
+        "name": "Thai Basil",
+        "quantity": 1.0,
+        "unit": "cups",
+        "default_unit": "cups"
+      }
+    ],
+    "instructions": [
+      {
+        "step": 1,
+        "text": "Sear duck breast skin-down until crisp; slice into medallions."
+      },
+      {
+        "step": 2,
+        "text": "Fry red curry paste in coconut cream for 2 minutes until fragrant."
+      },
+      {
+        "step": 3,
+        "text": "Add remaining coconut milk, pineapple chunks, and bamboo shoots; simmer 8 minutes."
+      },
+      {
+        "step": 4,
+        "text": "Add sliced duck and fresh Thai basil; serve hot with fragrant jasmine rice."
+      }
+    ],
+    "nutrition_per_serving": {
+      "calories": 560,
+      "protein_g": 38.0,
+      "carbs_g": 24.0,
+      "fat_g": 36.0
+    }
+  },
+  {
+    "title": "One-Skillet Lemon Butter Chicken Thighs and Orzo",
+    "description": "Crispy browned bone-in chicken thighs roasted atop garlicky lemon and herb infused toasted orzo pasta.",
+    "prep_time_minutes": 30,
+    "difficulty_level": "easy",
+    "dietary_tags": [
+      "high-protein"
+    ],
+    "ingredients": [
+      {
+        "name": "Chicken Thighs",
+        "quantity": 1.75,
+        "unit": "lbs",
+        "default_unit": "lbs"
+      },
+      {
+        "name": "Orzo Pasta",
+        "quantity": 1.25,
+        "unit": "cups",
+        "default_unit": "cups"
+      },
+      {
+        "name": "Chicken Broth",
+        "quantity": 2.5,
+        "unit": "cups",
+        "default_unit": "cups"
+      },
+      {
+        "name": "Lemons",
+        "quantity": 2.0,
+        "unit": "count",
+        "default_unit": "count"
+      },
+      {
+        "name": "Butter",
+        "quantity": 2.0,
+        "unit": "tbsp",
+        "default_unit": "tbsp"
+      }
+    ],
+    "instructions": [
+      {
+        "step": 1,
+        "text": "Brown seasoned chicken thighs skin-side down in a skillet for 8 minutes; transfer to a plate."
+      },
+      {
+        "step": 2,
+        "text": "In the same skillet, toast orzo pasta with minced garlic and butter for 2 minutes."
+      },
+      {
+        "step": 3,
+        "text": "Pour in chicken broth and fresh lemon juice; arrange chicken thighs back on top."
+      },
+      {
+        "step": 4,
+        "text": "Bake uncovered at 375\u00b0F for 20 minutes until orzo absorbs broth and is creamy."
+      }
+    ],
+    "nutrition_per_serving": {
+      "calories": 530,
+      "protein_g": 44.0,
+      "carbs_g": 42.0,
+      "fat_g": 22.0
+    }
+  },
+  {
+    "title": "Cast Iron Blackened Salmon with Cauliflower Mash",
+    "description": "Spicy Cajun blackened salmon fillets paired with a silky roasted garlic and cream cheese cauliflower puree.",
+    "prep_time_minutes": 20,
+    "difficulty_level": "easy",
+    "dietary_tags": [
+      "quick",
+      "high-protein",
+      "gluten-free",
+      "low-carb",
+      "keto",
+      "pescatarian"
+    ],
+    "ingredients": [
+      {
+        "name": "Salmon Fillets",
+        "quantity": 1.5,
+        "unit": "lbs",
+        "default_unit": "lbs"
+      },
+      {
+        "name": "Cauliflower Florets",
+        "quantity": 1.5,
+        "unit": "lbs",
+        "default_unit": "lbs"
+      },
+      {
+        "name": "Blackened Seasoning",
+        "quantity": 1.5,
+        "unit": "tbsp",
+        "default_unit": "tbsp"
+      },
+      {
+        "name": "Cream Cheese",
+        "quantity": 3.0,
+        "unit": "oz",
+        "default_unit": "oz"
+      },
+      {
+        "name": "Butter",
+        "quantity": 2.0,
+        "unit": "tbsp",
+        "default_unit": "tbsp"
+      }
+    ],
+    "instructions": [
+      {
+        "step": 1,
+        "text": "Steam cauliflower florets until fork tender; blend with cream cheese, butter, garlic, and salt until smooth."
+      },
+      {
+        "step": 2,
+        "text": "Coat salmon fillets generously in blackened seasoning."
+      },
+      {
+        "step": 3,
+        "text": "Sear salmon in a hot cast-iron skillet with 1 tbsp oil for 3 minutes per side until charred crust forms."
+      },
+      {
+        "step": 4,
+        "text": "Serve blackened salmon over hot creamy cauliflower puree."
+      }
+    ],
+    "nutrition_per_serving": {
+      "calories": 490,
+      "protein_g": 42.0,
+      "carbs_g": 8.0,
+      "fat_g": 32.0
+    }
+  },
+  {
+    "title": "Korean BBQ Short Rib Tacos (Galbi)",
+    "description": "Thin sweet soy and pear marinated beef short ribs grilled over blazing coals, served in tortillas with kimchi slaw.",
+    "prep_time_minutes": 30,
+    "difficulty_level": "medium",
+    "dietary_tags": [
+      "high-protein",
+      "dairy-free"
+    ],
+    "ingredients": [
+      {
+        "name": "Flanken Cut Beef Short Ribs",
+        "quantity": 1.75,
+        "unit": "lbs",
+        "default_unit": "lbs"
+      },
+      {
+        "name": "Soy Sauce",
+        "quantity": 0.25,
+        "unit": "cups",
+        "default_unit": "cups"
+      },
+      {
+        "name": "Brown Sugar",
+        "quantity": 2.0,
+        "unit": "tbsp",
+        "default_unit": "tbsp"
+      },
+      {
+        "name": "Prepared Kimchi",
+        "quantity": 1.0,
+        "unit": "cups",
+        "default_unit": "cups"
+      },
+      {
+        "name": "Corn Tortillas",
+        "quantity": 8.0,
+        "unit": "count",
+        "default_unit": "count"
+      }
+    ],
+    "instructions": [
+      {
+        "step": 1,
+        "text": "Marinate short ribs in soy sauce, grated Asian pear, brown sugar, garlic, and sesame oil."
+      },
+      {
+        "step": 2,
+        "text": "Grill over high heat 3 minutes per side until deeply caramelized and slightly charred."
+      },
+      {
+        "step": 3,
+        "text": "Snip ribs into bite-sized pieces with kitchen shears."
+      },
+      {
+        "step": 4,
+        "text": "Serve in warm corn tortillas topped with chopped kimchi and scallions."
+      }
+    ],
+    "nutrition_per_serving": {
+      "calories": 570,
+      "protein_g": 44.0,
+      "carbs_g": 38.0,
+      "fat_g": 26.0
+    }
+  },
+  {
+    "title": "Classic French Mushroom Bourguignon",
+    "description": "Hearty cremini and portobello mushrooms braised in robust Pinot Noir with carrots, pearl onions, and fresh thyme.",
+    "prep_time_minutes": 40,
+    "difficulty_level": "medium",
+    "dietary_tags": [
+      "vegetarian",
+      "vegan",
+      "dairy-free"
+    ],
+    "ingredients": [
+      {
+        "name": "Portobello Mushrooms",
+        "quantity": 1.0,
+        "unit": "lbs",
+        "default_unit": "lbs"
+      },
+      {
+        "name": "Cremini Mushrooms",
+        "quantity": 0.75,
+        "unit": "lbs",
+        "default_unit": "lbs"
+      },
+      {
+        "name": "Dry Red Wine",
+        "quantity": 1.5,
+        "unit": "cups",
+        "default_unit": "cups"
+      },
+      {
+        "name": "Vegetable Broth",
+        "quantity": 1.5,
+        "unit": "cups",
+        "default_unit": "cups"
+      },
+      {
+        "name": "Carrots",
+        "quantity": 3.0,
+        "unit": "count",
+        "default_unit": "count"
+      }
+    ],
+    "instructions": [
+      {
+        "step": 1,
+        "text": "Sear thick-cut mushrooms in olive oil until deeply browned."
+      },
+      {
+        "step": 2,
+        "text": "Saut\u00e9 diced carrots and tomato paste."
+      },
+      {
+        "step": 3,
+        "text": "Pour in red wine, broth, and thyme sprigs; simmer for 20 minutes."
+      },
+      {
+        "step": 4,
+        "text": "Add pearl onions and simmer 10 minutes longer until sauce is glossy and rich."
+      }
+    ],
+    "nutrition_per_serving": {
+      "calories": 310,
+      "protein_g": 12.0,
+      "carbs_g": 32.0,
+      "fat_g": 8.0
+    }
+  },
+  {
+    "title": "Garlic Herb Roasted Cornish Game Hens",
+    "description": "Whole individual Cornish game hens butterflied and roasted with rosemary garlic compound butter and baby carrots.",
+    "prep_time_minutes": 45,
+    "difficulty_level": "medium",
+    "dietary_tags": [
+      "high-protein",
+      "gluten-free",
+      "low-carb"
+    ],
+    "ingredients": [
+      {
+        "name": "Cornish Game Hens",
+        "quantity": 2.0,
+        "unit": "count",
+        "default_unit": "count"
+      },
+      {
+        "name": "Butter",
+        "quantity": 4.0,
+        "unit": "tbsp",
+        "default_unit": "tbsp"
+      },
+      {
+        "name": "Garlic Cloves",
+        "quantity": 5.0,
+        "unit": "count",
+        "default_unit": "count"
+      },
+      {
+        "name": "Fresh Rosemary",
+        "quantity": 3.0,
+        "unit": "count",
+        "default_unit": "count"
+      },
+      {
+        "name": "Baby Carrots",
+        "quantity": 1.0,
+        "unit": "lbs",
+        "default_unit": "lbs"
+      }
+    ],
+    "instructions": [
+      {
+        "step": 1,
+        "text": "Spatchcock Cornish game hens by removing backbone and flattening breastbone."
+      },
+      {
+        "step": 2,
+        "text": "Rub herb garlic butter underneath skin and all over surface."
+      },
+      {
+        "step": 3,
+        "text": "Place hens onto baking sheet over seasoned baby carrots."
+      },
+      {
+        "step": 4,
+        "text": "Roast at 425\u00b0F for 35 minutes until skin is crisp and thighs reach 165\u00b0F."
+      }
+    ],
+    "nutrition_per_serving": {
+      "calories": 540,
+      "protein_g": 48.0,
+      "carbs_g": 10.0,
+      "fat_g": 34.0
+    }
+  },
+  {
+    "title": "Sheet Pan Harissa Salmon with Roasted Cauliflower",
+    "description": "North African spicy harissa glazed salmon roasted on one pan with cumin-spiced cauliflower and mint yogurt.",
+    "prep_time_minutes": 25,
+    "difficulty_level": "easy",
+    "dietary_tags": [
+      "quick",
+      "high-protein",
+      "gluten-free",
+      "pescatarian"
+    ],
+    "ingredients": [
+      {
+        "name": "Salmon Fillets",
+        "quantity": 1.5,
+        "unit": "lbs",
+        "default_unit": "lbs"
+      },
+      {
+        "name": "Harissa Paste",
+        "quantity": 2.0,
+        "unit": "tbsp",
+        "default_unit": "tbsp"
+      },
+      {
+        "name": "Cauliflower",
+        "quantity": 1.0,
+        "unit": "count",
+        "default_unit": "count"
+      },
+      {
+        "name": "Plain Greek Yogurt",
+        "quantity": 0.5,
+        "unit": "cups",
+        "default_unit": "cups"
+      },
+      {
+        "name": "Fresh Mint",
+        "quantity": 2.0,
+        "unit": "tbsp",
+        "default_unit": "tbsp"
+      }
+    ],
+    "instructions": [
+      {
+        "step": 1,
+        "text": "Toss cauliflower florets in olive oil, ground cumin, and salt; roast at 425\u00b0F for 10 minutes."
+      },
+      {
+        "step": 2,
+        "text": "Brush salmon fillets generously with harissa paste and honey."
+      },
+      {
+        "step": 3,
+        "text": "Place salmon alongside cauliflower on sheet pan."
+      },
+      {
+        "step": 4,
+        "text": "Roast 12 minutes until salmon flakes easily; serve with cool mint yogurt."
+      }
+    ],
+    "nutrition_per_serving": {
+      "calories": 460,
+      "protein_g": 42.0,
+      "carbs_g": 12.0,
+      "fat_g": 28.0
+    }
+  },
+  {
+    "title": "Bacon Wrapped Stuffed Pork Tenderloin",
+    "description": "Pork tenderloin butterflied and filled with baby spinach, feta cheese, and roasted red peppers, wrapped in smoked bacon.",
+    "prep_time_minutes": 40,
+    "difficulty_level": "medium",
+    "dietary_tags": [
+      "high-protein",
+      "gluten-free",
+      "low-carb",
+      "keto"
+    ],
+    "ingredients": [
+      {
+        "name": "Pork Tenderloin",
+        "quantity": 1.5,
+        "unit": "lbs",
+        "default_unit": "lbs"
+      },
+      {
+        "name": "Smoked Bacon",
+        "quantity": 8.0,
+        "unit": "slices",
+        "default_unit": "slices"
+      },
+      {
+        "name": "Crumbled Feta Cheese",
+        "quantity": 0.5,
+        "unit": "cups",
+        "default_unit": "cups"
+      },
+      {
+        "name": "Baby Spinach",
+        "quantity": 2.0,
+        "unit": "cups",
+        "default_unit": "cups"
+      },
+      {
+        "name": "Roasted Red Peppers",
+        "quantity": 0.5,
+        "unit": "cups",
+        "default_unit": "cups"
+      }
+    ],
+    "instructions": [
+      {
+        "step": 1,
+        "text": "Butterfly pork tenderloin open flat and pound gently with meat mallet."
+      },
+      {
+        "step": 2,
+        "text": "Layer wilted baby spinach, roasted red peppers, and crumbled feta across pork."
+      },
+      {
+        "step": 3,
+        "text": "Roll tenderloin tightly into a cylinder and wrap completely with strips of bacon."
+      },
+      {
+        "step": 4,
+        "text": "Roast at 375\u00b0F for 28 minutes until bacon is crisp and pork reaches 145\u00b0F."
+      }
+    ],
+    "nutrition_per_serving": {
+      "calories": 520,
+      "protein_g": 52.0,
+      "carbs_g": 4.0,
+      "fat_g": 32.0
+    }
+  },
+  {
+    "title": "Sheet Pan Sausage, Grapes, and Polenta",
+    "description": "Sweet Italian sausage links roasted with seedless red grapes, fresh rosemary, and served over creamy mascarpone polenta.",
+    "prep_time_minutes": 30,
+    "difficulty_level": "easy",
+    "dietary_tags": [
+      "high-protein",
+      "gluten-free"
+    ],
+    "ingredients": [
+      {
+        "name": "Sweet Italian Sausage",
+        "quantity": 1.25,
+        "unit": "lbs",
+        "default_unit": "lbs"
+      },
+      {
+        "name": "Red Seedless Grapes",
+        "quantity": 2.0,
+        "unit": "cups",
+        "default_unit": "cups"
+      },
+      {
+        "name": "Polenta / Cornmeal",
+        "quantity": 1.0,
+        "unit": "cups",
+        "default_unit": "cups"
+      },
+      {
+        "name": "Mascarpone Cheese",
+        "quantity": 0.33,
+        "unit": "cups",
+        "default_unit": "cups"
+      },
+      {
+        "name": "Fresh Rosemary",
+        "quantity": 2.0,
+        "unit": "count",
+        "default_unit": "count"
+      }
+    ],
+    "instructions": [
+      {
+        "step": 1,
+        "text": "Arrange sausage links and whole grape clusters on baking sheet with rosemary."
+      },
+      {
+        "step": 2,
+        "text": "Drizzle with olive oil and roast at 400\u00b0F for 25 minutes until grapes blister and sausages brown."
+      },
+      {
+        "step": 3,
+        "text": "Whisk polenta into boiling salted water; cook 15 minutes, then stir in mascarpone cheese."
+      },
+      {
+        "step": 4,
+        "text": "Serve roasted sausages and sweet jammy grapes over hot creamy polenta."
+      }
+    ],
+    "nutrition_per_serving": {
+      "calories": 530,
+      "protein_g": 32.0,
+      "carbs_g": 48.0,
+      "fat_g": 24.0
+    }
+  },
+  {
+    "title": "Thai Coconut Green Curry Chicken",
+    "description": "Tender chicken thighs simmered in a creamy coconut broth with Thai green curry paste, zucchini, and bamboo shoots.",
+    "prep_time_minutes": 25,
+    "difficulty_level": "easy",
+    "dietary_tags": [
+      "quick",
+      "high-protein",
+      "gluten-free",
+      "dairy-free"
+    ],
+    "ingredients": [
+      {
+        "name": "Chicken Thighs",
+        "quantity": 1.5,
+        "unit": "lbs",
+        "default_unit": "lbs"
+      },
+      {
+        "name": "Canned Coconut Milk",
+        "quantity": 1.0,
+        "unit": "can",
+        "default_unit": "can"
+      },
+      {
+        "name": "Thai Green Curry Paste",
+        "quantity": 2.0,
+        "unit": "tbsp",
+        "default_unit": "tbsp"
+      },
+      {
+        "name": "Zucchini",
+        "quantity": 2.0,
+        "unit": "count",
+        "default_unit": "count"
+      },
+      {
+        "name": "Bamboo Shoots",
+        "quantity": 1.0,
+        "unit": "can",
+        "default_unit": "can"
+      }
+    ],
+    "instructions": [
+      {
+        "step": 1,
+        "text": "Saut\u00e9 green curry paste in coconut oil until fragrant."
+      },
+      {
+        "step": 2,
+        "text": "Add sliced chicken thighs and brown lightly for 3 minutes."
+      },
+      {
+        "step": 3,
+        "text": "Pour in coconut milk, bamboo shoots, and sliced zucchini; simmer 10 minutes."
+      },
+      {
+        "step": 4,
+        "text": "Stir in fish sauce and fresh Thai basil; serve over steamed jasmine rice."
+      }
+    ],
+    "nutrition_per_serving": {
+      "calories": 480,
+      "protein_g": 42.0,
+      "carbs_g": 10.0,
+      "fat_g": 30.0
+    }
+  },
+  {
+    "title": "Crispy Baked Lemon Herb Falafel Bowls",
+    "description": "Crispy golden baked chickpea falafel patties served over mixed greens with cucumbers, cherry tomatoes, and tahini.",
+    "prep_time_minutes": 30,
+    "difficulty_level": "easy",
+    "dietary_tags": [
+      "vegetarian",
+      "vegan",
+      "dairy-free",
+      "high-protein"
+    ],
+    "ingredients": [
+      {
+        "name": "Canned Chickpeas",
+        "quantity": 2.0,
+        "unit": "can",
+        "default_unit": "can"
+      },
+      {
+        "name": "Fresh Parsley",
+        "quantity": 1.0,
+        "unit": "cups",
+        "default_unit": "cups"
+      },
+      {
+        "name": "Garlic Cloves",
+        "quantity": 4.0,
+        "unit": "count",
+        "default_unit": "count"
+      },
+      {
+        "name": "Tahini Paste",
+        "quantity": 0.33,
+        "unit": "cups",
+        "default_unit": "cups"
+      },
+      {
+        "name": "English Cucumber",
+        "quantity": 1.0,
+        "unit": "count",
+        "default_unit": "count"
+      }
+    ],
+    "instructions": [
+      {
+        "step": 1,
+        "text": "Pulse drained chickpeas, fresh parsley, garlic, cumin, and coriander in food processor."
+      },
+      {
+        "step": 2,
+        "text": "Shape into 12 small patties; brush with olive oil."
+      },
+      {
+        "step": 3,
+        "text": "Bake at 400\u00b0F for 20 minutes, flipping halfway until golden and crispy."
+      },
+      {
+        "step": 4,
+        "text": "Assemble bowls with greens, diced cucumber, tomatoes, warm falafel, and tahini drizzle."
+      }
+    ],
+    "nutrition_per_serving": {
+      "calories": 410,
+      "protein_g": 18.0,
+      "carbs_g": 52.0,
+      "fat_g": 16.0
+    }
+  },
+  {
+    "title": "Greek Lemon Orzo Soup with Shredded Chicken",
+    "description": "Comforting Greek Avgolemono style soup featuring shredded chicken, tender orzo, fresh dill, and egg-lemon emulsion.",
+    "prep_time_minutes": 25,
+    "difficulty_level": "easy",
+    "dietary_tags": [
+      "quick",
+      "high-protein"
+    ],
+    "ingredients": [
+      {
+        "name": "Cooked Shredded Chicken",
+        "quantity": 1.5,
+        "unit": "lbs",
+        "default_unit": "lbs"
+      },
+      {
+        "name": "Orzo Pasta",
+        "quantity": 1.0,
+        "unit": "cups",
+        "default_unit": "cups"
+      },
+      {
+        "name": "Chicken Broth",
+        "quantity": 6.0,
+        "unit": "cups",
+        "default_unit": "cups"
+      },
+      {
+        "name": "Eggs",
+        "quantity": 3.0,
+        "unit": "count",
+        "default_unit": "count"
+      },
+      {
+        "name": "Fresh Lemon Juice",
+        "quantity": 0.33,
+        "unit": "cups",
+        "default_unit": "cups"
+      }
+    ],
+    "instructions": [
+      {
+        "step": 1,
+        "text": "Bring chicken broth to a boil and cook orzo pasta for 8 minutes until tender."
+      },
+      {
+        "step": 2,
+        "text": "Whisk eggs and lemon juice together in a bowl."
+      },
+      {
+        "step": 3,
+        "text": "Slowly temper egg mixture with 1 cup of hot broth while whisking vigorously."
+      },
+      {
+        "step": 4,
+        "text": "Pour tempered eggs back into soup off heat, stir in shredded chicken and fresh dill."
+      }
+    ],
+    "nutrition_per_serving": {
+      "calories": 420,
+      "protein_g": 40.0,
+      "carbs_g": 36.0,
+      "fat_g": 12.0
+    }
+  },
+  {
+    "title": "Pan-Seared Duck Breasts with Port Wine Reduction",
+    "description": "Crisp-skin Moulard duck breast sliced and spooned with a glossy reduction of ruby port, shallots, and fresh thyme.",
+    "prep_time_minutes": 30,
+    "difficulty_level": "hard",
+    "dietary_tags": [
+      "high-protein",
+      "gluten-free",
+      "dairy-free"
+    ],
+    "ingredients": [
+      {
+        "name": "Duck Breasts",
+        "quantity": 1.5,
+        "unit": "lbs",
+        "default_unit": "lbs"
+      },
+      {
+        "name": "Ruby Port Wine",
+        "quantity": 0.5,
+        "unit": "cups",
+        "default_unit": "cups"
+      },
+      {
+        "name": "Shallots",
+        "quantity": 2.0,
+        "unit": "count",
+        "default_unit": "count"
+      },
+      {
+        "name": "Beef Broth",
+        "quantity": 0.5,
+        "unit": "cups",
+        "default_unit": "cups"
+      },
+      {
+        "name": "Fresh Thyme",
+        "quantity": 3.0,
+        "unit": "count",
+        "default_unit": "count"
+      }
+    ],
+    "instructions": [
+      {
+        "step": 1,
+        "text": "Score duck skin and season with salt."
+      },
+      {
+        "step": 2,
+        "text": "Cook skin-down in cold pan over medium-low heat for 12 minutes to render crisp."
+      },
+      {
+        "step": 3,
+        "text": "Flip and sear meat side for 3 minutes to medium-rare; rest."
+      },
+      {
+        "step": 4,
+        "text": "Saut\u00e9 shallots in pan, deglaze with port wine and broth, reducing until syrupy."
+      }
+    ],
+    "nutrition_per_serving": {
+      "calories": 530,
+      "protein_g": 42.0,
+      "carbs_g": 12.0,
+      "fat_g": 34.0
+    }
+  },
+  {
+    "title": "Spicy Peanut Chicken Ramen",
+    "description": "Rich ramen broth enriched with creamy peanut butter, chili paste, and garlic, loaded with shredded chicken and bok choy.",
+    "prep_time_minutes": 20,
+    "difficulty_level": "easy",
+    "dietary_tags": [
+      "quick",
+      "high-protein"
+    ],
+    "ingredients": [
+      {
+        "name": "Ramen Noodles",
+        "quantity": 3.0,
+        "unit": "count",
+        "default_unit": "count"
+      },
+      {
+        "name": "Cooked Shredded Chicken",
+        "quantity": 1.0,
+        "unit": "lbs",
+        "default_unit": "lbs"
+      },
+      {
+        "name": "Creamy Peanut Butter",
+        "quantity": 0.33,
+        "unit": "cups",
+        "default_unit": "cups"
+      },
+      {
+        "name": "Chicken Broth",
+        "quantity": 4.0,
+        "unit": "cups",
+        "default_unit": "cups"
+      },
+      {
+        "name": "Baby Bok Choy",
+        "quantity": 3.0,
+        "unit": "count",
+        "default_unit": "count"
+      }
+    ],
+    "instructions": [
+      {
+        "step": 1,
+        "text": "Whisk peanut butter, garlic, soy sauce, and chili paste into hot chicken broth."
+      },
+      {
+        "step": 2,
+        "text": "Simmer baby bok choy and shredded chicken in broth for 3 minutes."
+      },
+      {
+        "step": 3,
+        "text": "Cook ramen noodles in boiling water; drain."
+      },
+      {
+        "step": 4,
+        "text": "Divide noodles into bowls, ladle hot spicy peanut broth over top, and garnish with sesame."
+      }
+    ],
+    "nutrition_per_serving": {
+      "calories": 540,
+      "protein_g": 42.0,
+      "carbs_g": 50.0,
+      "fat_g": 22.0
+    }
+  },
+  {
+    "title": "Seared Scallops over Sweet Corn Puree",
+    "description": "Caramelized jumbo sea scallops resting on a velvety summer sweet corn and coconut cream reduction with crispy bacon.",
+    "prep_time_minutes": 25,
+    "difficulty_level": "medium",
+    "dietary_tags": [
+      "quick",
+      "high-protein",
+      "gluten-free",
+      "pescatarian"
+    ],
+    "ingredients": [
+      {
+        "name": "Sea Scallops",
+        "quantity": 1.25,
+        "unit": "lbs",
+        "default_unit": "lbs"
+      },
+      {
+        "name": "Fresh Sweet Corn",
+        "quantity": 4.0,
+        "unit": "count",
+        "default_unit": "count"
+      },
+      {
+        "name": "Canned Coconut Cream",
+        "quantity": 0.5,
+        "unit": "cups",
+        "default_unit": "cups"
+      },
+      {
+        "name": "Smoked Bacon",
+        "quantity": 4.0,
+        "unit": "slices",
+        "default_unit": "slices"
+      },
+      {
+        "name": "Butter",
+        "quantity": 2.0,
+        "unit": "tbsp",
+        "default_unit": "tbsp"
+      }
+    ],
+    "instructions": [
+      {
+        "step": 1,
+        "text": "Crisp bacon in pan; set aside."
+      },
+      {
+        "step": 2,
+        "text": "Saut\u00e9 corn kernels in bacon fat with garlic, add coconut cream, and puree smooth in blender."
+      },
+      {
+        "step": 3,
+        "text": "Sear dry salted scallops in hot butter for 2 minutes per side until golden brown."
+      },
+      {
+        "step": 4,
+        "text": "Plate warm corn puree, arrange scallops on top, and scatter with crumbled bacon."
+      }
+    ],
+    "nutrition_per_serving": {
+      "calories": 440,
+      "protein_g": 34.0,
+      "carbs_g": 28.0,
+      "fat_g": 20.0
+    }
+  },
+  {
+    "title": "Sheet Pan Pork Chops with Roasted Brussels Sprouts",
+    "description": "Center-cut bone-in pork chops rubbed with smoked paprika and roasted with crispy halved Brussels sprouts and bacon.",
+    "prep_time_minutes": 30,
+    "difficulty_level": "easy",
+    "dietary_tags": [
+      "high-protein",
+      "gluten-free",
+      "dairy-free",
+      "low-carb",
+      "keto"
+    ],
+    "ingredients": [
+      {
+        "name": "Bone-In Pork Chops",
+        "quantity": 2.0,
+        "unit": "lbs",
+        "default_unit": "lbs"
+      },
+      {
+        "name": "Brussels Sprouts",
+        "quantity": 1.0,
+        "unit": "lbs",
+        "default_unit": "lbs"
+      },
+      {
+        "name": "Thick Bacon",
+        "quantity": 4.0,
+        "unit": "slices",
+        "default_unit": "slices"
+      },
+      {
+        "name": "Smoked Paprika",
+        "quantity": 1.0,
+        "unit": "tbsp",
+        "default_unit": "tbsp"
+      },
+      {
+        "name": "Olive Oil",
+        "quantity": 2.0,
+        "unit": "tbsp",
+        "default_unit": "tbsp"
+      }
+    ],
+    "instructions": [
+      {
+        "step": 1,
+        "text": "Toss halved Brussels sprouts and chopped bacon in olive oil."
+      },
+      {
+        "step": 2,
+        "text": "Season pork chops with smoked paprika, garlic powder, salt, and pepper."
+      },
+      {
+        "step": 3,
+        "text": "Arrange pork chops and Brussels sprouts on baking sheet."
+      },
+      {
+        "step": 4,
+        "text": "Roast at 400\u00b0F for 22 minutes until pork reaches 145\u00b0F and sprouts are caramelized."
+      }
+    ],
+    "nutrition_per_serving": {
+      "calories": 490,
+      "protein_g": 46.0,
+      "carbs_g": 10.0,
+      "fat_g": 30.0
+    }
+  },
+  {
+    "title": "Tuscan Roasted Garlic Stuffed Chicken",
+    "description": "Chicken breasts stuffed with garlic herb cheese, roasted bell peppers, and prosciutto, baked to tender perfection.",
+    "prep_time_minutes": 30,
+    "difficulty_level": "medium",
+    "dietary_tags": [
+      "high-protein",
+      "gluten-free",
+      "low-carb"
+    ],
+    "ingredients": [
+      {
+        "name": "Chicken Breast",
+        "quantity": 1.75,
+        "unit": "lbs",
+        "default_unit": "lbs"
+      },
+      {
+        "name": "Prosciutto",
+        "quantity": 6.0,
+        "unit": "slices",
+        "default_unit": "slices"
+      },
+      {
+        "name": "Garlic Herb Cheese",
+        "quantity": 4.0,
+        "unit": "oz",
+        "default_unit": "oz"
+      },
+      {
+        "name": "Roasted Red Peppers",
+        "quantity": 0.5,
+        "unit": "cups",
+        "default_unit": "cups"
+      },
+      {
+        "name": "Olive Oil",
+        "quantity": 1.0,
+        "unit": "tbsp",
+        "default_unit": "tbsp"
+      }
+    ],
+    "instructions": [
+      {
+        "step": 1,
+        "text": "Cut horizontal pocket in chicken breasts."
+      },
+      {
+        "step": 2,
+        "text": "Fill with garlic herb spreadable cheese and roasted peppers."
+      },
+      {
+        "step": 3,
+        "text": "Wrap each breast with prosciutto slices and place in baking dish."
+      },
+      {
+        "step": 4,
+        "text": "Bake at 375\u00b0F for 24 minutes until chicken reaches 165\u00b0F."
+      }
+    ],
+    "nutrition_per_serving": {
+      "calories": 510,
+      "protein_g": 50.0,
+      "carbs_g": 4.0,
+      "fat_g": 32.0
+    }
+  },
+  {
+    "title": "Thai Red Curry Coconut Mussels",
+    "description": "Fresh Prince Edward Island mussels steamed open in a fragrant broth of lemongrass, red curry paste, and rich coconut milk.",
+    "prep_time_minutes": 20,
+    "difficulty_level": "easy",
+    "dietary_tags": [
+      "quick",
+      "high-protein",
+      "gluten-free",
+      "dairy-free",
+      "pescatarian"
+    ],
+    "ingredients": [
+      {
+        "name": "Fresh Mussels",
+        "quantity": 2.0,
+        "unit": "lbs",
+        "default_unit": "lbs"
+      },
+      {
+        "name": "Canned Coconut Milk",
+        "quantity": 1.0,
+        "unit": "can",
+        "default_unit": "can"
+      },
+      {
+        "name": "Thai Red Curry Paste",
+        "quantity": 2.0,
+        "unit": "tbsp",
+        "default_unit": "tbsp"
+      },
+      {
+        "name": "Fresh Ginger",
+        "quantity": 1.0,
+        "unit": "tbsp",
+        "default_unit": "tbsp"
+      },
+      {
+        "name": "Fresh Cilantro",
+        "quantity": 0.5,
+        "unit": "cups",
+        "default_unit": "cups"
+      }
+    ],
+    "instructions": [
+      {
+        "step": 1,
+        "text": "Saut\u00e9 red curry paste, minced ginger, and garlic in a wide pot."
+      },
+      {
+        "step": 2,
+        "text": "Add coconut milk and chicken broth; bring to a rolling boil."
+      },
+      {
+        "step": 3,
+        "text": "Add cleaned mussels, cover tightly, and steam 4-5 minutes until shells open wide."
+      },
+      {
+        "step": 4,
+        "text": "Discard any unopened mussels; ladle into large bowls with fresh cilantro."
+      }
+    ],
+    "nutrition_per_serving": {
+      "calories": 360,
+      "protein_g": 32.0,
+      "carbs_g": 14.0,
+      "fat_g": 20.0
+    }
+  },
+  {
+    "title": "Vegetarian Eggplant Rollatini",
+    "description": "Grilled thin eggplant slices rolled around rich seasoned ricotta and mozzarella, baked in San Marzano tomato sauce.",
+    "prep_time_minutes": 35,
+    "difficulty_level": "medium",
+    "dietary_tags": [
+      "vegetarian",
+      "gluten-free"
+    ],
+    "ingredients": [
+      {
+        "name": "Large Eggplants",
+        "quantity": 2.0,
+        "unit": "count",
+        "default_unit": "count"
+      },
+      {
+        "name": "Ricotta Cheese",
+        "quantity": 15.0,
+        "unit": "oz",
+        "default_unit": "oz"
+      },
+      {
+        "name": "Mozzarella Cheese",
+        "quantity": 1.0,
+        "unit": "cups",
+        "default_unit": "cups"
+      },
+      {
+        "name": "Marinara Sauce",
+        "quantity": 1.0,
+        "unit": "can",
+        "default_unit": "can"
+      },
+      {
+        "name": "Parmesan Cheese",
+        "quantity": 0.5,
+        "unit": "cups",
+        "default_unit": "cups"
+      }
+    ],
+    "instructions": [
+      {
+        "step": 1,
+        "text": "Slice eggplants lengthwise into 1/4-inch planks; roast at 400\u00b0F for 10 minutes until pliable."
+      },
+      {
+        "step": 2,
+        "text": "Mix ricotta, egg, parmesan, garlic, and fresh basil."
+      },
+      {
+        "step": 3,
+        "text": "Spread ricotta mixture on eggplant slices and roll up snugly."
+      },
+      {
+        "step": 4,
+        "text": "Place seam-side down over marinara, top with mozzarella, and bake 20 minutes until bubbly."
+      }
+    ],
+    "nutrition_per_serving": {
+      "calories": 380,
+      "protein_g": 20.0,
+      "carbs_g": 26.0,
+      "fat_g": 22.0
+    }
+  },
+  {
+    "title": "Spanish Paella with Chicken and Shrimp",
+    "description": "Saffron scented bomba rice simmered with tender chicken thighs, jumbo shrimp, sweet peas, and smoked paprika.",
+    "prep_time_minutes": 45,
+    "difficulty_level": "medium",
+    "dietary_tags": [
+      "high-protein",
+      "gluten-free",
+      "dairy-free"
+    ],
+    "ingredients": [
+      {
+        "name": "Bomba Rice",
+        "quantity": 1.5,
+        "unit": "cups",
+        "default_unit": "cups"
+      },
+      {
+        "name": "Chicken Thighs",
+        "quantity": 1.0,
+        "unit": "lbs",
+        "default_unit": "lbs"
+      },
+      {
+        "name": "Raw Shrimp",
+        "quantity": 0.75,
+        "unit": "lbs",
+        "default_unit": "lbs"
+      },
+      {
+        "name": "Saffron Threads",
+        "quantity": 1.0,
+        "unit": "pinch",
+        "default_unit": "pinch"
+      },
+      {
+        "name": "Sweet Green Peas",
+        "quantity": 1.0,
+        "unit": "cups",
+        "default_unit": "cups"
+      }
+    ],
+    "instructions": [
+      {
+        "step": 1,
+        "text": "Sear salted chicken thighs in a paella pan with olive oil; remove."
+      },
+      {
+        "step": 2,
+        "text": "Saut\u00e9 onions, garlic, and tomatoes; stir in saffron, smoked paprika, and rice."
+      },
+      {
+        "step": 3,
+        "text": "Pour in warm chicken broth and arrange chicken on top; simmer undisturbed for 15 minutes."
+      },
+      {
+        "step": 4,
+        "text": "Scatter shrimp and peas across top; cook 8 more minutes until rice forms socarrat crust."
+      }
+    ],
+    "nutrition_per_serving": {
+      "calories": 540,
+      "protein_g": 42.0,
+      "carbs_g": 62.0,
+      "fat_g": 14.0
+    }
+  },
+  {
+    "title": "Honey Sriracha Glazed Turkey Meatballs",
+    "description": "Tender oven-baked lean ground turkey meatballs tossed in a sweet and spicy glaze of honey, sriracha, and ginger.",
+    "prep_time_minutes": 25,
+    "difficulty_level": "easy",
+    "dietary_tags": [
+      "quick",
+      "high-protein"
+    ],
+    "ingredients": [
+      {
+        "name": "Ground Turkey (93/7)",
+        "quantity": 1.5,
+        "unit": "lbs",
+        "default_unit": "lbs"
+      },
+      {
+        "name": "Honey",
+        "quantity": 3.0,
+        "unit": "tbsp",
+        "default_unit": "tbsp"
+      },
+      {
+        "name": "Sriracha Sauce",
+        "quantity": 2.0,
+        "unit": "tbsp",
+        "default_unit": "tbsp"
+      },
+      {
+        "name": "Soy Sauce",
+        "quantity": 2.0,
+        "unit": "tbsp",
+        "default_unit": "tbsp"
+      },
+      {
+        "name": "Panko Breadcrumbs",
+        "quantity": 0.5,
+        "unit": "cups",
+        "default_unit": "cups"
+      }
+    ],
+    "instructions": [
+      {
+        "step": 1,
+        "text": "Combine ground turkey, panko, egg, garlic, and green onions; roll into 18 meatballs."
+      },
+      {
+        "step": 2,
+        "text": "Bake at 400\u00b0F for 15 minutes on a parchment-lined baking sheet."
+      },
+      {
+        "step": 3,
+        "text": "Simmer honey, sriracha, soy sauce, and ginger in a skillet until bubbly."
+      },
+      {
+        "step": 4,
+        "text": "Toss baked meatballs in hot glaze until coated and shiny."
+      }
+    ],
+    "nutrition_per_serving": {
+      "calories": 410,
+      "protein_g": 40.0,
+      "carbs_g": 24.0,
+      "fat_g": 16.0
+    }
+  },
+  {
+    "title": "Blackened Tilapia Tacos with Cilantro Lime Slaw",
+    "description": "Quick pan-blackened tilapia fillets wrapped in warm corn tortillas with crunchy shredded cabbage and lime crema.",
+    "prep_time_minutes": 20,
+    "difficulty_level": "easy",
+    "dietary_tags": [
+      "quick",
+      "high-protein",
+      "pescatarian"
+    ],
+    "ingredients": [
+      {
+        "name": "Tilapia Fillets",
+        "quantity": 1.25,
+        "unit": "lbs",
+        "default_unit": "lbs"
+      },
+      {
+        "name": "Corn Tortillas",
+        "quantity": 8.0,
+        "unit": "count",
+        "default_unit": "count"
+      },
+      {
+        "name": "Shredded Cabbage",
+        "quantity": 2.0,
+        "unit": "cups",
+        "default_unit": "cups"
+      },
+      {
+        "name": "Sour Cream",
+        "quantity": 0.33,
+        "unit": "cups",
+        "default_unit": "cups"
+      },
+      {
+        "name": "Blackened Seasoning",
+        "quantity": 1.5,
+        "unit": "tbsp",
+        "default_unit": "tbsp"
+      }
+    ],
+    "instructions": [
+      {
+        "step": 1,
+        "text": "Coat tilapia fillets generously in blackened spice rub."
+      },
+      {
+        "step": 2,
+        "text": "Sear in a hot cast-iron skillet with oil for 3 minutes per side until flaky."
+      },
+      {
+        "step": 3,
+        "text": "Toss shredded cabbage with sour cream, lime juice, and chopped cilantro."
+      },
+      {
+        "step": 4,
+        "text": "Flake fish into warm tortillas and top with cilantro lime slaw."
+      }
+    ],
+    "nutrition_per_serving": {
+      "calories": 380,
+      "protein_g": 36.0,
+      "carbs_g": 32.0,
+      "fat_g": 12.0
+    }
+  },
+  {
+    "title": "Classic French Coq au Vin Blanc",
+    "description": "Chicken braised in dry white wine, garlic, and fresh tarragon with cremini mushrooms, shallots, and cr\u00e8me fra\u00eeche.",
+    "prep_time_minutes": 45,
+    "difficulty_level": "medium",
+    "dietary_tags": [
+      "high-protein",
+      "gluten-free"
+    ],
+    "ingredients": [
+      {
+        "name": "Chicken Thighs",
+        "quantity": 2.0,
+        "unit": "lbs",
+        "default_unit": "lbs"
+      },
+      {
+        "name": "Dry White Wine",
+        "quantity": 1.5,
+        "unit": "cups",
+        "default_unit": "cups"
+      },
+      {
+        "name": "Cremini Mushrooms",
+        "quantity": 8.0,
+        "unit": "oz",
+        "default_unit": "oz"
+      },
+      {
+        "name": "Shallots",
+        "quantity": 4.0,
+        "unit": "count",
+        "default_unit": "count"
+      },
+      {
+        "name": "Cr\u00e8me Fra\u00eeche",
+        "quantity": 0.33,
+        "unit": "cups",
+        "default_unit": "cups"
+      }
+    ],
+    "instructions": [
+      {
+        "step": 1,
+        "text": "Brown salted chicken thighs in butter in a Dutch oven; remove."
+      },
+      {
+        "step": 2,
+        "text": "Saut\u00e9 sliced shallots and cremini mushrooms until browned."
+      },
+      {
+        "step": 3,
+        "text": "Deglaze with dry white wine and chicken stock; return chicken to pot."
+      },
+      {
+        "step": 4,
+        "text": "Simmer covered for 25 minutes; stir in cr\u00e8me fra\u00eeche and fresh tarragon before serving."
+      }
+    ],
+    "nutrition_per_serving": {
+      "calories": 510,
+      "protein_g": 46.0,
+      "carbs_g": 8.0,
+      "fat_g": 30.0
+    }
   }
 ]

@@ -58,8 +58,8 @@ def test_auth_me_authenticated():
         assert data["household"]["household_name"] == "The Bannon Family"
 
 def test_household_latest_plan_found():
-    # Use household with known meal plan (80ece546-89b7-4ed7-a28e-5804e656b43d)
-    req = urllib.request.Request(f"{BASE_URL}/api/meal-plans/household/80ece546-89b7-4ed7-a28e-5804e656b43d/latest")
+    # Use known household with active meal plan (The Bannon Family)
+    req = urllib.request.Request(f"{BASE_URL}/api/meal-plans/household/0cd6b528-48ac-4b49-b3aa-1c27ef410479/latest")
     with urllib.request.urlopen(req) as resp:
         assert resp.status == 200
         data = json.loads(resp.read().decode("utf-8"))

@@ -135,8 +135,25 @@ async def seed_recipes(db_url: str = DEFAULT_DB_URL):
                 if seeded_count % 10 == 0 or seeded_count == len(recipes_data):
                     print(f"  [+] Seeded {seeded_count}/{len(recipes_data)} recipes with 1536-dim embeddings...")
 
+            # Link all baseline recipes to existing household recipe books (e.g. The Bannon Family)
+            print("[seed_recipes] Linking baseline recipes to existing household recipe books...")
+            await session.execute(text("""
+                INSERT INTO household_recipes (household_id, recipe_id)
+                SELECT h.household_id, r.recipe_id
+                FROM households h
+                CROSS JOIN recipes r
+                WHERE r.creator_id IS NULL
+                ON CONFLICT DO NOTHING;
+            """))
+
         # Run validation
         await verify_seed(session_factory)
+
+    # Auto-provision baseline retailer pricing across Aldi, Walmart, Meijer, Amazon
+    print("\n[seed_recipes] Auto-provisioning retailer pricing for all catalog ingredients...")
+    from app.database.seed_pricing import seed_pricing
+    await seed_pricing(db_url)
+
     await engine.dispose()
 
 async def verify_seed(session_factory):
@@ -164,7 +181,12 @@ async def verify_seed(session_factory):
         ings = ing_res.scalar()
         print(f"  [+] Unique ingredients cataloged     : {ings}")
 
-        # 5. Vector cosine similarity search test using pgvector operator (<=>)
+        # 5. Household recipe links
+        hlink_res = await session.execute(text("SELECT count(*) FROM household_recipes"))
+        hlinks = hlink_res.scalar()
+        print(f"  [+] Household recipe book links      : {hlinks}")
+
+        # 6. Vector cosine similarity search test using pgvector operator (<=>)
         print("\n[seed_recipes] Testing pgvector semantic similarity search...")
         query_text = "quick weeknight chicken dinner with vegetables"
         q_vec = await get_embedding(query_text)
@@ -183,10 +205,10 @@ async def verify_seed(session_factory):
         for i, m in enumerate(matches, 1):
             print(f"    {i}. {m[0]} (prep: {m[1]}m, level: {m[2]}) -> cosine distance: {round(float(m[3]), 4)}")
 
-        if embedded >= 30:
-            print("\n[seed_recipes] SUCCESS: All baseline starter recipes loaded with active pgvector embeddings!")
+        if embedded >= 100:
+            print(f"\n[seed_recipes] SUCCESS: {embedded} baseline starter recipes loaded with active pgvector embeddings (>= 100)!")
         else:
-            print(f"\n[seed_recipes] WARNING: Expected >= 30 embedded recipes, found {embedded}.")
+            print(f"\n[seed_recipes] WARNING: Expected >= 100 embedded recipes, found {embedded}.")
 
 if __name__ == "__main__":
     target_url = sys.argv[1] if len(sys.argv) > 1 else DEFAULT_DB_URL

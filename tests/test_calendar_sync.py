@@ -5,7 +5,7 @@ from uuid import uuid4
 from app.services.auth import create_access_token
 
 BASE_URL = "http://127.0.0.1:8001"
-TEST_HOUSEHOLD_ID = "80ece546-89b7-4ed7-a28e-5804e656b43d"
+TEST_HOUSEHOLD_ID = "0cd6b528-48ac-4b49-b3aa-1c27ef410479"
 TEST_USER_ID = "0d38cb28-71ef-4a71-9650-6943f49e6b48"
 TEST_USER_EMAIL = "timothy.bannon@gmail.com"
 

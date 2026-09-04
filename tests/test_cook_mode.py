@@ -167,7 +167,7 @@ def test_timer_durations_extraction():
 def test_meal_plan_payload_includes_instructions_and_ingredients():
     """Verify that active meal plan format response includes instructions and ingredients for instant Cook Mode."""
     # Use known household with active meal plan
-    req = urllib.request.Request(f"{BASE_URL}/api/meal-plans/household/80ece546-89b7-4ed7-a28e-5804e656b43d/latest")
+    req = urllib.request.Request(f"{BASE_URL}/api/meal-plans/household/0cd6b528-48ac-4b49-b3aa-1c27ef410479/latest")
     with urllib.request.urlopen(req) as resp:
         assert resp.status == 200
         data = json.loads(resp.read().decode("utf-8"))
